@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mathouse.pl/sitemap-index.xml

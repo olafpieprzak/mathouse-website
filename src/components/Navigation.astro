@@ -1,0 +1,328 @@
+---
+// =====================================================
+// NAWIGACJA GŁÓWNA
+// =====================================================
+// Aktywny element rozpoznawany z URL-a
+const pathname = Astro.url.pathname;
+
+function isActive(path: string): boolean {
+  if (path === '/') return pathname === '/';
+  return pathname.startsWith(path);
+}
+
+const navItems = [
+  { label: 'Kursy', href: '/kursy', hasSubmenu: true },
+  { label: 'Korepetycje', href: '/korepetycje', hasSubmenu: false },
+  { label: 'Arkusze', href: '/arkusze', hasSubmenu: true },
+  { label: 'Sklep', href: '/sklep', hasSubmenu: true },
+  { label: 'O mnie', href: '/o-mnie', hasSubmenu: false },
+];
+---
+
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <!-- LOGO -->
+    <a href="/" class="logo-group" aria-label="MATHOUSE - strona główna">
+      <div class="logo-mark">M</div>
+      <span class="logo-text">MATHOUSE</span>
+    </a>
+
+    <!-- DESKTOP MENU -->
+    <div class="main-nav">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class={`nav-link ${isActive(item.href) ? 'active' : ''}`}
+        >
+          {item.label}{item.hasSubmenu && ' ▾'}
+        </a>
+      ))}
+    </div>
+
+    <!-- PRAWY ROG -->
+    <div class="nav-right">
+      <a href="/login" class="nav-login">Zaloguj</a>
+      <a href="/kursy" class="btn-primary nav-cta">Sprawdź kursy →</a>
+    </div>
+
+    <!-- HAMBURGER (mobile) -->
+    <button
+      class="m-hamburger"
+      id="mobile-menu-toggle"
+      aria-label="Otwórz menu"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <!-- MOBILE MENU (rozwijane) -->
+  <div class="m-menu" id="mobile-menu" aria-hidden="true">
+    <div class="m-menu-section">
+      <div class="m-menu-title">OFERTA</div>
+      <a href="/kursy" class="m-menu-item">
+        <span><i class="ti ti-player-play"></i> Kursy</span>
+        <i class="ti ti-chevron-right"></i>
+      </a>
+      <a href="/korepetycje" class="m-menu-item">
+        <span><i class="ti ti-school"></i> Korepetycje</span>
+        <i class="ti ti-chevron-right"></i>
+      </a>
+      <a href="/arkusze" class="m-menu-item">
+        <span><i class="ti ti-file-text"></i> Arkusze CKE</span>
+        <span class="m-menu-badge">FREE</span>
+      </a>
+      <a href="/sklep" class="m-menu-item">
+        <span><i class="ti ti-shopping-bag"></i> Sklep</span>
+        <i class="ti ti-chevron-right"></i>
+      </a>
+      <a href="/kalkulatory" class="m-menu-item">
+        <span><i class="ti ti-calculator"></i> Kalkulatory</span>
+        <span class="m-menu-soon">wkrótce</span>
+      </a>
+    </div>
+
+    <div class="m-menu-section">
+      <div class="m-menu-title">INNE</div>
+      <a href="/o-mnie" class="m-menu-item">
+        <span><i class="ti ti-user"></i> O mnie</span>
+      </a>
+      <a href="/kontakt" class="m-menu-item">
+        <span><i class="ti ti-mail"></i> Kontakt</span>
+      </a>
+    </div>
+
+    <a href="/kursy" class="m-menu-cta">Sprawdź kursy →</a>
+  </div>
+</nav>
+
+<style>
+  /* === DESKTOP === */
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5, 10, 36, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+  }
+  .logo-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    background: #FFDE59;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #050A24;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .logo-text {
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+  }
+  .main-nav {
+    display: flex;
+    gap: 26px;
+    font-size: 13px;
+  }
+  .nav-link {
+    color: rgba(235, 238, 255, 0.7);
+    text-decoration: none;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.15s ease;
+  }
+  .nav-link:hover {
+    color: #EBEEFF;
+  }
+  .nav-link.active {
+    color: #FFDE59;
+  }
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -19px;
+    height: 2px;
+    background: #FFDE59;
+  }
+  .nav-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .nav-login {
+    color: rgba(235, 238, 255, 0.7);
+    font-size: 13px;
+    text-decoration: none;
+  }
+  .nav-login:hover {
+    color: #EBEEFF;
+  }
+
+  /* === HAMBURGER === */
+  .m-hamburger {
+    display: none;
+    width: 32px;
+    height: 32px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  .m-hamburger span {
+    width: 20px;
+    height: 2px;
+    background: #EBEEFF;
+    border-radius: 1px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .m-hamburger.open span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 4px);
+  }
+  .m-hamburger.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .m-hamburger.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* === MOBILE MENU === */
+  .m-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(5, 10, 36, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+    padding: 20px;
+    max-height: calc(100vh - 65px);
+    overflow-y: auto;
+    display: none;
+  }
+  .m-menu.open {
+    display: block;
+  }
+  .m-menu-section {
+    margin-bottom: 18px;
+  }
+  .m-menu-title {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+    padding: 0 4px;
+  }
+  .m-menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 12px;
+    font-size: 14px;
+    color: #EBEEFF;
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+    text-decoration: none;
+  }
+  .m-menu-item:active {
+    background: rgba(255, 222, 89, 0.05);
+  }
+  .m-menu-item span {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .m-menu-item i.ti {
+    font-size: 18px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+  .m-menu-badge {
+    font-size: 9px;
+    color: #3FCECF;
+    background: rgba(63, 206, 207, 0.15);
+    padding: 3px 7px;
+    border-radius: 5px;
+  }
+  .m-menu-soon {
+    font-size: 9px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+  .m-menu-cta {
+    display: block;
+    background: #FFDE59;
+    color: #050A24;
+    padding: 13px;
+    border-radius: 9px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 14px;
+    text-decoration: none;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 1024px) {
+    .main-nav,
+    .nav-right {
+      display: none;
+    }
+    .m-hamburger {
+      display: flex;
+    }
+    .nav-inner {
+      padding: 14px 18px;
+    }
+  }
+</style>
+
+<script>
+  // === Logika menu mobilnego ===
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const isOpen = menu.classList.toggle('open');
+      toggle.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      menu.setAttribute('aria-hidden', String(!isOpen));
+      // Blokuj scroll body gdy menu otwarte
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Zamknij menu po kliknięciu linka
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+        toggle.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+</script>

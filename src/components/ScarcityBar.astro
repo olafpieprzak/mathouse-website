@@ -1,0 +1,175 @@
+---
+// =====================================================
+// SCARCITY BAR — pasek z liczbą wolnych miejsc
+// =====================================================
+// Pobiera dane z Cloudflare Workera (cache 5 min).
+// Fallback: jeśli API nie odpowiada, pokazuje wartości z konfigu.
+//
+// Użycie:
+//   <ScarcityBar />
+//   <ScarcityBar variant="hero" />   ← mniejsza wersja na stronę główną
+//   <ScarcityBar variant="korepetycje" />  ← pełna wersja
+// =====================================================
+import { TIDYCAL_CONFIG } from '../config/tidycal.js';
+
+interface Props {
+  variant?: 'hero' | 'korepetycje';
+}
+
+const { variant = 'korepetycje' } = Astro.props;
+
+// === Build-time: dane fallbackowe ===
+// JavaScript w przeglądarce pobierze świeże dane po załadowaniu strony.
+const fallbackFree = TIDYCAL_CONFIG.fallback.freeSlotsThisWeek;
+const fallbackPercent = TIDYCAL_CONFIG.fallback.occupancyPercent;
+---
+
+<div class={`scarcity-bar scarcity-${variant}`} data-tidycal-scarcity>
+  <div class="container-content scarcity-inner">
+    <div class="scarcity-items">
+      <div class="scarcity-item">
+        <div class="scarcity-dot"></div>
+        <span>
+          grafik na ten tydzień
+          <strong class="scarcity-percent" data-scarcity-percent>{fallbackPercent}% wypełniony</strong>
+        </span>
+      </div>
+      <div class="scarcity-sep">·</div>
+      <div class="scarcity-item">
+        aktualnie
+        <strong class="scarcity-free" data-scarcity-free>
+          <span data-scarcity-count>{fallbackFree}</span>
+          <span data-scarcity-label>{fallbackFree === 1 ? 'wolne miejsce' : (fallbackFree < 5 ? 'wolne miejsca' : 'wolnych miejsc')}</span>
+        </strong>
+      </div>
+      <div class="scarcity-sep">·</div>
+      <div class="scarcity-item">nowi uczniowie od <strong>czerwca</strong></div>
+    </div>
+    {variant === 'korepetycje' && (
+      <div class="scarcity-arrow">↓ rezerwacja poniżej</div>
+    )}
+  </div>
+</div>
+
+<style>
+  .scarcity-bar {
+    padding: 16px 0;
+    background: linear-gradient(90deg, rgba(255, 222, 89, 0.12), rgba(63, 206, 207, 0.12));
+    border-top: 1px solid rgba(255, 222, 89, 0.3);
+    border-bottom: 1px solid rgba(255, 222, 89, 0.3);
+  }
+  .scarcity-hero {
+    padding: 12px 0;
+    margin-top: 28px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 222, 89, 0.3);
+  }
+  .scarcity-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .scarcity-items {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .scarcity-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+  }
+  .scarcity-item strong {
+    color: #FFDE59;
+  }
+  .scarcity-dot {
+    width: 8px;
+    height: 8px;
+    background: #3FCECF;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+  }
+  .scarcity-sep {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+  .scarcity-arrow {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+
+  /* Wariant hero — mniejszy */
+  .scarcity-hero .scarcity-inner {
+    padding: 0 16px;
+  }
+  .scarcity-hero .scarcity-item {
+    font-size: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .scarcity-items {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .scarcity-sep {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // ============================================================
+  // Dynamiczne pobranie danych z Cloudflare Workera
+  // ============================================================
+  // Robi to po załadowaniu strony — strona ładuje się natychmiast,
+  // a liczby aktualizują się gdy API odpowie.
+  // ============================================================
+  import { TIDYCAL_CONFIG, fetchAvailability } from '../config/tidycal.js';
+
+  async function updateScarcityBar() {
+    try {
+      const data = await fetchAvailability();
+
+      // Aktualizujemy wszystkie scarcity bary na stronie
+      document.querySelectorAll('[data-tidycal-scarcity]').forEach((bar) => {
+        const percentEl = bar.querySelector('[data-scarcity-percent]');
+        const countEl = bar.querySelector('[data-scarcity-count]');
+        const labelEl = bar.querySelector('[data-scarcity-label]');
+
+        if (percentEl && data.occupancy_percent !== undefined) {
+          percentEl.textContent = `${data.occupancy_percent}% wypełniony`;
+        }
+        if (countEl && data.free_slots_this_week !== undefined) {
+          countEl.textContent = String(data.free_slots_this_week);
+        }
+        if (labelEl && data.free_slots_this_week !== undefined) {
+          const n = data.free_slots_this_week;
+          labelEl.textContent = n === 1
+            ? 'wolne miejsce'
+            : (n >= 2 && n <= 4)
+              ? 'wolne miejsca'
+              : 'wolnych miejsc';
+        }
+      });
+    } catch (err) {
+      console.warn('[ScarcityBar] błąd:', err);
+      // Zostają wartości fallbackowe — niegroźne
+    }
+  }
+
+  // Uruchom po załadowaniu DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateScarcityBar);
+  } else {
+    updateScarcityBar();
+  }
+</script>

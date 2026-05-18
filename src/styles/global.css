@@ -1,0 +1,146 @@
+/* =====================================================
+   GLOBALNE STYLE MATHOUSE
+   ===================================================== */
+
+/* === Wzbogacenie domyślnych elementów HTML === */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Przyciski mają płynne hovery */
+button,
+a {
+  transition: all 0.15s ease;
+}
+
+/* Obrazy reagują na rodzica */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =====================================================
+   KOMPONENTY WIELOKROTNEGO UŻYTKU
+   Klasy CSS które można dodać do dowolnego elementu
+   ===================================================== */
+
+/* --- Przyciski --- */
+.btn-primary {
+  display: inline-block;
+  background: #FFDE59;
+  color: #050A24;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: none;
+  font-family: inherit;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(255, 222, 89, 0.25);
+}
+
+.btn-secondary {
+  display: inline-block;
+  border: 1px solid rgba(235, 238, 255, 0.25);
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #EBEEFF;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(235, 238, 255, 0.4);
+}
+
+/* --- Etykiety sekcji --- */
+.section-label {
+  font-size: 11px;
+  color: #3FCECF;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.section-label.yellow {
+  color: #FFDE59;
+}
+
+/* --- Tagi/chipsy --- */
+.tag-teal {
+  display: inline-block;
+  background: rgba(63, 206, 207, 0.15);
+  color: #3FCECF;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+.tag-yellow {
+  display: inline-block;
+  background: rgba(255, 222, 89, 0.15);
+  color: #FFDE59;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+/* --- Karty --- */
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(235, 238, 255, 0.1);
+  border-radius: 14px;
+  padding: 22px;
+  transition: all 0.2s ease;
+}
+.card:hover {
+  border-color: rgba(255, 222, 89, 0.3);
+}
+
+/* --- Kontenery treści --- */
+.container-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 48px;
+  padding-right: 48px;
+}
+
+/* =====================================================
+   RESPONSIVE — telefony
+   ===================================================== */
+@media (max-width: 768px) {
+  .container-content {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+    padding: 13px;
+  }
+}
+
+/* =====================================================
+   ANIMACJE WEJŚCIA
+   Aktywowane gdy element wchodzi w viewport
+   ===================================================== */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
