@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="404 — Strona nie znaleziona"
+  description="Strona której szukasz nie istnieje."
+  noindex={true}
+>
+  <main class="not-found">
+    <div class="container-content">
+      <div class="nf-content">
+        <div class="nf-num">404</div>
+        <h1 class="nf-title">Strony nie ma.</h1>
+        <p class="nf-text">
+          Albo wpisałeś zły adres, albo strona została usunięta.<br />
+          Wróć na stronę główną i zaczynaj od nowa.
+        </p>
+        <div class="nf-actions">
+          <a href="/" class="btn-primary">Strona główna →</a>
+          <a href="/korepetycje" class="btn-secondary">Korepetycje</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .not-found {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 0;
+  }
+  .nf-content {
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .nf-num {
+    font-size: 140px;
+    font-weight: 700;
+    color: #FFDE59;
+    line-height: 1;
+    font-family: 'Instrument Serif', serif;
+    margin-bottom: 12px;
+  }
+  .nf-title {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    letter-spacing: -0.5px;
+  }
+  .nf-text {
+    font-size: 15px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  .nf-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>
