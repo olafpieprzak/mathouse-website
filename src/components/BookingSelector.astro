@@ -1,0 +1,812 @@
+---
+// =====================================================
+// BOOKING SELECTOR — 3-stopniowy wybór lekcji
+// =====================================================
+// 1. Poziom (szkoła / liceum podst. / liceum rozsz. / studia)
+// 2. Długość (45 min / 90 min) — DLA STUDIÓW ZAWSZE 90
+// 3. Wielkość grupy (1 / 2 / 3 / 4 / 5-6)
+// → URL do konkretnego booking type w TidyCal
+// =====================================================
+import { TIDYCAL_CONFIG } from '../config/tidycal.js';
+---
+
+<section id="rezerwuj" class="booking-selector">
+  <div class="container-content">
+    <div class="section-label">REZERWUJ KOREPETYCJE · 3 KROKI</div>
+    <h2 class="bs-title">Wybierz wariant, potem termin.</h2>
+    <p class="bs-subtitle">
+      Zacznij od wyboru — poziom, długość, wielkość grupy. Cena dopasuje się dynamicznie.
+    </p>
+
+    <!-- KROK 1: POZIOM -->
+    <div class="bs-step">
+      <div class="bs-step-num">1</div>
+      <div class="bs-step-text">Wybierz poziom</div>
+    </div>
+
+    <div class="bs-levels" role="radiogroup" aria-label="Poziom edukacji">
+      <button class="bs-level bs-level-active" data-level="szkola" role="radio" aria-checked="true">
+        <div class="bs-level-icon">🏫</div>
+        <div class="bs-level-name">Szkoła podstawowa</div>
+        <div class="bs-level-meta">klasy 4-8 + egzamin 8</div>
+      </button>
+      <button class="bs-level" data-level="liceum-podst" role="radio" aria-checked="false">
+        <div class="bs-level-icon">📐</div>
+        <div class="bs-level-name">Liceum / matura podst.</div>
+        <div class="bs-level-meta">klasy 1-4 LO + technikum</div>
+      </button>
+      <button class="bs-level" data-level="liceum-rozsz" role="radio" aria-checked="false">
+        <div class="bs-level-icon"><span class="bs-icon-fn">sin</span></div>
+        <div class="bs-level-name">Liceum / matura rozsz.</div>
+        <div class="bs-level-meta">klasy 1-4 LO + technikum</div>
+      </button>
+      <button class="bs-level" data-level="studia" role="radio" aria-checked="false">
+        <div class="bs-level-icon">🎓</div>
+        <div class="bs-level-name">Studia</div>
+        <div class="bs-level-meta">10+ przedmiotów</div>
+      </button>
+    </div>
+
+    <!-- Lista przedmiotów ze studiów (widoczna tylko gdy wybrane studia) -->
+    <div class="bs-studia-info" data-studia-info hidden>
+      <div class="bs-studia-icon"><i class="ti ti-info-circle"></i></div>
+      <div>
+        <strong>Uczę wszystkich matematycznych przedmiotów ze studiów:</strong>
+        <div class="bs-studia-list">
+          {TIDYCAL_CONFIG.studiaPrzedmioty.map((p) => (
+            <span class="bs-studia-chip">{p}</span>
+          ))}
+          <span class="bs-studia-chip bs-studia-other">i inne — napisz</span>
+        </div>
+        <p class="bs-studia-note">
+          Materiał akademicki — wybierz długość lekcji <strong>45 lub 90 min</strong> w zależności od potrzeb.
+        </p>
+      </div>
+    </div>
+
+    <!-- KROK 2: DŁUGOŚĆ -->
+    <div class="bs-step">
+      <div class="bs-step-num">2</div>
+      <div class="bs-step-text">Wybierz długość lekcji</div>
+      <div class="bs-step-hint" data-duration-hint>45 min — standard · 90 min — taniej za godzinę</div>
+    </div>
+
+    <div class="bs-durations" role="radiogroup" aria-label="Długość lekcji">
+      <button class="bs-duration bs-duration-active" data-duration="45" role="radio" aria-checked="true">
+        <div class="bs-dur-num">45</div>
+        <div class="bs-dur-label">minut</div>
+        <div class="bs-dur-meta">standardowa lekcja</div>
+      </button>
+      <button class="bs-duration bs-duration-best" data-duration="90" role="radio" aria-checked="false">
+        <span class="bs-best-badge">OSZCZĘDZASZ</span>
+        <div class="bs-dur-num">90</div>
+        <div class="bs-dur-label">minut</div>
+        <div class="bs-dur-meta">lepsza cena za godzinę</div>
+      </button>
+    </div>
+
+    <!-- KROK 3: GRUPA -->
+    <div class="bs-step">
+      <div class="bs-step-num">3</div>
+      <div class="bs-step-text">Wybierz wielkość grupy</div>
+      <div class="bs-step-hint">Możesz dołączyć do istniejącej grupy lub założyć własną</div>
+    </div>
+
+    <div class="bs-groups" role="radiogroup" aria-label="Wielkość grupy">
+      <button class="bs-group bs-group-active" data-group="1" role="radio" aria-checked="true">
+        <div class="bs-group-num">1</div>
+        <div class="bs-group-label">osoba</div>
+        <div class="bs-group-price" data-price-display>130 zł</div>
+        <div class="bs-group-time" data-time-display>za 45 min</div>
+      </button>
+      <button class="bs-group" data-group="2" role="radio" aria-checked="false">
+        <div class="bs-group-num">2</div>
+        <div class="bs-group-label">osoby</div>
+        <div class="bs-group-price" data-price-display>80 zł</div>
+        <div class="bs-group-time" data-time-display>od osoby</div>
+      </button>
+      <button class="bs-group" data-group="3" role="radio" aria-checked="false">
+        <div class="bs-group-num">3</div>
+        <div class="bs-group-label">osoby</div>
+        <div class="bs-group-price" data-price-display>70 zł</div>
+        <div class="bs-group-time" data-time-display>od osoby</div>
+      </button>
+      <button class="bs-group" data-group="4" role="radio" aria-checked="false">
+        <div class="bs-group-num">4</div>
+        <div class="bs-group-label">osoby</div>
+        <div class="bs-group-price" data-price-display>60 zł</div>
+        <div class="bs-group-time" data-time-display>od osoby</div>
+      </button>
+      <button class="bs-group bs-group-best" data-group="56" role="radio" aria-checked="false">
+        <span class="bs-best-badge">NAJTANIEJ</span>
+        <div class="bs-group-num">5-6</div>
+        <div class="bs-group-label">osób</div>
+        <div class="bs-group-price" data-price-display>40 zł</div>
+        <div class="bs-group-time" data-time-display>od osoby</div>
+      </button>
+    </div>
+
+    <!-- PODSUMOWANIE -->
+    <div class="bs-summary">
+      <div class="bs-summary-info">
+        <div class="bs-summary-label">TWÓJ WYBÓR:</div>
+        <div class="bs-summary-text">
+          <span data-summary-level>Szkoła podstawowa</span>
+          ·
+          <span data-summary-duration>45 min</span>
+          ·
+          <span data-summary-group>1 osoba</span>
+          ·
+          <strong class="text-yellow"><span data-summary-price>130</span> zł</strong>
+          <span class="bs-summary-per" data-summary-per>za osobę</span>
+        </div>
+        <div class="bs-summary-payment">
+          💰 <strong>Płatność po lekcji</strong> — 3 sposoby: gotówka (preferowane), BLIK na <strong>570 840 416</strong>, lub przelew (numer konta w mailu).
+        </div>
+
+        <!-- Info dla grup 3+ osób (widoczne tylko wtedy) -->
+        <div class="bs-group-contact" data-group-contact-info hidden>
+          <i class="ti ti-info-circle"></i>
+          <div>
+            <strong>Grupy 3-6 osób — na zamówienie</strong>
+            <p>Dla większych grup utworzę specjalny termin dopasowany do Was. Napisz do mnie — ustalimy datę, godzinę i miejsce. Cena na osobę z cennika powyżej.</p>
+          </div>
+        </div>
+      </div>
+      <a
+        href={TIDYCAL_CONFIG.bookingUrl}
+        class="btn-primary bs-cta"
+        data-booking-cta
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Przejdź do kalendarza →
+      </a>
+    </div>
+
+    <p class="bs-note">
+      Kliknięcie otworzy kalendarz TidyCal w nowej karcie. Zobaczysz wszystkie wolne terminy i zarezerwujesz wybrany.
+    </p>
+  </div>
+</section>
+
+<script>
+  // ============================================================
+  // LOGIKA SELECTORA — 3 kroki
+  // ============================================================
+  import { TIDYCAL_CONFIG, getBookingType, getBookingUrl } from '../config/tidycal.js';
+
+  // === STATE ===
+  let currentLevel = 'szkola';
+  let currentDuration = 45;
+  let currentGroup = '1';
+
+  // === REFS ===
+  const levelButtons = document.querySelectorAll('.bs-level');
+  const durationButtons = document.querySelectorAll('.bs-duration');
+  const groupButtons = document.querySelectorAll('.bs-group');
+
+  const summaryLevel = document.querySelector('[data-summary-level]');
+  const summaryDuration = document.querySelector('[data-summary-duration]');
+  const summaryGroup = document.querySelector('[data-summary-group]');
+  const summaryPrice = document.querySelector('[data-summary-price]');
+  const summaryPer = document.querySelector('[data-summary-per]');
+  const bookingCta = document.querySelector('[data-booking-cta]');
+  const studiaInfo = document.querySelector('[data-studia-info]');
+  const durationHint = document.querySelector('[data-duration-hint]');
+  const durationContainer = document.querySelector('.bs-durations');
+
+  // === ETYKIETY ===
+  const LABELS_LEVEL = {
+    'szkola': 'Szkoła podstawowa',
+    'liceum-podst': 'Liceum / matura podstawowa',
+    'liceum-rozsz': 'Liceum / matura rozszerzona',
+    'studia': 'Studia',
+  };
+
+  const LABELS_GROUP = {
+    '1': '1 osoba',
+    '2': '2 osoby',
+    '3': '3 osoby',
+    '4': '4 osoby',
+    '56': '5-6 osób',
+  };
+
+  /**
+   * Po wyborze poziomu — pokaż/ukryj info o studiach (45 i 90 min dostępne dla wszystkich)
+   */
+  function handleLevelChange() {
+    if (currentLevel === 'studia') {
+      // Pokaż info o studiach (lista przedmiotów)
+      studiaInfo?.removeAttribute('hidden');
+    } else {
+      // Ukryj info o studiach
+      studiaInfo?.setAttribute('hidden', '');
+    }
+    // Wszystkie buttony zawsze włączone (nie blokujemy 45 min dla studiów)
+    durationButtons.forEach((btn) => {
+      btn.disabled = false;
+      btn.classList.remove('bs-duration-disabled');
+    });
+  }
+
+  /**
+   * Aktualizuje ceny na guzikach grup (zmienia się przy zmianie poziomu/długości)
+   */
+  function updateGroupPrices() {
+    groupButtons.forEach((btn) => {
+      const groupKey = btn.dataset.group;
+      const bookingType = getBookingType(currentLevel, currentDuration, groupKey);
+      if (!bookingType) return;
+
+      const priceEl = btn.querySelector('[data-price-display]');
+      const timeEl = btn.querySelector('[data-time-display]');
+
+      if (priceEl) {
+        priceEl.textContent = `${bookingType.price} zł`;
+      }
+      if (timeEl) {
+        if (bookingType.contactOnly) {
+          // Grupy 3+ — info zamiast czasu
+          timeEl.textContent = 'na zamówienie';
+          timeEl.style.color = '#3FCECF';
+        } else if (groupKey === '1') {
+          timeEl.textContent = `za ${currentDuration} min`;
+          timeEl.style.color = '';
+        } else {
+          timeEl.textContent = 'od osoby';
+          timeEl.style.color = '';
+        }
+      }
+
+      // Dodaj/usuń klasę dla grup contact-only
+      if (bookingType.contactOnly) {
+        btn.classList.add('bs-group-contact-only');
+      } else {
+        btn.classList.remove('bs-group-contact-only');
+      }
+    });
+  }
+
+  /**
+   * Aktualizuje podsumowanie i URL przycisku
+   */
+  function updateSummary() {
+    const bookingType = getBookingType(currentLevel, currentDuration, currentGroup);
+    if (!bookingType) return;
+
+    if (summaryLevel) summaryLevel.textContent = LABELS_LEVEL[currentLevel] || '';
+    if (summaryDuration) summaryDuration.textContent = `${currentDuration} min`;
+    if (summaryGroup) summaryGroup.textContent = LABELS_GROUP[currentGroup] || '';
+    if (summaryPrice) summaryPrice.textContent = String(bookingType.price);
+    if (summaryPer) {
+      summaryPer.textContent = currentGroup === '1' ? '' : 'za osobę';
+    }
+    if (bookingCta) {
+      bookingCta.href = getBookingUrl(bookingType);
+
+      // Zmień tekst przycisku w zależności czy to bezpośrednia rezerwacja czy kontakt
+      if (bookingType.contactOnly) {
+        bookingCta.textContent = 'Napisz — ustalimy termin →';
+        bookingCta.target = '_self'; // otwiera w tej samej karcie (do /kontakt)
+      } else {
+        bookingCta.textContent = 'Przejdź do kalendarza →';
+        bookingCta.target = '_blank'; // otwiera TidyCal w nowej karcie
+
+        // EMIT EVENT — TidyCalEmbed na dole automatycznie przełączy się
+        // na wybrany wariant (jeśli ma poprawny slug)
+        if (bookingType.slug && !bookingType.slug.startsWith('PLACEHOLDER')) {
+          // Generujemy ładny title oparty o WYBÓR USERA (nie z API)
+          // np. "Liceum / matura podstawowa · 1 osoba · 45 min"
+          const niceTitle = `${LABELS_LEVEL[currentLevel]} · ${LABELS_GROUP[currentGroup]} · ${currentDuration} min`;
+          window.dispatchEvent(new CustomEvent('tidycal-select', {
+            detail: {
+              slug: bookingType.slug,
+              customTitle: niceTitle,
+              level: currentLevel,
+              duration: currentDuration,
+              group: currentGroup,
+            }
+          }));
+        }
+      }
+    }
+
+    // Pokaż/ukryj info o grupie 3+
+    const groupContactInfo = document.querySelector('[data-group-contact-info]');
+    if (groupContactInfo) {
+      if (bookingType.contactOnly) {
+        groupContactInfo.removeAttribute('hidden');
+      } else {
+        groupContactInfo.setAttribute('hidden', '');
+      }
+    }
+  }
+
+  /**
+   * Obsługa kliknięć w poziom
+   */
+  levelButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      levelButtons.forEach((b) => {
+        b.classList.remove('bs-level-active');
+        b.setAttribute('aria-checked', 'false');
+      });
+      btn.classList.add('bs-level-active');
+      btn.setAttribute('aria-checked', 'true');
+      currentLevel = btn.dataset.level;
+      handleLevelChange();
+      updateGroupPrices();
+      updateSummary();
+    });
+  });
+
+  /**
+   * Obsługa kliknięć w długość
+   */
+  durationButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      durationButtons.forEach((b) => {
+        b.classList.remove('bs-duration-active');
+        b.setAttribute('aria-checked', 'false');
+      });
+      btn.classList.add('bs-duration-active');
+      btn.setAttribute('aria-checked', 'true');
+      currentDuration = parseInt(btn.dataset.duration);
+      updateGroupPrices();
+      updateSummary();
+    });
+  });
+
+  /**
+   * Obsługa kliknięć w grupę
+   */
+  groupButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      groupButtons.forEach((b) => {
+        b.classList.remove('bs-group-active');
+        b.setAttribute('aria-checked', 'false');
+      });
+      btn.classList.add('bs-group-active');
+      btn.setAttribute('aria-checked', 'true');
+      currentGroup = btn.dataset.group;
+      updateSummary();
+    });
+  });
+
+  // Inicjalizacja
+  updateGroupPrices();
+  updateSummary();
+</script>
+
+<style>
+  .booking-selector {
+    padding: 40px 0;
+  }
+  .bs-title {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-top: 6px;
+  }
+  .bs-subtitle {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 8px;
+    max-width: 580px;
+    line-height: 1.6;
+  }
+
+  /* === STEPS === */
+  .bs-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 32px 0 14px;
+    flex-wrap: wrap;
+  }
+  .bs-step-num {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .bs-step-text {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .bs-step-hint {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-left: 8px;
+  }
+
+  /* === LEVELS === */
+  .bs-levels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .bs-level {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    color: inherit;
+  }
+  .bs-level:hover {
+    border-color: rgba(255, 222, 89, 0.3);
+    transform: translateY(-2px);
+  }
+  .bs-level-active {
+    border-color: #FFDE59;
+    background: rgba(255, 222, 89, 0.08);
+    box-shadow: 0 0 0 1px rgba(255, 222, 89, 0.4);
+  }
+  .bs-level-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+    font-family: 'Instrument Serif', serif;
+  }
+  /* Ikona funkcji matematycznej (np. "sin") */
+  .bs-icon-fn {
+    display: inline-block;
+    font-family: 'Instrument Serif', 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: #FFDE59;
+    letter-spacing: -1px;
+  }
+  .bs-level-name {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .bs-level-meta {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 4px;
+  }
+
+  /* === INFO O STUDIACH (lista przedmiotów) === */
+  .bs-studia-info {
+    background: rgba(63, 206, 207, 0.08);
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 14px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  /* FIX: atrybut hidden musi być silniejszy niż display: flex */
+  .bs-studia-info[hidden] {
+    display: none !important;
+  }
+  .bs-studia-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .bs-studia-icon i {
+    font-size: 20px;
+  }
+  .bs-studia-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+  }
+  .bs-studia-chip {
+    background: rgba(255, 255, 255, 0.06);
+    color: #EBEEFF;
+    padding: 5px 11px;
+    border-radius: 14px;
+    font-size: 11px;
+    border: 1px solid rgba(235, 238, 255, 0.08);
+  }
+  .bs-studia-other {
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+    border-color: rgba(255, 222, 89, 0.3);
+  }
+  .bs-studia-note {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.55;
+  }
+  .bs-studia-note strong {
+    color: #3FCECF;
+  }
+
+  /* === DURATIONS === */
+  .bs-durations {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 500px;
+  }
+  .bs-duration {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 12px;
+    padding: 18px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    color: inherit;
+    position: relative;
+  }
+  .bs-duration:hover {
+    border-color: rgba(255, 222, 89, 0.3);
+    transform: translateY(-2px);
+  }
+  .bs-duration-active {
+    border-color: #FFDE59;
+    background: rgba(255, 222, 89, 0.08);
+    box-shadow: 0 0 0 1px rgba(255, 222, 89, 0.4);
+  }
+  .bs-duration-best {
+    border-color: rgba(63, 206, 207, 0.4);
+  }
+  .bs-duration-best.bs-duration-active {
+    border-color: #FFDE59;
+  }
+  .bs-duration-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .bs-duration-disabled:hover {
+    transform: none;
+    border-color: rgba(235, 238, 255, 0.1);
+  }
+  .bs-dur-num {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .bs-dur-label {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 4px;
+  }
+  .bs-dur-meta {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 8px;
+  }
+
+  /* === GROUPS === */
+  .bs-groups {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .bs-group {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    color: inherit;
+    position: relative;
+  }
+  .bs-group:hover {
+    border-color: rgba(255, 222, 89, 0.3);
+    transform: translateY(-2px);
+  }
+  .bs-group-active {
+    border-color: #FFDE59;
+    background: rgba(255, 222, 89, 0.08);
+    box-shadow: 0 0 0 1px rgba(255, 222, 89, 0.4);
+  }
+  .bs-group-best {
+    border-color: rgba(63, 206, 207, 0.4);
+  }
+  .bs-group-best.bs-group-active {
+    border-color: #FFDE59;
+  }
+  .bs-best-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3FCECF;
+    color: #050A24;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .bs-group-num {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .bs-group-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 4px;
+  }
+  .bs-group-price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFDE59;
+    margin-top: 12px;
+  }
+  .bs-group-time {
+    font-size: 9px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 2px;
+  }
+
+  /* === SUMMARY === */
+  .bs-summary {
+    background: linear-gradient(90deg, rgba(255, 222, 89, 0.1), rgba(63, 206, 207, 0.08));
+    border: 1px solid rgba(255, 222, 89, 0.3);
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .bs-summary-info {
+    flex: 1;
+    min-width: 280px;
+  }
+  .bs-summary-label {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+  .bs-summary-text {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .bs-summary-per {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-left: 4px;
+  }
+  .bs-summary-payment {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+  .bs-summary-payment strong {
+    color: #EBEEFF;
+  }
+
+  /* === INFO O GRUPACH 3+ === */
+  .bs-group-contact {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(63, 206, 207, 0.1);
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    border-radius: 9px;
+    display: flex;
+    gap: 11px;
+    align-items: flex-start;
+  }
+  /* FIX: atrybut hidden musi być silniejszy niż display: flex */
+  .bs-group-contact[hidden] {
+    display: none !important;
+  }
+  .bs-group-contact i {
+    color: #3FCECF;
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .bs-group-contact strong {
+    color: #3FCECF;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .bs-group-contact p {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.55;
+  }
+
+  /* === GUZIK GRUPY "CONTACT ONLY" (3+) === */
+  .bs-group-contact-only {
+    border-color: rgba(63, 206, 207, 0.25);
+    background: rgba(63, 206, 207, 0.04);
+  }
+  .bs-group-contact-only.bs-group-active {
+    border-color: #3FCECF;
+    background: rgba(63, 206, 207, 0.12);
+    box-shadow: 0 0 0 1px rgba(63, 206, 207, 0.4);
+  }
+  .bs-group-contact-only .bs-group-price {
+    color: #3FCECF;
+  }
+  .text-yellow {
+    color: #FFDE59;
+  }
+  .bs-cta {
+    white-space: nowrap;
+  }
+  .bs-note {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 1024px) {
+    .bs-levels {
+      grid-template-columns: 1fr 1fr;
+    }
+    .bs-groups {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+    .bs-group {
+      padding: 14px 6px;
+    }
+    .bs-group-num {
+      font-size: 20px;
+    }
+    .bs-group-price {
+      font-size: 15px;
+    }
+  }
+  @media (max-width: 640px) {
+    .bs-title {
+      font-size: 22px;
+    }
+    .bs-levels {
+      grid-template-columns: 1fr 1fr;
+    }
+    .bs-groups {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .bs-durations {
+      max-width: none;
+    }
+    .bs-summary {
+      flex-direction: column;
+      text-align: center;
+    }
+    .bs-cta {
+      width: 100%;
+      text-align: center;
+    }
+    .bs-studia-info {
+      flex-direction: column;
+    }
+  }
+</style>

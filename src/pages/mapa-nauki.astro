@@ -1,0 +1,643 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// =====================================================
+// MAPA NAUKI MATEMATYKI - graf pionowy ze strzałkami
+// 8klasista → LO klasa 1 → 2 → 3 → 4 → Matura podst/rozsz
+// =====================================================
+// UWAGA: Layout JUŻ MA Navigation + Footer w środku!
+// Nie importuję ich tutaj ponownie!
+// =====================================================
+
+const klasa1 = [
+  { num: '1.1', tytul: 'Zbiory Liczbowe', url: 'https://kurs.mathouse.pl/s/zbiory-liczbowe.html' },
+  { num: '1.2', tytul: 'Równania i nierówności 1°', url: 'https://kurs.mathouse.pl/s/rownania-i-nierownosci-1-stopnia.html' },
+  { num: '1.3', tytul: 'Procenty · Błąd · Przybliżenie', url: 'https://kurs.mathouse.pl/s/procenty-punkt-procentowy.html' },
+  { num: '1.4', tytul: 'Potęgi', url: 'https://kurs.mathouse.pl/s/potegi.html' },
+  { num: '1.5', tytul: 'Logarytmy', url: 'https://kurs.mathouse.pl/s/logarytmy.html' },
+  { num: '1.6', tytul: 'Wyrażenia algebraiczne', url: 'https://kurs.mathouse.pl/s/wyrazenia-algebraiczne.html' },
+  { num: '1.7', tytul: 'Wzory skróconego mnożenia', url: 'https://kurs.mathouse.pl/s/wzory-skroconego-mnozenie.html' },
+  { num: '1.8', tytul: 'Funkcje', url: 'https://kurs.mathouse.pl/s/funkcja.html' },
+  { num: '1.9', tytul: 'Funkcja liniowa', url: 'https://kurs.mathouse.pl/s/funkcja-liniowa.html' },
+  { num: '1.10', tytul: 'Układy równań', url: 'https://kurs.mathouse.pl/s/uklady-rownan.html' },
+  { num: '1.11', tytul: 'Geometria płaska cz. 1', url: 'https://kurs.mathouse.pl/s/11-geometria-plaska-cz1-klasa-1.html' },
+  { num: '1.12', tytul: 'Trygonometria cz. 1', url: 'https://kurs.mathouse.pl/s/trygonometria-cz1.html' },
+];
+
+const klasa2 = [
+  '2.1 Przekształcenia wykresów',
+  '2.2 Wartość bezwzględna',
+  '2.3 Funkcja kwadratowa',
+  '2.4 Geometria — okręgi',
+  '2.5 Trygonometria zaawansowana',
+  '2.6 Geometria analityczna',
+  '2.7 Trójkąty, pola, koła',
+  '2.8 Wielomiany',
+];
+
+const klasa3 = [
+  '3.1 Ułamki algebraiczne',
+  '3.2 Ciągi (arytmetyczny, geometryczny)',
+  '3.3 Kombinatoryka',
+  '3.4 Czworokąty',
+  '3.5 Pole czworokąta',
+  '3.6 Geometria analityczna cz. 2',
+];
+
+const klasa4 = [
+  '4.1 Funkcja wykładnicza',
+  '4.2 Funkcja logarytmiczna',
+  '4.3 Statystyka',
+  '4.4 Rachunek prawdopodobieństwa',
+  '4.5 Geometria przestrzenna',
+  '4.6 Bryły obrotowe',
+];
+---
+
+<Layout
+  title="Mapa Nauki Matematyki — wszystkie kursy MATHOUSE"
+  description="Pełna ścieżka nauki matematyki od podstawówki do matury. Cały plan krok po kroku."
+>
+  <main class="mapa-page">
+    <div class="container-content">
+
+      <!-- HERO -->
+      <section class="mapa-hero">
+        <div class="section-label">🗺️ MAPA NAUKI</div>
+        <h1 class="mapa-title">Cały plan nauki<br /><span class="text-yellow">krok po kroku.</span></h1>
+        <p class="mapa-sub">
+          Wybierz swoją klasę, dział, ścieżkę.<br />
+          <strong>Każdy etap prowadzi do następnego.</strong>
+        </p>
+        <div class="mapa-legend">
+          <span class="legend-item"><span class="legend-dot legend-live"></span> Gotowy</span>
+          <span class="legend-item"><span class="legend-dot legend-soon"></span> Wkrótce</span>
+        </div>
+      </section>
+
+      <!-- STRUKTURA PIONOWA Z STRZAŁKAMI -->
+      <div class="mapa-tree">
+
+        <!-- POZIOM 0: EGZAMIN 8-KLASISTY -->
+        <div class="tree-node tree-node-soon">
+          <div class="node-icon">🎓</div>
+          <div class="node-label">START</div>
+          <div class="node-title">Egzamin 8-klasisty</div>
+          <div class="node-desc">Przygotowanie do egzaminu kończącego SP</div>
+          <span class="node-status node-status-soon">Wkrótce</span>
+        </div>
+
+        <!-- STRZAŁKA W DÓŁ -->
+        <div class="tree-arrow">↓</div>
+
+        <!-- POZIOM 1: LICEUM (rozkład na 4 klasy) -->
+        <div class="tree-banner">
+          <div class="banner-icon">📘</div>
+          <div>
+            <div class="banner-label">ŚCIEŻKA LICEUM (kurs podstawowy)</div>
+            <div class="banner-title">4 lata · 32 działy · cała matematyka szkoły średniej</div>
+          </div>
+        </div>
+
+        <!-- 4 KLASY OBOK SIEBIE -->
+        <div class="tree-klasy">
+
+          <!-- KLASA 1 -->
+          <div class="tree-klasa tree-klasa-live">
+            <div class="klasa-header">
+              <span class="klasa-num">KLASA 1</span>
+              <span class="klasa-badge">✅ Gotowa</span>
+            </div>
+            <div class="klasa-count">12 działów</div>
+            <div class="klasa-dzialy">
+              {klasa1.map((d) => (
+                <a href={d.url} target="_blank" rel="noopener noreferrer" class="dzial-link" title="Wkrótce: indywidualna strona działu">
+                  <span class="dzial-num">{d.num}</span>
+                  <span class="dzial-tytul">{d.tytul}</span>
+                </a>
+              ))}
+            </div>
+            <div class="klasa-note">💡 Wkrótce: indywidualne landing pages każdego działu</div>
+          </div>
+
+          <!-- KLASA 2 -->
+          <div class="tree-klasa tree-klasa-soon">
+            <div class="klasa-header">
+              <span class="klasa-num">KLASA 2</span>
+              <span class="klasa-badge">⏳ Wkrótce</span>
+            </div>
+            <div class="klasa-count">{klasa2.length} działów</div>
+            <div class="klasa-dzialy">
+              {klasa2.map((d) => (
+                <div class="dzial-soon">{d}</div>
+              ))}
+            </div>
+          </div>
+
+          <!-- KLASA 3 -->
+          <div class="tree-klasa tree-klasa-soon">
+            <div class="klasa-header">
+              <span class="klasa-num">KLASA 3</span>
+              <span class="klasa-badge">⏳ Wkrótce</span>
+            </div>
+            <div class="klasa-count">{klasa3.length} działów</div>
+            <div class="klasa-dzialy">
+              {klasa3.map((d) => (
+                <div class="dzial-soon">{d}</div>
+              ))}
+            </div>
+          </div>
+
+          <!-- KLASA 4 -->
+          <div class="tree-klasa tree-klasa-soon">
+            <div class="klasa-header">
+              <span class="klasa-num">KLASA 4</span>
+              <span class="klasa-badge">⏳ Wkrótce</span>
+            </div>
+            <div class="klasa-count">{klasa4.length} działów</div>
+            <div class="klasa-dzialy">
+              {klasa4.map((d) => (
+                <div class="dzial-soon">{d}</div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STRZAŁKI W DÓŁ Z ROZDZIAŁEM NA 2 -->
+        <div class="tree-split">
+          <div class="split-arrow split-arrow-left">↙</div>
+          <div class="split-text">Po klasie 4 wybierasz:</div>
+          <div class="split-arrow split-arrow-right">↘</div>
+        </div>
+
+        <!-- POZIOM 2: 2 ŚCIEŻKI MATURY -->
+        <div class="tree-finales">
+
+          <!-- MATURA PODSTAWOWA -->
+          <div class="tree-finale tree-finale-live">
+            <div class="finale-icon">📕</div>
+            <div class="finale-label">ŚCIEŻKA PODSTAWOWA</div>
+            <div class="finale-title">Matura podstawowa</div>
+            <div class="finale-desc">Powtórka całego materiału + arkusze CKE</div>
+            <div class="finale-products">
+              <a href="/landing-powtorka-14-dni" class="finale-product">
+                <span class="product-badge">⭐ 197 zł</span>
+                <span class="product-name">14-dniowa powtórka</span>
+                <span class="product-arrow">→</span>
+              </a>
+              <a href="/landing-maturalny-sprint" class="finale-product">
+                <span class="product-badge">⚡ 67 zł</span>
+                <span class="product-name">Maturalny sprint (3 dni)</span>
+                <span class="product-arrow">→</span>
+              </a>
+              <a href="/arkusze" class="finale-product">
+                <span class="product-badge">🆓 Free</span>
+                <span class="product-name">Arkusze CKE</span>
+                <span class="product-arrow">→</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- MATURA ROZSZERZONA -->
+          <div class="tree-finale tree-finale-soon">
+            <div class="finale-icon">🔬</div>
+            <div class="finale-label">ŚCIEŻKA ROZSZERZONA</div>
+            <div class="finale-title">Matura rozszerzona</div>
+            <div class="finale-desc">Wszystko z podstawy + zaawansowane działy</div>
+            <div class="finale-products">
+              <div class="finale-product finale-product-soon">
+                <span class="product-badge">⏳</span>
+                <span class="product-name">Funkcja kwadratowa+</span>
+              </div>
+              <div class="finale-product finale-product-soon">
+                <span class="product-badge">⏳</span>
+                <span class="product-name">Wielomiany rozsz.</span>
+              </div>
+              <div class="finale-product finale-product-soon">
+                <span class="product-badge">⏳</span>
+                <span class="product-name">Geometria zaawansowana</span>
+              </div>
+              <div class="finale-product finale-product-soon">
+                <span class="product-badge">⏳</span>
+                <span class="product-name">Dowody · trygonometria+</span>
+              </div>
+            </div>
+            <div class="finale-note">Już wkrótce — buduję materiały</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- FINAL CTA -->
+      <section class="mapa-final">
+        <div class="mapa-final-box">
+          <h2>Potrzebujesz pomocy z konkretnym działem?</h2>
+          <p>Umów korepetycje 1-na-1 lub w grupie. Tłumaczę aż zrozumiesz.</p>
+          <a href="/korepetycje" class="btn-primary">Sprawdź korepetycje →</a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .mapa-page { color: #EBEEFF; padding: 40px 0 80px; }
+  .text-yellow { color: #FFDE59; }
+
+  /* HERO */
+  .mapa-hero {
+    text-align: center;
+    padding: 40px 0 60px;
+  }
+  .mapa-title {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin: 12px 0 16px;
+  }
+  .mapa-sub {
+    font-size: 16px;
+    color: rgba(235, 238, 255, 0.7);
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 auto 24px;
+  }
+  .mapa-legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.55);
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .legend-live { background: #3FCECF; box-shadow: 0 0 6px rgba(63, 206, 207, 0.5); }
+  .legend-soon { background: rgba(235, 238, 255, 0.3); }
+
+  /* TREE STRUCTURE */
+  .mapa-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+
+  /* TREE NODE (pojedynczy) */
+  .tree-node {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 14px;
+    padding: 22px 28px;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    position: relative;
+  }
+  .tree-node-soon {
+    opacity: 0.7;
+  }
+  .node-icon {
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .node-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #3FCECF;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .node-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .node-desc {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.6);
+  }
+  .node-status {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .node-status-soon {
+    background: rgba(235, 238, 255, 0.08);
+    color: rgba(235, 238, 255, 0.5);
+  }
+
+  /* STRZAŁKA */
+  .tree-arrow {
+    font-size: 28px;
+    color: rgba(255, 222, 89, 0.6);
+    line-height: 1;
+    padding: 4px 0;
+  }
+
+  /* BANNER LICEUM */
+  .tree-banner {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.08) 0%, rgba(63, 206, 207, 0.05) 100%);
+    border: 1px solid rgba(255, 222, 89, 0.25);
+    border-radius: 16px;
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .banner-icon {
+    font-size: 40px;
+    line-height: 1;
+  }
+  .banner-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #FFDE59;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .banner-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #EBEEFF;
+  }
+
+  /* KLASY GRID */
+  .tree-klasy {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .tree-klasa {
+    background: rgba(5, 10, 36, 0.5);
+    border: 1px solid rgba(235, 238, 255, 0.08);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .tree-klasa-live {
+    border-color: rgba(63, 206, 207, 0.3);
+  }
+  .tree-klasa-soon {
+    opacity: 0.65;
+  }
+
+  .klasa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .klasa-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFDE59;
+    letter-spacing: 1px;
+  }
+  .klasa-badge {
+    font-size: 9px;
+    color: rgba(235, 238, 255, 0.6);
+    background: rgba(235, 238, 255, 0.06);
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+  .tree-klasa-live .klasa-badge {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+  }
+  .klasa-count {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .klasa-dzialy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .dzial-link {
+    display: flex;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    font-size: 11px;
+    transition: all 0.15s ease;
+    align-items: baseline;
+  }
+  .dzial-link:hover {
+    background: rgba(255, 222, 89, 0.08);
+    transform: translateX(2px);
+  }
+  .dzial-num {
+    font-weight: 700;
+    color: #3FCECF;
+    font-size: 10px;
+    flex-shrink: 0;
+    min-width: 28px;
+  }
+  .dzial-tytul {
+    color: #EBEEFF;
+    line-height: 1.3;
+  }
+  .dzial-soon {
+    padding: 6px 8px;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    line-height: 1.3;
+  }
+  .klasa-note {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(235, 238, 255, 0.06);
+    font-size: 10px;
+    color: rgba(255, 222, 89, 0.6);
+    line-height: 1.4;
+  }
+
+  /* SPLIT — strzałki rozchodzą się na 2 ścieżki */
+  .tree-split {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+    max-width: 560px;
+    gap: 16px;
+    margin: 4px 0;
+  }
+  .split-text {
+    font-size: 13px;
+    color: rgba(255, 222, 89, 0.8);
+    font-weight: 600;
+    text-align: center;
+  }
+  .split-arrow {
+    font-size: 32px;
+    color: rgba(255, 222, 89, 0.6);
+    line-height: 1;
+  }
+  .split-arrow-left { text-align: right; }
+  .split-arrow-right { text-align: left; }
+
+  /* FINALES — 2 ścieżki matury */
+  .tree-finales {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .tree-finale {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .tree-finale-live {
+    background: rgba(255, 222, 89, 0.05);
+    border-color: rgba(255, 222, 89, 0.25);
+  }
+  .tree-finale-soon {
+    opacity: 0.7;
+  }
+  .finale-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+  .finale-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #3FCECF;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .finale-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .finale-desc {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .finale-products {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .finale-product {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(5, 10, 36, 0.5);
+    border: 1px solid rgba(235, 238, 255, 0.06);
+    border-radius: 9px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.15s ease;
+  }
+  .finale-product:hover {
+    border-color: rgba(255, 222, 89, 0.3);
+    transform: translateX(3px);
+  }
+  .finale-product-soon {
+    opacity: 0.6;
+    cursor: default;
+  }
+  .finale-product-soon:hover {
+    transform: none;
+    border-color: rgba(235, 238, 255, 0.06);
+  }
+  .product-badge {
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+    padding: 4px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .product-name {
+    font-size: 13px;
+    flex: 1;
+    color: #EBEEFF;
+  }
+  .product-arrow {
+    color: rgba(235, 238, 255, 0.4);
+    font-size: 14px;
+  }
+  .finale-note {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: rgba(255, 222, 89, 0.05);
+    border-radius: 8px;
+    font-size: 11px;
+    color: rgba(255, 222, 89, 0.7);
+    text-align: center;
+  }
+
+  /* FINAL CTA */
+  .mapa-final {
+    margin-top: 60px;
+  }
+  .mapa-final-box {
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.08) 0%, rgba(63, 206, 207, 0.06) 100%);
+    border: 1px solid rgba(255, 222, 89, 0.2);
+    border-radius: 18px;
+    padding: 40px;
+    text-align: center;
+  }
+  .mapa-final-box h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 12px;
+  }
+  .mapa-final-box p {
+    font-size: 15px;
+    color: rgba(235, 238, 255, 0.7);
+    margin: 0 0 20px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .tree-klasy { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .mapa-title { font-size: 32px; }
+    .tree-klasy { grid-template-columns: 1fr; }
+    .tree-finales { grid-template-columns: 1fr; }
+    .tree-banner { flex-direction: column; text-align: center; padding: 18px; }
+    .tree-split { grid-template-columns: 1fr; gap: 4px; }
+    .split-arrow-left, .split-arrow-right { text-align: center; }
+    .mapa-final-box { padding: 24px; }
+  }
+</style>

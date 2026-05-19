@@ -1,0 +1,240 @@
+---
+// =====================================================
+// PAYMENT METHODS — 3 sposoby płatności
+// =====================================================
+// 3 warianty wyświetlania:
+//   - "full" — pełna sekcja z 3 kartami (pod cennikiem)
+//   - "compact" — pasek kompaktowy (w BookingSelector)
+//   - "inline" — jednolinijkowa wzmianka (FAQ, krok 3)
+// =====================================================
+import { TIDYCAL_CONFIG } from '../config/tidycal.js';
+
+interface Props {
+  variant?: 'full' | 'compact' | 'inline';
+}
+
+const { variant = 'full' } = Astro.props;
+const methods = TIDYCAL_CONFIG.payment.methods;
+const note = TIDYCAL_CONFIG.payment.note;
+---
+
+{variant === 'full' && (
+  <div class="payment-section">
+    <div class="payment-header">
+      <div class="payment-header-icon">💰</div>
+      <div>
+        <div class="payment-title">Płatność po lekcji — 3 sposoby do wyboru</div>
+        <p class="payment-subtitle">{note}</p>
+      </div>
+    </div>
+
+    <div class="payment-grid">
+      {methods.map((m) => (
+        <div class={`payment-card payment-card-${m.id}`}>
+          {m.badge && <span class="payment-badge">{m.badge}</span>}
+          <div class="payment-icon">{m.icon}</div>
+          <div class="payment-name">{m.name}</div>
+          <div class="payment-desc">{m.desc}</div>
+          <div class="payment-details">{m.details}</div>
+        </div>
+      ))}
+    </div>
+
+    {TIDYCAL_CONFIG.payment.invoiceNote && (
+      <div class="payment-invoice">
+        <i class="ti ti-receipt"></i>
+        <span>{TIDYCAL_CONFIG.payment.invoiceNote}</span>
+      </div>
+    )}
+  </div>
+)}
+
+{variant === 'compact' && (
+  <div class="payment-compact">
+    <span class="pc-icon">💰</span>
+    <span class="pc-title">Płatność po lekcji:</span>
+    <span class="pc-methods">
+      {methods.map((m, i) => (
+        <>
+          {i > 0 && <span class="pc-sep">·</span>}
+          <span class="pc-method">{m.icon} <strong>{m.name}</strong></span>
+        </>
+      ))}
+    </span>
+  </div>
+)}
+
+{variant === 'inline' && (
+  <span class="payment-inline">
+    💰 <strong>Płatność po lekcji:</strong> gotówka (preferowana), BLIK na <strong>570 840 416</strong>, lub przelew (numer konta w mailu).
+  </span>
+)}
+
+<style>
+  /* === FULL VARIANT === */
+  .payment-section {
+    background: linear-gradient(90deg, rgba(255, 222, 89, 0.1), rgba(255, 222, 89, 0.04));
+    border: 1px solid rgba(255, 222, 89, 0.3);
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 14px;
+  }
+  .payment-header {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .payment-header-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .payment-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFDE59;
+    margin-bottom: 4px;
+  }
+  .payment-subtitle {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.7);
+    line-height: 1.55;
+  }
+
+  .payment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .payment-card {
+    background: rgba(5, 10, 36, 0.4);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 11px;
+    padding: 16px;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  .payment-card-cash {
+    border-color: rgba(255, 222, 89, 0.4);
+    background: rgba(255, 222, 89, 0.06);
+  }
+  .payment-card-blik {
+    border-color: rgba(63, 206, 207, 0.3);
+  }
+  .payment-badge {
+    position: absolute;
+    top: -8px;
+    right: 10px;
+    background: #FFDE59;
+    color: #050A24;
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .payment-card-blik .payment-badge {
+    background: #3FCECF;
+  }
+  .payment-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .payment-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .payment-desc {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-bottom: 8px;
+  }
+  .payment-details {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.8);
+    padding: 6px 10px;
+    background: rgba(235, 238, 255, 0.05);
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+  }
+
+  /* === SEKCJA FAKTURY === */
+  .payment-invoice {
+    margin-top: 14px;
+    padding: 11px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.7);
+  }
+  .payment-invoice i {
+    color: #3FCECF;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* === COMPACT VARIANT === */
+  .payment-compact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.7);
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 222, 89, 0.06);
+    border: 1px solid rgba(255, 222, 89, 0.2);
+    border-radius: 8px;
+    line-height: 1.4;
+  }
+  .pc-icon {
+    font-size: 14px;
+  }
+  .pc-title {
+    font-weight: 600;
+    color: #FFDE59;
+  }
+  .pc-methods {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .pc-method {
+    color: rgba(235, 238, 255, 0.8);
+  }
+  .pc-method strong {
+    color: #EBEEFF;
+  }
+  .pc-sep {
+    color: rgba(235, 238, 255, 0.3);
+  }
+
+  /* === INLINE VARIANT === */
+  .payment-inline {
+    display: inline;
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.6;
+  }
+  .payment-inline strong {
+    color: #EBEEFF;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .payment-grid {
+      grid-template-columns: 1fr;
+    }
+    .payment-header {
+      flex-direction: column;
+    }
+  }
+</style>
