@@ -168,7 +168,7 @@ const faq = [
         </div>
         <div class="cennik-info">
           Lekcja: <strong>45 min lub 90 min</strong> — wybierasz przy rezerwacji<br />
-          Cena podana <strong>za 1 osobę</strong>
+          Cena podana <strong>za 1 osobę · za 45 minut</strong>
         </div>
       </div>
 
@@ -199,7 +199,7 @@ const faq = [
         </div>
       </div>
 
-      <h3 class="cennik-section-h" style="margin-top:24px">Studia — 45 minut</h3>
+      <h3 class="cennik-section-h" style="margin-top:24px">Studia — wszystkie przedmioty matematyczne</h3>
       <div class="cennik-table-wrap">
         <div class="cennik-table">
           <div class="cennik-row cennik-header-row">
@@ -226,30 +226,12 @@ const faq = [
         </div>
       </div>
 
-      <h3 class="cennik-section-h" style="margin-top:24px">Studia — 90 minut</h3>
-      <div class="cennik-table-wrap">
-        <div class="cennik-table">
-          <div class="cennik-row cennik-header-row">
-            <div>POZIOM</div>
-            <div class="cennik-cell-r">1 OS</div>
-            <div class="cennik-cell-r">2 OS</div>
-            <div class="cennik-cell-r">3 OS</div>
-            <div class="cennik-cell-r">4 OS</div>
-            <div class="cennik-cell-r">5-6 OS</div>
-          </div>
-          {cennikStudia.map((row) => (
-            <div class="cennik-row">
-              <div>
-                <strong>{row.name}</strong>
-                {row.sub && <div class="cennik-sub">{row.sub}</div>}
-              </div>
-              <div class="cennik-cell-r yellow"><strong>{row.prices['1']} zł</strong></div>
-              <div class="cennik-cell-r">{row.prices['2']} zł</div>
-              <div class="cennik-cell-r">{row.prices['3']} zł</div>
-              <div class="cennik-cell-r">{row.prices['4']} zł</div>
-              <div class="cennik-cell-r teal"><strong>{row.prices['56']} zł</strong></div>
-            </div>
-          ))}
+      <!-- INFO BOX: Lekcja 90 min = cena × 2 -->
+      <div class="cennik-info-90">
+        <div class="cennik-info-90-icon">💡</div>
+        <div class="cennik-info-90-content">
+          <strong>Lekcja 90 minut?</strong>
+          <span>Pomnóż cenę z tabeli przez 2. Przykład: szkoła indywidualnie 90 min = <strong style="color:#FFDE59">130 zł × 2 = 260 zł</strong>.</span>
         </div>
       </div>
 
@@ -554,6 +536,36 @@ const faq = [
     font-size: 11px;
     color: rgba(235, 238, 255, 0.5);
     margin-top: 2px;
+  }
+
+  /* === INFO BOX: lekcja 90 min × 2 === */
+  .cennik-info-90 {
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.08) 0%, rgba(63, 206, 207, 0.06) 100%);
+    border: 1px solid rgba(255, 222, 89, 0.25);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .cennik-info-90-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .cennik-info-90-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cennik-info-90-content strong {
+    color: #FFDE59;
+    font-size: 14px;
+  }
+  .cennik-info-90-content span {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.5;
   }
 
   /* === PRZEDMIOTY STUDIÓW === */

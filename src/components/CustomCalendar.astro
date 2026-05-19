@@ -1,12 +1,11 @@
 ---
 // =====================================================
-// CUSTOM CALENDAR V9 — styl kafelkowy + pole rezerwacji
+// CUSTOM CALENDAR V9 — filtrowanie godzin + naprawione style
 // =====================================================
-// - Dni wolne: eliptyczne ciemnoniebieskie kafelki, żółty tekst
-// - Wybrany dzień: żółty kafelek
-// - Godziny: prostokątne kafelki z ramką, hover effect
-// - Wybrana godzina: żółty kafelek z ✓
-// - Pole WYBRANY TERMIN + żółty przycisk Rezerwuj
+// - Tylko sloty z dozwolonych godzin (12:00, 12:45, 13:30, ..., 18:45)
+// - Dni innych miesięcy: puste pola (nie pokazujemy)
+// - Wolne dni: granat kafelek + żółty tekst (mocne !important)
+// - Booking type: prawidłowe filtrowanie z BookingSelector
 // =====================================================
 import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 ---
@@ -28,7 +27,6 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 
       <div class="cc-content" data-cc-content hidden>
 
-        <!-- LEWA: kalendarz -->
         <div class="cc-calendar">
           <div class="cc-cal-header">
             <button class="cc-cal-nav" data-cc-prev type="button" aria-label="Poprzedni miesiąc">‹</button>
@@ -48,7 +46,6 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
           </div>
         </div>
 
-        <!-- PRAWA: godziny -->
         <div class="cc-times">
           <div class="cc-times-header">
             <span class="cc-times-label" data-cc-day-label>Wybierz dzień z kalendarza</span>
@@ -100,6 +97,14 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 <script>
   import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 
+  // ============================================================
+  // KLUCZOWA NAPRAWA: dozwolone godziny startu lekcji (co 45 min)
+  // ============================================================
+  const DOZWOLONE_GODZINY = [
+    '12:00', '12:45', '13:30', '14:15', '15:00',
+    '15:45', '16:30', '17:15', '18:00', '18:45'
+  ];
+
   const TIMEZONE = 'Europe/Warsaw';
   const POLSKIE_MIESIACE = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
   const POLSKIE_MIESIACE_GEN = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
@@ -133,7 +138,9 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
   async function fetchSlots() {
     showLoader();
     try {
-      const response = await fetch(`${TIDYCAL_CONFIG.apiUrl}/api/upcoming-slots`, {
+      // Cache buster: ?v=9 + timestamp żeby ominąć cache
+      const cacheBust = `?v=9&t=${Date.now()}`;
+      const response = await fetch(`${TIDYCAL_CONFIG.apiUrl}/api/upcoming-slots${cacheBust}`, {
         headers: { Accept: 'application/json' },
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -146,6 +153,10 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
         if (!slug) continue;
         slotsByDayPerType[slug] = {};
         for (const slot of btData.slots || []) {
+          const time = formatTime(slot.starts_at);
+          // KLUCZOWE: filtrujemy tylko sloty z dozwolonych godzin
+          if (!DOZWOLONE_GODZINY.includes(time)) continue;
+
           const day = slot.starts_at.split('T')[0];
           if (!slotsByDayPerType[slug][day]) slotsByDayPerType[slug][day] = [];
           slotsByDayPerType[slug][day].push({
@@ -170,6 +181,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 
   function computeAggregatedSlots() {
     slotsByDay = {};
+    // Jeśli wybrany konkretny booking type → tylko te sloty
     const source = currentBookingSlug && slotsByDayPerType[currentBookingSlug]
       ? { [currentBookingSlug]: slotsByDayPerType[currentBookingSlug] }
       : slotsByDayPerType;
@@ -181,6 +193,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
       }
     }
 
+    // Deduplikacja po czasie + slug, sortowanie
     for (const day in slotsByDay) {
       const seen = new Set();
       slotsByDay[day] = slotsByDay[day].filter(s => {
@@ -204,16 +217,15 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
-    const prevLastDay = new Date(year, month, 0);
-    const daysInPrevMonth = prevLastDay.getDate();
 
     let html = '';
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayStr = formatDate(today);
 
-    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
-      html += `<div class="cc-day cc-day-other"><span>${daysInPrevMonth - i}</span></div>`;
+    // Dni innych miesięcy → PUSTE pola (cleaner look)
+    for (let i = 0; i < firstDayOfWeek; i++) {
+      html += `<div class="cc-day cc-day-empty"></div>`;
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
@@ -235,10 +247,11 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
       html += `<div class="${classes.join(' ')}" ${attrs}><span>${day}</span></div>`;
     }
 
+    // Reszta tygodnia → puste pola (nie pokazujemy następnego miesiąca)
     const filledCells = firstDayOfWeek + daysInMonth;
-    const remaining = 42 - filledCells;
-    for (let day = 1; day <= remaining; day++) {
-      html += `<div class="cc-day cc-day-other"><span>${day}</span></div>`;
+    const remaining = (Math.ceil(filledCells / 7) * 7) - filledCells;
+    for (let i = 0; i < remaining; i++) {
+      html += `<div class="cc-day cc-day-empty"></div>`;
     }
 
     gridEl.innerHTML = html;
@@ -298,6 +311,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
       return;
     }
 
+    // Grupuj po unikalnej godzinie
     const byTime = {};
     for (const slot of slots) {
       const time = formatTime(slot.starts_at);
@@ -330,10 +344,14 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     const matchingSlots = slots.filter(s => formatTime(s.starts_at) === time);
     if (matchingSlots.length === 0) return;
 
-    let slot = matchingSlots[0];
+    // NAPRAWA: jeśli mamy wybrany booking type w BookingSelector,
+    // wybierz slot tego TYPU (nie pierwszy lepszy)
+    let slot;
     if (currentBookingSlug) {
-      const filtered = matchingSlots.find(s => s.booking_type_slug === currentBookingSlug);
-      if (filtered) slot = filtered;
+      slot = matchingSlots.find(s => s.booking_type_slug === currentBookingSlug);
+      if (!slot) slot = matchingSlots[0]; // fallback
+    } else {
+      slot = matchingSlots[0];
     }
 
     selectedSlot = { ...slot, _key: slotKey };
@@ -406,6 +424,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     fetchSlots();
   });
 
+  // Event z BookingSelector — filtruj po wybranym booking type
   window.addEventListener('tidycal-select', (e) => {
     const slug = e.detail?.slug;
     if (slug) {
@@ -431,243 +450,109 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 
 <style>
   .custom-calendar-section { padding: 40px 0; }
-  .cc-title {
-    font-size: 28px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    line-height: 1.15;
-    margin-top: 6px;
-    margin-bottom: 8px;
-  }
-  .cc-subtitle {
-    font-size: 14px;
-    color: rgba(235, 238, 255, 0.65);
-    line-height: 1.6;
-    margin-bottom: 22px;
-    max-width: 640px;
-  }
+  .cc-title { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; line-height: 1.15; margin-top: 6px; margin-bottom: 8px; }
+  .cc-subtitle { font-size: 14px; color: rgba(235,238,255,0.65); line-height: 1.6; margin-bottom: 22px; max-width: 640px; }
   .cc-subtitle strong { color: #FFDE59; }
-
-  .cc-widget {
-    position: relative;
-    min-height: 520px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 222, 89, 0.2);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
-  }
-
-  /* === LOADER === */
-  .cc-loader {
-    min-height: 520px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: rgba(235, 238, 255, 0.5);
-    padding: 40px 20px;
-  }
+  .cc-widget { position: relative; min-height: 520px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,222,89,0.2); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.25); }
+  .cc-loader { min-height: 520px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(235,238,255,0.5); padding: 40px 20px; }
   .cc-loader[hidden] { display: none !important; }
   .cc-loader p { font-size: 13px; margin-top: 14px; }
-  .cc-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 222, 89, 0.2);
-    border-top-color: #FFDE59;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
+  .cc-spinner { width: 40px; height: 40px; border: 3px solid rgba(255,222,89,0.2); border-top-color: #FFDE59; border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* === BŁĄD === */
   .cc-error { display: flex; gap: 16px; align-items: flex-start; padding: 32px; }
   .cc-error[hidden] { display: none !important; }
   .cc-error i { color: #FFDE59; font-size: 28px; flex-shrink: 0; margin-top: 2px; }
   .cc-error strong { font-size: 16px; display: block; margin-bottom: 4px; }
-  .cc-error p { font-size: 13px; color: rgba(235, 238, 255, 0.65); margin-bottom: 12px; }
+  .cc-error p { font-size: 13px; color: rgba(235,238,255,0.65); margin-bottom: 12px; }
   .cc-error a[data-cc-retry] { color: #3FCECF; cursor: pointer; }
-
-  /* === CONTENT — 2 KOLUMNY === */
-  .cc-content {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 0;
-    min-height: 520px;
-  }
+  .cc-content { display: grid; grid-template-columns: 1.4fr 1fr; gap: 0; min-height: 520px; }
   .cc-content[hidden] { display: none !important; }
-
-  /* === LEWA: KALENDARZ === */
-  .cc-calendar {
-    padding: 24px;
-    border-right: 1px solid rgba(235, 238, 255, 0.08);
-  }
-  .cc-cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
-  .cc-cal-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: #EBEEFF;
-  }
-  .cc-cal-nav {
-    background: transparent;
-    border: 1px solid rgba(235, 238, 255, 0.1);
-    color: rgba(235, 238, 255, 0.6);
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    font-family: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .cc-cal-nav:hover:not([disabled]) {
-    background: rgba(255, 255, 255, 0.06);
-    color: #EBEEFF;
-    border-color: rgba(235, 238, 255, 0.2);
-  }
+  .cc-calendar { padding: 24px; border-right: 1px solid rgba(235,238,255,0.08); }
+  .cc-cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .cc-cal-title { font-size: 17px; font-weight: 600; color: #EBEEFF; }
+  .cc-cal-nav { background: transparent; border: 1px solid rgba(235,238,255,0.1); color: rgba(235,238,255,0.6); width: 32px; height: 32px; border-radius: 8px; font-size: 18px; cursor: pointer; transition: all 0.15s ease; font-family: inherit; display: flex; align-items: center; justify-content: center; }
+  .cc-cal-nav:hover:not([disabled]) { background: rgba(255,255,255,0.06); color: #EBEEFF; border-color: rgba(235,238,255,0.2); }
   .cc-cal-nav[disabled] { opacity: 0.3; cursor: not-allowed; }
-  .cc-cal-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    margin-bottom: 8px;
-  }
-  .cc-cal-weekdays div {
-    text-align: center;
-    font-size: 11px;
-    font-weight: 500;
-    color: rgba(235, 238, 255, 0.4);
-    padding: 6px 0;
-  }
-  .cc-cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-  }
-  /* DZIEŃ — bazowo prostokątne pole, w środku <span> z liczbą */
+  .cc-cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 8px; }
+  .cc-cal-weekdays div { text-align: center; font-size: 11px; font-weight: 500; color: rgba(235,238,255,0.4); padding: 6px 0; }
+  .cc-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+
+  /* === DZIEŃ — bazowy === */
   .cc-day {
     aspect-ratio: 1 / 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     font-size: 14px;
-    color: rgba(235, 238, 255, 0.5);
+    color: rgba(235,238,255,0.5);
     transition: all 0.15s ease;
   }
   .cc-day span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 80%;
-    height: 80%;
-    border-radius: 999px;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 82% !important;
+    height: 82% !important;
+    border-radius: 999px !important;
     transition: all 0.15s ease;
   }
-  /* Dni innych miesięcy */
-  .cc-day-other span { color: rgba(235, 238, 255, 0.18); }
+
+  /* PUSTE pole (poza miesiącem) */
+  .cc-day-empty { visibility: hidden; }
+
   /* Przeszłe dni */
-  .cc-day-past span { color: rgba(235, 238, 255, 0.25); }
+  .cc-day-past span { color: rgba(235,238,255,0.25); }
+
   /* DZIŚ — turkusowy obrys */
   .cc-day-today span {
-    border: 1.5px solid #3FCECF;
-    color: #3FCECF;
-    font-weight: 600;
+    border: 1.5px solid #3FCECF !important;
+    color: #3FCECF !important;
+    font-weight: 600 !important;
   }
-  /* WOLNE DNI — eliptyczny kafelek (ciemny granat), żółty tekst */
+
+  /* === WOLNE DNI — granat kafelek + żółty tekst === */
   .cc-day-free { cursor: pointer; }
   .cc-day-free span {
-    background: rgba(5, 10, 36, 0.85);
-    color: #FFDE59;
-    font-weight: 600;
-    border: 1px solid rgba(255, 222, 89, 0.3);
+    background: rgba(5, 10, 36, 0.85) !important;
+    color: #FFDE59 !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(255, 222, 89, 0.4) !important;
   }
   .cc-day-free:hover span {
-    background: rgba(255, 222, 89, 0.15);
-    border-color: rgba(255, 222, 89, 0.6);
-    transform: scale(1.05);
+    background: rgba(255, 222, 89, 0.15) !important;
+    border-color: rgba(255, 222, 89, 0.7) !important;
+    transform: scale(1.08);
   }
-  /* WYBRANY DZIEŃ — pełny żółty kafelek */
+
+  /* === WYBRANY DZIEŃ — pełny żółty === */
   .cc-day-selected span {
     background: #FFDE59 !important;
     color: #050A24 !important;
     font-weight: 700 !important;
     border-color: #FFDE59 !important;
   }
-  /* DZIŚ + wolny → łączymy: żółty kafelek z turkusowym obrysem */
-  .cc-day-today.cc-day-free span {
-    border: 1.5px solid #3FCECF;
-  }
+
+  /* DZIŚ + wolny */
+  .cc-day-today.cc-day-free span { border: 1.5px solid #3FCECF !important; }
 
   /* Legenda */
-  .cc-cal-legend {
-    display: flex;
-    gap: 18px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-  }
-  .cc-cal-legend span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: rgba(235, 238, 255, 0.5);
-  }
-  .cc-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-  .cc-dot-today {
-    background: transparent;
-    border: 1.5px solid #3FCECF;
-  }
+  .cc-cal-legend { display: flex; gap: 18px; margin-top: 20px; flex-wrap: wrap; }
+  .cc-cal-legend span { display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(235,238,255,0.5); }
+  .cc-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .cc-dot-today { background: transparent; border: 1.5px solid #3FCECF; }
   .cc-dot-free { background: #FFDE59; }
 
   /* === PRAWA: GODZINY === */
-  .cc-times {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    background: rgba(5, 10, 36, 0.4);
-  }
+  .cc-times { padding: 24px; display: flex; flex-direction: column; background: rgba(5,10,36,0.4); }
   .cc-times-header { margin-bottom: 14px; }
-  .cc-times-label {
-    font-size: 14px;
-    color: #FFDE59;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-  }
-  /* GODZINY — 2 KOLUMNY (desktop) — kafelki z ramką */
-  .cc-times-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    flex: 1;
-    overflow-y: auto;
-    max-height: 360px;
-    align-content: start;
-  }
-  .cc-times-empty {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 40px 20px;
-    color: rgba(235, 238, 255, 0.4);
-    font-size: 13px;
-    line-height: 1.6;
-  }
-  /* KAFELEK GODZINY — prostokątny, z ramką, hover effect */
+  .cc-times-label { font-size: 14px; color: #FFDE59; font-weight: 600; letter-spacing: 0.2px; }
+  .cc-times-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; flex: 1; overflow-y: auto; max-height: 360px; align-content: start; }
+  .cc-times-empty { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: rgba(235,238,255,0.4); font-size: 13px; line-height: 1.6; }
+
+  /* KAFELEK GODZINY */
   .cc-time-btn {
-    background: rgba(5, 10, 36, 0.6);
-    border: 1px solid rgba(63, 206, 207, 0.25);
+    background: rgba(5,10,36,0.6);
+    border: 1px solid rgba(63,206,207,0.25);
     color: #EBEEFF;
     padding: 14px 12px;
     border-radius: 10px;
@@ -682,111 +567,40 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     justify-content: center;
     gap: 6px;
   }
-  .cc-time-btn:hover {
-    background: rgba(63, 206, 207, 0.1);
-    border-color: rgba(63, 206, 207, 0.5);
-    transform: translateY(-1px);
-  }
-  /* WYBRANA GODZINA — pełny żółty kafelek + ✓ */
+  .cc-time-btn:hover { background: rgba(63,206,207,0.1); border-color: rgba(63,206,207,0.5); transform: translateY(-1px); }
   .cc-time-selected {
     background: #FFDE59 !important;
     color: #050A24 !important;
     border-color: #FFDE59 !important;
-    box-shadow: 0 2px 12px rgba(255, 222, 89, 0.3);
+    box-shadow: 0 2px 12px rgba(255,222,89,0.3);
   }
-  .cc-time-check {
-    font-size: 12px;
-    font-weight: 700;
-  }
+  .cc-time-check { font-size: 12px; font-weight: 700; }
 
   /* CTA */
-  .cc-cta-wrap {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(235, 238, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+  .cc-cta-wrap { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(235,238,255,0.1); display: flex; flex-direction: column; gap: 12px; }
   .cc-cta-wrap[hidden] { display: none !important; }
-  .cc-selected-info {
-    background: rgba(255, 222, 89, 0.08);
-    border: 1px solid rgba(255, 222, 89, 0.25);
-    border-radius: 9px;
-    padding: 12px 14px;
-  }
-  .cc-selected-label {
-    font-size: 9px;
-    color: rgba(235, 238, 255, 0.5);
-    letter-spacing: 1.5px;
-    margin-bottom: 4px;
-  }
-  .cc-selected-value {
-    font-size: 14px;
-    font-weight: 600;
-    color: #FFDE59;
-  }
-  .cc-selected-meta {
-    font-size: 11px;
-    color: rgba(235, 238, 255, 0.65);
-    margin-top: 2px;
-  }
+  .cc-selected-info { background: rgba(255,222,89,0.08); border: 1px solid rgba(255,222,89,0.25); border-radius: 9px; padding: 12px 14px; }
+  .cc-selected-label { font-size: 9px; color: rgba(235,238,255,0.5); letter-spacing: 1.5px; margin-bottom: 4px; }
+  .cc-selected-value { font-size: 14px; font-weight: 600; color: #FFDE59; }
+  .cc-selected-meta { font-size: 11px; color: rgba(235,238,255,0.65); margin-top: 2px; }
   .cc-cta-btn { text-align: center; }
-
-  .cc-times-info {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(235, 238, 255, 0.06);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    color: rgba(235, 238, 255, 0.5);
-  }
+  .cc-times-info { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(235,238,255,0.06); display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(235,238,255,0.5); }
   .cc-times-info i { color: #3FCECF; font-size: 14px; }
-  .cc-times-info strong { color: rgba(235, 238, 255, 0.8); }
-
-  /* === BOTTOM INFO === */
-  .cc-bottom-info {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-  }
-  .cc-info-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: rgba(235, 238, 255, 0.55);
-  }
+  .cc-times-info strong { color: rgba(235,238,255,0.8); }
+  .cc-bottom-info { display: flex; justify-content: center; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
+  .cc-info-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(235,238,255,0.55); }
   .cc-info-item i { color: #3FCECF; font-size: 16px; }
 
-  /* === RESPONSIVE === */
   @media (max-width: 900px) {
     .cc-content { grid-template-columns: 1fr; }
-    .cc-calendar {
-      border-right: none;
-      border-bottom: 1px solid rgba(235, 238, 255, 0.08);
-    }
-    .cc-times-list {
-      grid-template-columns: repeat(2, 1fr);
-      max-height: 280px;
-    }
+    .cc-calendar { border-right: none; border-bottom: 1px solid rgba(235,238,255,0.08); }
+    .cc-times-list { grid-template-columns: repeat(2, 1fr); max-height: 280px; }
   }
   @media (max-width: 480px) {
     .cc-title { font-size: 22px; }
     .cc-calendar, .cc-times { padding: 18px; }
     .cc-day { font-size: 13px; }
-    .cc-times-list {
-      grid-template-columns: 1fr;
-      max-height: none;
-    }
-    .cc-bottom-info {
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-start;
-    }
+    .cc-times-list { grid-template-columns: 1fr; max-height: none; }
+    .cc-bottom-info { flex-direction: column; gap: 10px; align-items: flex-start; }
   }
 </style>

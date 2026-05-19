@@ -284,6 +284,49 @@ const kroki = [
       </div>
     </div>
   </section>
+
+  <!-- KURSY WIDEO Z PLATFORMY WEBTOLEARN -->
+  <section class="kursy-wideo-section">
+    <div class="container-content">
+      <div class="section-label" style="text-align:center">KURSY WIDEO Z PLATFORMY</div>
+      <h2 class="kw-title">Kompletne kursy video<br /><span style="color:#FFDE59">— ucz się z pełnymi nagraniami.</span></h2>
+      <p class="kw-sub">
+        Lekcje wideo nagrane krok po kroku. Wracasz kiedy chcesz, ile chcesz.<br />
+        Pełna teoria · Przykłady · Zadania maturalne · Dostęp 24/7.
+      </p>
+
+      <div class="kw-grid">
+        <a href="https://kurs.mathouse.pl/next/public/catalog" target="_blank" rel="noopener noreferrer" class="kw-card kw-card-main">
+          <div class="kw-card-icon">📚</div>
+          <div class="kw-card-badge">16 KURSÓW</div>
+          <h3>Pakiet podstawowy klasa 1</h3>
+          <p>Wszystkie 12 działów klasy 1 LO w jednym pakiecie</p>
+          <div class="kw-card-price"><strong>597 zł</strong> <s>697 zł</s></div>
+          <span class="kw-card-cta">Zobacz pakiet →</span>
+        </a>
+
+        <a href="https://kurs.mathouse.pl/next/public/catalog" target="_blank" rel="noopener noreferrer" class="kw-card">
+          <div class="kw-card-icon">📐</div>
+          <h3>Pojedyncze działy</h3>
+          <p>Zbiory liczbowe, równania, procenty, potęgi, logarytmy, wyrażenia...</p>
+          <div class="kw-card-price"><strong>197 zł</strong> <s>399 zł</s> / dział</div>
+          <span class="kw-card-cta">Wszystkie kursy →</span>
+        </a>
+
+        <a href="https://kurs.mathouse.pl/next/public/login" target="_blank" rel="noopener noreferrer" class="kw-card kw-card-secondary">
+          <div class="kw-card-icon">🔐</div>
+          <h3>Masz już kurs?</h3>
+          <p>Zaloguj się i wróć do swoich lekcji</p>
+          <span class="kw-card-cta">Przejdź do logowania →</span>
+        </a>
+      </div>
+
+      <div class="kw-info">
+        <strong>💡 Wszystkie kursy wideo są dostępne na platformie kurs.mathouse.pl.</strong>
+        Po zakupie otrzymujesz pełen dostęp do nagrań — oglądasz kiedy chcesz, ile chcesz.
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style>
@@ -907,5 +950,122 @@ const kroki = [
     .kroki-grid {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* === KURSY WIDEO Z PLATFORMY === */
+  .kursy-wideo-section {
+    padding: 80px 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(255, 222, 89, 0.03) 100%);
+  }
+  .kw-title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin: 12px 0 16px;
+  }
+  .kw-sub {
+    text-align: center;
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+  .kw-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 32px;
+  }
+  .kw-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.08);
+    border-radius: 16px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kw-card:hover {
+    border-color: rgba(255, 222, 89, 0.3);
+    transform: translateY(-3px);
+  }
+  .kw-card-main {
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.1) 0%, rgba(63, 206, 207, 0.08) 100%);
+    border-color: rgba(255, 222, 89, 0.3);
+  }
+  .kw-card-secondary {
+    background: rgba(63, 206, 207, 0.06);
+    border-color: rgba(63, 206, 207, 0.2);
+  }
+  .kw-card-icon {
+    font-size: 36px;
+    line-height: 1;
+  }
+  .kw-card-badge {
+    display: inline-block;
+    background: rgba(255, 222, 89, 0.2);
+    color: #FFDE59;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    align-self: flex-start;
+  }
+  .kw-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #EBEEFF;
+  }
+  .kw-card p {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.55;
+    margin: 0;
+    flex: 1;
+  }
+  .kw-card-price {
+    font-size: 18px;
+    color: #FFDE59;
+    margin-top: 8px;
+  }
+  .kw-card-price s {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.4);
+    margin-left: 6px;
+  }
+  .kw-card-cta {
+    font-size: 13px;
+    color: #FFDE59;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .kw-info {
+    background: rgba(63, 206, 207, 0.06);
+    border: 1px solid rgba(63, 206, 207, 0.2);
+    border-radius: 12px;
+    padding: 18px 22px;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.6;
+  }
+  .kw-info strong {
+    color: #3FCECF;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  @media (max-width: 900px) {
+    .kw-grid { grid-template-columns: 1fr; }
+    .kw-title { font-size: 26px; }
   }
 </style>
