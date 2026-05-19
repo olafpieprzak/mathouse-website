@@ -1,11 +1,10 @@
 ---
 // =====================================================
-// CUSTOM CALENDAR V9 — filtrowanie godzin + naprawione style
+// CUSTOM CALENDAR V12 — INLINE STYLES (Astro scope problem fix)
 // =====================================================
-// - Tylko sloty z dozwolonych godzin (12:00, 12:45, 13:30, ..., 18:45)
-// - Dni innych miesięcy: puste pola (nie pokazujemy)
-// - Wolne dni: granat kafelek + żółty tekst (mocne !important)
-// - Booking type: prawidłowe filtrowanie z BookingSelector
+// Style aplikowane bezpośrednio na elementach żeby ominąć
+// problem z Astro scoped styles które nie zawsze działają
+// w produkcji (Cloudflare Pages cache)
 // =====================================================
 import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 ---
@@ -98,9 +97,6 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 <script>
   import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 
-  // ============================================================
-  // KLUCZOWA NAPRAWA: dozwolone godziny startu lekcji (co 45 min)
-  // ============================================================
   const DOZWOLONE_GODZINY = [
     '12:00', '12:45', '13:30', '14:15', '15:00',
     '15:45', '16:30', '17:15', '18:00', '18:45'
@@ -111,6 +107,26 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
   const POLSKIE_MIESIACE_GEN = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
   const POLSKIE_DNI = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
 
+  // =====================================================
+  // INLINE STYLES — działają niezależnie od CSS scope
+  // =====================================================
+  const STYLES = {
+    day: 'aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; font-size:14px; transition:all 0.15s ease; cursor:default;',
+    span: 'display:inline-flex; align-items:center; justify-content:center; width:88%; height:88%; border-radius:12px; transition:all 0.15s ease;',
+    // DNI INNYCH MIESIĘCY — przygaszone bez tła
+    other: 'color:rgba(235,238,255,0.2); background:transparent; border:1px solid transparent;',
+    // PRZESZŁE
+    past: 'color:rgba(235,238,255,0.25); background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03);',
+    // DZIŚ — turkusowy obrys
+    today: 'color:#3FCECF; background:rgba(63,206,207,0.08); border:1.5px solid #3FCECF; font-weight:700;',
+    // WOLNE DNI — szary kafelek + żółty tekst (jak TidyCal)
+    free: 'color:#FFDE59; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.06); font-weight:700; cursor:pointer;',
+    // ZAJĘTE DNI (przyszłe bez slotów) — szary kafelek mniej widoczny
+    booked: 'color:rgba(255,222,89,0.35); background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.03);',
+    // WYBRANY — pełny żółty
+    selected: 'color:#050A24; background:#FFDE59; border:1.5px solid #FFDE59; font-weight:700;',
+  };
+
   let currentMonth = new Date();
   currentMonth.setDate(1);
   let selectedDay = null;
@@ -119,7 +135,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
   let slotsByDayPerType = {};
   let bookingTypes = [];
   let currentBookingSlug = null;
-  let currentCustomTitle = null; // FIX: tytuł zgodny z wyborem usera
+  let currentCustomTitle = null;
 
   const loader = document.querySelector('[data-cc-loader]');
   const content = document.querySelector('[data-cc-content]');
@@ -140,8 +156,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
   async function fetchSlots() {
     showLoader();
     try {
-      // Cache buster: ?v=9 + timestamp żeby ominąć cache
-      const cacheBust = `?v=9&t=${Date.now()}`;
+      const cacheBust = `?v=12&t=${Date.now()}`;
       const response = await fetch(`${TIDYCAL_CONFIG.apiUrl}/api/upcoming-slots${cacheBust}`, {
         headers: { Accept: 'application/json' },
       });
@@ -156,9 +171,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
         slotsByDayPerType[slug] = {};
         for (const slot of btData.slots || []) {
           const time = formatTime(slot.starts_at);
-          // KLUCZOWE: filtrujemy tylko sloty z dozwolonych godzin
           if (!DOZWOLONE_GODZINY.includes(time)) continue;
-
           const day = slot.starts_at.split('T')[0];
           if (!slotsByDayPerType[slug][day]) slotsByDayPerType[slug][day] = [];
           slotsByDayPerType[slug][day].push({
@@ -183,19 +196,15 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 
   function computeAggregatedSlots() {
     slotsByDay = {};
-    // Jeśli wybrany konkretny booking type → tylko te sloty
     const source = currentBookingSlug && slotsByDayPerType[currentBookingSlug]
       ? { [currentBookingSlug]: slotsByDayPerType[currentBookingSlug] }
       : slotsByDayPerType;
-
     for (const [slug, daysMap] of Object.entries(source)) {
       for (const [day, slots] of Object.entries(daysMap)) {
         if (!slotsByDay[day]) slotsByDay[day] = [];
         slotsByDay[day].push(...slots);
       }
     }
-
-    // Deduplikacja po czasie + slug, sortowanie
     for (const day in slotsByDay) {
       const seen = new Set();
       slotsByDay[day] = slotsByDay[day].filter(s => {
@@ -207,6 +216,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     }
   }
 
+  // KLUCZOWE: renderowanie z INLINE STYLES — nie zależy od CSS
   function renderCalendar() {
     if (!gridEl || !monthTitleEl) return;
 
@@ -220,19 +230,21 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
 
-    let html = '';
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayStr = formatDate(today);
 
-    // Dni POPRZEDNIEGO miesiąca (przygaszone, jak na TidyCal)
+    let html = '';
+
+    // Dni POPRZEDNIEGO miesiąca
     const prevLastDay = new Date(year, month, 0);
     const daysInPrevMonth = prevLastDay.getDate();
     for (let i = firstDayOfWeek - 1; i >= 0; i--) {
       const dayNum = daysInPrevMonth - i;
-      html += `<div class="cc-day cc-day-other"><span>${dayNum}</span></div>`;
+      html += `<div style="${STYLES.day}"><span style="${STYLES.span} ${STYLES.other}">${dayNum}</span></div>`;
     }
 
+    // Dni BIEŻĄCEGO miesiąca
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(year, month, day);
       const dateStr = formatDate(date);
@@ -241,24 +253,34 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
       const hasSlots = slotsByDay[dateStr] && slotsByDay[dateStr].length > 0;
       const isSelected = dateStr === selectedDay;
 
-      let classes = ['cc-day'];
-      if (isPast) classes.push('cc-day-past');
-      if (isToday) classes.push('cc-day-today');
-      if (hasSlots && !isPast) classes.push('cc-day-free');
-      // Zajęty dzień (przyszły, ale bez slotów) — szary kafelek jak TidyCal
-      if (!hasSlots && !isPast && !isToday) classes.push('cc-day-booked');
-      if (isSelected) classes.push('cc-day-selected');
+      let spanStyle = STYLES.span;
+      let clickable = false;
 
-      const clickable = hasSlots && !isPast;
-      const attrs = clickable ? `data-cc-day="${dateStr}" role="button" tabindex="0"` : '';
-      html += `<div class="${classes.join(' ')}" ${attrs}><span>${day}</span></div>`;
+      if (isSelected) {
+        spanStyle += STYLES.selected;
+      } else if (isPast) {
+        spanStyle += STYLES.past;
+      } else if (isToday && hasSlots) {
+        spanStyle += STYLES.free + 'border:1.5px solid #3FCECF !important; background:rgba(63,206,207,0.1) !important;';
+        clickable = true;
+      } else if (isToday) {
+        spanStyle += STYLES.today;
+      } else if (hasSlots) {
+        spanStyle += STYLES.free;
+        clickable = true;
+      } else {
+        spanStyle += STYLES.booked;
+      }
+
+      const attrs = clickable ? `data-cc-day="${dateStr}" role="button" tabindex="0" style="${STYLES.day} cursor:pointer;"` : `style="${STYLES.day}"`;
+      html += `<div ${attrs}><span style="${spanStyle}">${day}</span></div>`;
     }
 
-    // Dni NASTĘPNEGO miesiąca (przygaszone)
+    // Dni NASTĘPNEGO miesiąca
     const filledCells = firstDayOfWeek + daysInMonth;
     const remaining = (Math.ceil(filledCells / 7) * 7) - filledCells;
     for (let i = 1; i <= remaining; i++) {
-      html += `<div class="cc-day cc-day-other"><span>${i}</span></div>`;
+      html += `<div style="${STYLES.day}"><span style="${STYLES.span} ${STYLES.other}">${i}</span></div>`;
     }
 
     gridEl.innerHTML = html;
@@ -267,6 +289,22 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
       el.addEventListener('click', () => {
         const day = el.getAttribute('data-cc-day');
         if (day) selectDay(day);
+      });
+      // Hover effect
+      el.addEventListener('mouseenter', () => {
+        const span = el.querySelector('span');
+        if (span && !el.getAttribute('data-cc-day') === selectedDay) {
+          span.style.background = 'rgba(255,222,89,0.18)';
+          span.style.borderColor = 'rgba(255,222,89,0.5)';
+          span.style.transform = 'scale(1.05)';
+        }
+      });
+      el.addEventListener('mouseleave', () => {
+        const day = el.getAttribute('data-cc-day');
+        if (day !== selectedDay) {
+          // Re-render żeby przywrócić style
+          renderCalendar();
+        }
       });
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -299,33 +337,27 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 
   function renderTimes() {
     if (!timesListEl || !dayLabelEl) return;
-
     if (!selectedDay) {
       dayLabelEl.textContent = 'Wybierz dzień z kalendarza';
       timesListEl.innerHTML = '<div class="cc-times-empty">👈 Kliknij wolny dzień w kalendarzu, żeby zobaczyć dostępne godziny</div>';
       return;
     }
-
     const date = parseDate(selectedDay);
     const dayName = POLSKIE_DNI[date.getDay()];
     const dayNum = date.getDate();
     const monthGen = POLSKIE_MIESIACE_GEN[date.getMonth()];
     dayLabelEl.textContent = `${dayName}, ${dayNum} ${monthGen}`;
-
     const slots = slotsByDay[selectedDay] || [];
     if (slots.length === 0) {
       timesListEl.innerHTML = '<div class="cc-times-empty">Brak wolnych terminów w tym dniu</div>';
       return;
     }
-
-    // Grupuj po unikalnej godzinie
     const byTime = {};
     for (const slot of slots) {
       const time = formatTime(slot.starts_at);
       if (!byTime[time]) byTime[time] = [];
       byTime[time].push(slot);
     }
-
     let html = '';
     for (const time of Object.keys(byTime).sort()) {
       const slotKey = `${selectedDay}_${time}`;
@@ -333,9 +365,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
       const checkMark = isSelected ? ' <span class="cc-time-check">✓</span>' : '';
       html += `<button class="cc-time-btn ${isSelected ? 'cc-time-selected' : ''}" data-cc-time="${time}" data-cc-slot-key="${slotKey}" type="button">${time}${checkMark}</button>`;
     }
-
     timesListEl.innerHTML = html;
-
     timesListEl.querySelectorAll('[data-cc-time]').forEach(el => {
       el.addEventListener('click', () => {
         const time = el.getAttribute('data-cc-time');
@@ -350,17 +380,13 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     const slots = slotsByDay[selectedDay] || [];
     const matchingSlots = slots.filter(s => formatTime(s.starts_at) === time);
     if (matchingSlots.length === 0) return;
-
-    // NAPRAWA: jeśli mamy wybrany booking type w BookingSelector,
-    // wybierz slot tego TYPU (nie pierwszy lepszy)
     let slot;
     if (currentBookingSlug) {
       slot = matchingSlots.find(s => s.booking_type_slug === currentBookingSlug);
-      if (!slot) slot = matchingSlots[0]; // fallback
+      if (!slot) slot = matchingSlots[0];
     } else {
       slot = matchingSlots[0];
     }
-
     selectedSlot = { ...slot, _key: slotKey };
     renderTimes();
     showCTA();
@@ -373,12 +399,8 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     const dayNum = date.getDate();
     const monthGen = POLSKIE_MIESIACE_GEN[date.getMonth()];
     const time = formatTime(selectedSlot.starts_at);
-
     selectedTextEl.textContent = `${dayName}, ${dayNum} ${monthGen} · ${time}`;
-    // FIX: jeśli mamy customTitle z BookingSelector — używamy go (zgodny z wyborem)
-    // W przeciwnym razie używamy title z API (fallback)
     selectedMetaEl.textContent = currentCustomTitle || selectedSlot.booking_type_title;
-
     const startsAt = new Date(selectedSlot.starts_at);
     const dateParam = formatDate(startsAt);
     const timeParam = formatTime(selectedSlot.starts_at);
@@ -411,44 +433,33 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
 
   prevBtn?.addEventListener('click', () => {
     currentMonth.setMonth(currentMonth.getMonth() - 1);
-    selectedDay = null;
-    selectedSlot = null;
+    selectedDay = null; selectedSlot = null;
     ctaWrap?.setAttribute('hidden', '');
-    renderCalendar();
-    renderTimes();
+    renderCalendar(); renderTimes();
   });
-
   nextBtn?.addEventListener('click', () => {
     currentMonth.setMonth(currentMonth.getMonth() + 1);
-    selectedDay = null;
-    selectedSlot = null;
+    selectedDay = null; selectedSlot = null;
     ctaWrap?.setAttribute('hidden', '');
-    renderCalendar();
-    renderTimes();
+    renderCalendar(); renderTimes();
   });
-
   retryEl?.addEventListener('click', (e) => {
     e.preventDefault();
     errorBox?.setAttribute('hidden', '');
     fetchSlots();
   });
 
-  // Event z BookingSelector — filtruj po wybranym booking type
   window.addEventListener('tidycal-select', (e) => {
     const slug = e.detail?.slug;
     const customTitle = e.detail?.customTitle;
     if (slug) {
       currentBookingSlug = slug;
-      currentCustomTitle = customTitle || null; // zapisz tytuł z wyboru usera
+      currentCustomTitle = customTitle || null;
       computeAggregatedSlots();
-      selectedDay = null;
-      selectedSlot = null;
+      selectedDay = null; selectedSlot = null;
       ctaWrap?.setAttribute('hidden', '');
-      renderCalendar();
-      renderTimes();
-
+      renderCalendar(); renderTimes();
       if (subtitleEl) {
-        // Używamy customTitle (zgodnego z wyborem usera) zamiast API title
         const displayTitle = customTitle || bookingTypes.find(b => b.url_slug === slug)?.title;
         if (displayTitle) {
           subtitleEl.innerHTML = `Pokazuję dostępność dla: <strong>${displayTitle}</strong>. Kliknij wolny dzień i wybierz godzinę.`;
@@ -483,134 +494,26 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
   .cc-cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
   .cc-cal-title { font-size: 17px; font-weight: 600; color: #EBEEFF; }
   .cc-cal-nav { background: transparent; border: 1px solid rgba(235,238,255,0.1); color: rgba(235,238,255,0.6); width: 32px; height: 32px; border-radius: 8px; font-size: 18px; cursor: pointer; transition: all 0.15s ease; font-family: inherit; display: flex; align-items: center; justify-content: center; }
-  .cc-cal-nav:hover:not([disabled]) { background: rgba(255,255,255,0.06); color: #EBEEFF; border-color: rgba(235,238,255,0.2); }
+  .cc-cal-nav:hover:not([disabled]) { background: rgba(255,255,255,0.06); color: #EBEEFF; }
   .cc-cal-nav[disabled] { opacity: 0.3; cursor: not-allowed; }
   .cc-cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 8px; }
-  .cc-cal-weekdays div { text-align: center; font-size: 11px; font-weight: 500; color: rgba(235,238,255,0.4); padding: 6px 0; }
+  .cc-cal-weekdays div { text-align: center; font-size: 11px; font-weight: 500; color: rgba(235,238,255,0.4); padding: 6px 0; letter-spacing: 0.5px; }
   .cc-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-
-  /* === DZIEŃ — bazowy === */
-  .cc-day {
-    aspect-ratio: 1 / 1;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 14px;
-    color: rgba(235,238,255,0.5);
-    transition: all 0.15s ease;
-  }
-  .cc-day span {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 88% !important;
-    height: 88% !important;
-    border-radius: 12px !important;
-    transition: all 0.15s ease;
-  }
-
-  /* PUSTE pole (poza miesiącem) — nieużywane, ale zostawiamy */
-  .cc-day-empty { visibility: hidden; }
-
-  /* DNI INNYCH MIESIĘCY — przygaszone, bez kafelka */
-  .cc-day-other span {
-    color: rgba(235, 238, 255, 0.2) !important;
-    background: transparent !important;
-    border: none !important;
-  }
-
-  /* Przeszłe dni */
-  .cc-day-past span {
-    color: rgba(235, 238, 255, 0.25) !important;
-    background: rgba(255, 255, 255, 0.02) !important;
-  }
-
-  /* DZIŚ — turkusowy obrys + kafelek */
-  .cc-day-today span {
-    border: 1.5px solid #3FCECF !important;
-    color: #3FCECF !important;
-    font-weight: 700 !important;
-    background: rgba(63, 206, 207, 0.08) !important;
-  }
-
-  /* === WOLNE DNI — szary kafelek + żółty tekst (jak TidyCal) === */
-  .cc-day-free { cursor: pointer; }
-  .cc-day-free span {
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: #FFDE59 !important;
-    font-weight: 700 !important;
-    border: 1px solid rgba(255, 255, 255, 0.04) !important;
-  }
-  .cc-day-free:hover span {
-    background: rgba(255, 222, 89, 0.18) !important;
-    border-color: rgba(255, 222, 89, 0.5) !important;
-    transform: scale(1.05);
-  }
-
-  /* === ZAJĘTE DNI (przyszłe, bez slotów) — ciemniejszy kafelek, lekko widoczna cyfra === */
-  .cc-day-booked span {
-    background: rgba(255, 255, 255, 0.06) !important;
-    color: rgba(255, 222, 89, 0.35) !important;
-    border: 1px solid rgba(255, 255, 255, 0.03) !important;
-  }
-
-  /* === WYBRANY DZIEŃ — pełny żółty kafelek === */
-  .cc-day-selected span {
-    background: #FFDE59 !important;
-    color: #050A24 !important;
-    font-weight: 700 !important;
-    border-color: #FFDE59 !important;
-  }
-
-  /* DZIŚ + wolny — łączymy */
-  .cc-day-today.cc-day-free span {
-    border: 1.5px solid #3FCECF !important;
-    background: rgba(63, 206, 207, 0.1) !important;
-  }
-
-  /* Legenda */
   .cc-cal-legend { display: flex; gap: 18px; margin-top: 20px; flex-wrap: wrap; }
   .cc-cal-legend span { display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(235,238,255,0.5); }
   .cc-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
   .cc-dot-today { background: transparent; border: 1.5px solid #3FCECF; }
   .cc-dot-free { background: #FFDE59; }
-  .cc-dot-booked { background: rgba(235, 238, 255, 0.15); }
-
-  /* === PRAWA: GODZINY === */
+  .cc-dot-booked { background: rgba(255,255,255,0.15); }
   .cc-times { padding: 24px; display: flex; flex-direction: column; background: rgba(5,10,36,0.4); }
   .cc-times-header { margin-bottom: 14px; }
   .cc-times-label { font-size: 14px; color: #FFDE59; font-weight: 600; letter-spacing: 0.2px; }
   .cc-times-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; flex: 1; overflow-y: auto; max-height: 360px; align-content: start; }
   .cc-times-empty { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: rgba(235,238,255,0.4); font-size: 13px; line-height: 1.6; }
-
-  /* KAFELEK GODZINY */
-  .cc-time-btn {
-    background: rgba(5,10,36,0.6);
-    border: 1px solid rgba(63,206,207,0.25);
-    color: #EBEEFF;
-    padding: 14px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
+  .cc-time-btn { background: rgba(5,10,36,0.6); border: 1px solid rgba(63,206,207,0.25); color: #EBEEFF; padding: 14px 12px; border-radius: 10px; cursor: pointer; transition: all 0.15s ease; font-family: inherit; font-size: 14px; font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .cc-time-btn:hover { background: rgba(63,206,207,0.1); border-color: rgba(63,206,207,0.5); transform: translateY(-1px); }
-  .cc-time-selected {
-    background: #FFDE59 !important;
-    color: #050A24 !important;
-    border-color: #FFDE59 !important;
-    box-shadow: 0 2px 12px rgba(255,222,89,0.3);
-  }
+  .cc-time-selected { background: #FFDE59 !important; color: #050A24 !important; border-color: #FFDE59 !important; }
   .cc-time-check { font-size: 12px; font-weight: 700; }
-
-  /* CTA */
   .cc-cta-wrap { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(235,238,255,0.1); display: flex; flex-direction: column; gap: 12px; }
   .cc-cta-wrap[hidden] { display: none !important; }
   .cc-selected-info { background: rgba(255,222,89,0.08); border: 1px solid rgba(255,222,89,0.25); border-radius: 9px; padding: 12px 14px; }
@@ -624,7 +527,6 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
   .cc-bottom-info { display: flex; justify-content: center; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
   .cc-info-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(235,238,255,0.55); }
   .cc-info-item i { color: #3FCECF; font-size: 16px; }
-
   @media (max-width: 900px) {
     .cc-content { grid-template-columns: 1fr; }
     .cc-calendar { border-right: none; border-bottom: 1px solid rgba(235,238,255,0.08); }
@@ -633,7 +535,6 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
   @media (max-width: 480px) {
     .cc-title { font-size: 22px; }
     .cc-calendar, .cc-times { padding: 18px; }
-    .cc-day { font-size: 13px; }
     .cc-times-list { grid-template-columns: 1fr; max-height: none; }
     .cc-bottom-info { flex-direction: column; gap: 10px; align-items: flex-start; }
   }

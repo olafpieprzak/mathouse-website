@@ -266,32 +266,48 @@ const currentPath = Astro.url.pathname;
   </div>
 </header>
 
-<script>
-  const toggle = document.querySelector('[data-nav-toggle]');
-  const closeBtn = document.querySelector('[data-nav-close]');
-  const mobile = document.querySelector('[data-nav-mobile]');
+<script is:inline>
+  // Czekaj na DOM
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.querySelector('[data-nav-toggle]');
+    const closeBtn = document.querySelector('[data-nav-close]');
+    const mobile = document.querySelector('[data-nav-mobile]');
 
-  function openMenu() {
-    mobile?.removeAttribute('hidden');
-    toggle?.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeMenu() {
-    mobile?.setAttribute('hidden', '');
-    toggle?.classList.remove('open');
-    document.body.style.overflow = '';
-  }
+    if (!toggle || !mobile) {
+      console.warn('[Navigation] Brak elementów menu mobilnego');
+      return;
+    }
 
-  toggle?.addEventListener('click', () => {
-    const isOpen = !mobile.hasAttribute('hidden');
-    if (isOpen) closeMenu();
-    else openMenu();
-  });
-  closeBtn?.addEventListener('click', closeMenu);
+    function openMenu() {
+      mobile.removeAttribute('hidden');
+      toggle.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      mobile.setAttribute('hidden', '');
+      toggle.classList.remove('open');
+      document.body.style.overflow = '';
+    }
 
-  // Zamknij po kliknięciu w link (z wyjątkiem details summary)
-  document.querySelectorAll('.mobile-item:not(.mobile-item-summary), .mobile-sublink, .mobile-cta').forEach(link => {
-    link.addEventListener('click', closeMenu);
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = !mobile.hasAttribute('hidden');
+      if (isOpen) closeMenu();
+      else openMenu();
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeMenu();
+      });
+    }
+
+    // Zamknij po kliknięciu w link (z wyjątkiem details summary)
+    document.querySelectorAll('.mobile-item:not(.mobile-item-summary), .mobile-sublink, .mobile-cta').forEach(function(link) {
+      link.addEventListener('click', closeMenu);
+    });
   });
 </script>
 
