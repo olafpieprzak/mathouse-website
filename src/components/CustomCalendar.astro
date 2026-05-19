@@ -35,7 +35,7 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
           </div>
 
           <div class="cc-cal-weekdays">
-            <div>Pn</div><div>Wt</div><div>Śr</div><div>Cz</div><div>Pt</div><div>Sb</div><div>Nd</div>
+            <div>PON.</div><div>WT.</div><div>ŚR.</div><div>CZW.</div><div>PT.</div><div>SOB.</div><div>NIEDZ.</div>
           </div>
 
           <div class="cc-cal-grid" data-cc-grid></div>
@@ -225,9 +225,12 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     today.setHours(0, 0, 0, 0);
     const todayStr = formatDate(today);
 
-    // Dni innych miesięcy → PUSTE pola (cleaner look)
-    for (let i = 0; i < firstDayOfWeek; i++) {
-      html += `<div class="cc-day cc-day-empty"></div>`;
+    // Dni POPRZEDNIEGO miesiąca (przygaszone, jak na TidyCal)
+    const prevLastDay = new Date(year, month, 0);
+    const daysInPrevMonth = prevLastDay.getDate();
+    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+      const dayNum = daysInPrevMonth - i;
+      html += `<div class="cc-day cc-day-other"><span>${dayNum}</span></div>`;
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
@@ -251,11 +254,11 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
       html += `<div class="${classes.join(' ')}" ${attrs}><span>${day}</span></div>`;
     }
 
-    // Reszta tygodnia → puste pola (nie pokazujemy następnego miesiąca)
+    // Dni NASTĘPNEGO miesiąca (przygaszone)
     const filledCells = firstDayOfWeek + daysInMonth;
     const remaining = (Math.ceil(filledCells / 7) * 7) - filledCells;
-    for (let i = 0; i < remaining; i++) {
-      html += `<div class="cc-day cc-day-empty"></div>`;
+    for (let i = 1; i <= remaining; i++) {
+      html += `<div class="cc-day cc-day-other"><span>${i}</span></div>`;
     }
 
     gridEl.innerHTML = html;
@@ -500,47 +503,58 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 82% !important;
-    height: 82% !important;
-    border-radius: 999px !important;
+    width: 88% !important;
+    height: 88% !important;
+    border-radius: 12px !important;
     transition: all 0.15s ease;
   }
 
-  /* PUSTE pole (poza miesiącem) */
+  /* PUSTE pole (poza miesiącem) — nieużywane, ale zostawiamy */
   .cc-day-empty { visibility: hidden; }
 
-  /* Przeszłe dni */
-  .cc-day-past span { color: rgba(235,238,255,0.25); }
+  /* DNI INNYCH MIESIĘCY — przygaszone, bez kafelka */
+  .cc-day-other span {
+    color: rgba(235, 238, 255, 0.2) !important;
+    background: transparent !important;
+    border: none !important;
+  }
 
-  /* DZIŚ — turkusowy obrys */
+  /* Przeszłe dni */
+  .cc-day-past span {
+    color: rgba(235, 238, 255, 0.25) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  /* DZIŚ — turkusowy obrys + kafelek */
   .cc-day-today span {
     border: 1.5px solid #3FCECF !important;
     color: #3FCECF !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    background: rgba(63, 206, 207, 0.08) !important;
   }
 
-  /* === WOLNE DNI — granat kafelek + żółty tekst === */
+  /* === WOLNE DNI — szary kafelek + żółty tekst (jak TidyCal) === */
   .cc-day-free { cursor: pointer; }
   .cc-day-free span {
-    background: rgba(5, 10, 36, 0.85) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
     color: #FFDE59 !important;
-    font-weight: 600 !important;
-    border: 1px solid rgba(255, 222, 89, 0.4) !important;
+    font-weight: 700 !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
   }
   .cc-day-free:hover span {
-    background: rgba(255, 222, 89, 0.15) !important;
-    border-color: rgba(255, 222, 89, 0.7) !important;
-    transform: scale(1.08);
+    background: rgba(255, 222, 89, 0.18) !important;
+    border-color: rgba(255, 222, 89, 0.5) !important;
+    transform: scale(1.05);
   }
 
-  /* === ZAJĘTE DNI (przyszłe, bez slotów) — szare jak TidyCal === */
+  /* === ZAJĘTE DNI (przyszłe, bez slotów) — ciemniejszy kafelek, lekko widoczna cyfra === */
   .cc-day-booked span {
-    background: rgba(255, 255, 255, 0.04) !important;
-    color: rgba(235, 238, 255, 0.3) !important;
-    border: 1px solid rgba(235, 238, 255, 0.06) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: rgba(255, 222, 89, 0.35) !important;
+    border: 1px solid rgba(255, 255, 255, 0.03) !important;
   }
 
-  /* === WYBRANY DZIEŃ — pełny żółty === */
+  /* === WYBRANY DZIEŃ — pełny żółty kafelek === */
   .cc-day-selected span {
     background: #FFDE59 !important;
     color: #050A24 !important;
@@ -548,8 +562,11 @@ import { TIDYCAL_CONFIG } from '../config/tidycal.js';
     border-color: #FFDE59 !important;
   }
 
-  /* DZIŚ + wolny */
-  .cc-day-today.cc-day-free span { border: 1.5px solid #3FCECF !important; }
+  /* DZIŚ + wolny — łączymy */
+  .cc-day-today.cc-day-free span {
+    border: 1.5px solid #3FCECF !important;
+    background: rgba(63, 206, 207, 0.1) !important;
+  }
 
   /* Legenda */
   .cc-cal-legend { display: flex; gap: 18px; margin-top: 20px; flex-wrap: wrap; }

@@ -499,7 +499,7 @@ const currentPath = Astro.url.pathname;
      MOBILE MENU — STYL Z SCREENU (OFERTA / INNE)
      ==================================================== */
   .nav-mobile {
-    display: none;
+    display: flex;
     flex-direction: column;
     position: fixed;
     top: 0;
@@ -511,7 +511,9 @@ const currentPath = Astro.url.pathname;
     padding: 16px 20px;
     overflow-y: auto;
   }
-  .nav-mobile[hidden] { display: none !important; }
+  .nav-mobile[hidden] {
+    display: none !important;
+  }
 
   /* Header z X */
   .mobile-header {
@@ -658,7 +660,6 @@ const currentPath = Astro.url.pathname;
   @media (max-width: 1024px) {
     .nav-links { display: none; }
     .nav-hamburger { display: flex; }
-    .nav-mobile:not([hidden]) { display: flex; }
     .nav-login { display: none; }
   }
   @media (max-width: 480px) {
