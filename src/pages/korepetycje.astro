@@ -1,0 +1,852 @@
+---
+// =====================================================
+// STRONA KOREPETYCJE — z pełną automatyzacją TidyCal
+// =====================================================
+import Layout from '../layouts/Layout.astro';
+import ScarcityBar from '../components/ScarcityBar.astro';
+import BookingSelector from '../components/BookingSelector.astro';
+import CustomCalendar from '../components/CustomCalendar.astro';
+import PaymentMethods from '../components/PaymentMethods.astro';
+
+const cennikSzkola = [
+  { name: 'Szkoła podstawowa', sub: 'klasy 4-8 · ósmoklasista', prices: { '1': 130, '2': 80, '3': 70, '4': 60, '56': 40 } },
+  { name: 'Liceum / matura podstawowa', sub: '', prices: { '1': 130, '2': 80, '3': 70, '4': 60, '56': 40 } },
+  { name: 'Liceum / matura rozszerzona', sub: '', prices: { '1': 130, '2': 80, '3': 70, '4': 60, '56': 40 } },
+];
+
+const cennikStudia = [
+  { name: 'Wszystkie przedmioty matematyczne ze studiów', sub: 'jedna stawka niezależnie od przedmiotu', prices: { '1': 160, '2': 110, '3': 100, '4': 80, '56': 50 } },
+];
+
+// Lista przedmiotów ze studiów (wyświetlana w sekcji info)
+const przedmiotyStudiow = [
+  'Analiza matematyczna',
+  'Algebra liniowa',
+  'Statystyka matematyczna',
+  'Matematyka finansowa',
+  'Matematyka w ekonomii',
+  'Rachunek prawdopodobieństwa',
+  'Matematyka dyskretna',
+  'Geometria analityczna',
+  'Równania różniczkowe',
+  'Metody numeryczne',
+];
+
+const kroki = [
+  { num: 1, icon: 'list-check', title: 'Wybierz wariant', desc: 'Klikasz poziom, długość lekcji (45 lub 90 min) i wielkość grupy (1 os / 2 os / itd.).' },
+  { num: 2, icon: 'calendar', title: 'Wybierz termin', desc: 'Otwiera się kalendarz TidyCal. Klikasz wolny slot — wszystkie terminy w czasie rzeczywistym.' },
+  { num: 3, icon: 'cash', title: 'Płatność po lekcji', desc: '3 sposoby: gotówka (preferowana), BLIK na 570 840 416, lub przelew. Numer konta dostajesz mailem po rezerwacji.' },
+  { num: 4, icon: 'video', title: 'Spotykamy się', desc: 'Stacjonarnie (Ropczyce) lub online (Google Meet) — wybierasz przy rezerwacji.' },
+];
+
+const dostajesz = [
+  { letter: 'N', color: 'yellow', title: 'Notatki przez OneNote', desc: 'Wszystkie notatki w wersji elektronicznej — możesz zrobić PDF i wydrukować.' },
+  { icon: 'pencil', color: 'teal', title: 'Zadania domowe', desc: 'Dostajesz przez OneNote, sprawdzamy razem na kolejnej lekcji.' },
+  { icon: 'brand-youtube', color: 'yellow', title: 'Nagrania na życzenie', desc: 'Prywatna playlista YouTube z zapisem każdej lekcji.' },
+  { icon: 'users', color: 'teal', title: 'Dostęp dla rodzica (opcja)', desc: 'Rodzic może mieć podgląd do notatek i zadań domowych.' },
+];
+
+const faq = [
+  {
+    question: 'A co jeśli nie przyjdę na zajęcia?',
+    answer: 'Jeśli poinformujesz mnie <strong>minimum 2 dni wcześniej</strong> — zajęcia przechodzą na kolejny tydzień. W innym przypadku przepadają wraz z opłatą. Oczywiście istnieją przypadki losowe, które będą brane pod uwagę.',
+  },
+  {
+    question: 'Jak płacę za korepetycje?',
+    answer: 'Masz <strong>3 sposoby do wyboru</strong>: <strong>1) Gotówka</strong> (preferowane, najszybsze) — na lekcji stacjonarnej. <strong>2) BLIK na telefon</strong> — 570 840 416, natychmiast, bez prowizji. <strong>3) Przelew na konto</strong> — numer konta dostajesz mailem od TidyCal po rezerwacji. Płacisz <strong>po lekcji</strong>, bez płatności online z góry, bez prowizji bankowych, bez stresu.',
+  },
+  {
+    question: 'Czy lekcje są nagrywane?',
+    answer: 'Tylko na Twoje życzenie. Jeśli chcesz, dostaniesz prywatną playlistę YouTube (niedostępną publicznie) z zapisem każdej lekcji — wracasz do trudnych tematów ile chcesz.',
+  },
+  {
+    question: 'Gdzie odbywają się zajęcia?',
+    answer: 'Stacjonarnie w mojej pracowni w Ropczycach (ul. Piłsudskiego 26A/16) lub online przez Google Meet — z tablicą interaktywną. Wybierasz przy rezerwacji.',
+  },
+  {
+    question: 'Czy mogę założyć grupę z koleżankami?',
+    answer: 'Tak! Im większa grupa, tym taniej dla każdego — w grupie 5-6 osób płacisz tylko 40 zł za godzinę. Możecie się zorganizować sami albo dopisać do istniejącej grupy.',
+  },
+  {
+    question: 'Jak długo trwa jedna lekcja?',
+    answer: 'Masz wybór: <strong>45 minut</strong> (standardowa, najczęściej wybierana) lub <strong>90 minut</strong> (dłuższa, z lekką zniżką za godzinę). 90 minut polecam gdy materiał jest trudny i potrzebujesz głębszego wejścia w temat — np. przygotowanie do klasówki, intensywne powtórki przed maturą. <strong>Studia mają zawsze 90 minut</strong> — to standard akademicki.',
+  },
+  {
+    question: 'Czy mogę zarezerwować 2 godziny z rzędu?',
+    answer: 'Tak, ale prościej wybrać od razu wariant <strong>90 minut</strong> — jedna rezerwacja, lepsza cena za godzinę niż 2× 45 min. Jeśli potrzebujesz dłużej (np. 135 min), zarezerwuj 90 min + 45 min jako kolejny slot, albo napisz do mnie i ustalimy indywidualnie.',
+  },
+];
+---
+
+<Layout
+  title="Korepetycje z matematyki — Olaf Pieprzak"
+  description="Korepetycje indywidualne i grupowe (2-6 osób) z matematyki: szkoła podstawowa, liceum i technikum (matura podstawowa i rozszerzona), studia. Stacjonarnie w Ropczycach lub online przez Google Meet. Od 40 zł / 45 min."
+>
+  <div class="breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> / <span>Korepetycje</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="korep-hero">
+    <div class="container-content korep-hero-grid">
+      <div>
+        <span class="tag-teal">● Stacjonarnie w Ropczycach lub online</span>
+        <h1 class="korep-title">
+          Korepetycje<br />
+          z <span class="text-yellow">Olafem</span>.
+        </h1>
+        <p class="korep-desc">
+          Indywidualne lub w grupie 2-6 osób. Tłumaczę aż zrozumiesz — w 45 minut.
+        </p>
+
+        <div class="korep-stats">
+          <div class="korep-stat">
+            <div class="korep-stat-num">130 zł</div>
+            <div class="korep-stat-label">1 osoba · 45 min</div>
+          </div>
+          <div class="korep-stat-sep"></div>
+          <div class="korep-stat">
+            <div class="korep-stat-num teal">od 40 zł</div>
+            <div class="korep-stat-label">w grupie · od osoby</div>
+          </div>
+          <div class="korep-stat-sep"></div>
+          <div class="korep-stat">
+            <div class="korep-stat-num">13 lat</div>
+            <div class="korep-stat-label">doświadczenia</div>
+          </div>
+        </div>
+
+        <div class="korep-cta">
+          <a href="#rezerwuj" class="btn-primary">Wybierz wariant i rezerwuj →</a>
+          <a href="#kalendarz" class="btn-secondary">Otwórz pełen kalendarz</a>
+        </div>
+      </div>
+
+      <div class="korep-video-wrap">
+        <div class="korep-video-bg"></div>
+        <div class="korep-video-frame">
+          <button class="korep-play" aria-label="Odtwórz wideo">▶</button>
+          <span class="korep-video-badge">JAK SIĘ ZAPISAĆ</span>
+          <span class="korep-video-time">4 kroki do pierwszej lekcji · 0:45</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCARCITY BAR — z dynamicznym licznikiem z API -->
+  <ScarcityBar variant="korepetycje" />
+
+  <!-- 4 KROKI -->
+  <section class="section-kroki">
+    <div class="container-content">
+      <div class="section-label kroki-label">JAK TO DZIAŁA</div>
+      <div class="kroki-grid">
+        {kroki.map((k) => (
+          <div class="krok-card">
+            <div class="krok-num-bg">0{k.num}</div>
+            <i class={`ti ti-${k.icon} krok-icon`}></i>
+            <h3 class="krok-title">{k.title}</h3>
+            <p class="krok-desc">{k.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CENNIK -->
+  <section id="cennik" class="section-cennik">
+    <div class="container-content">
+      <div class="cennik-header">
+        <div>
+          <div class="section-label">CENNIK</div>
+          <h2 class="cennik-title">
+            Im większa grupa,<br />
+            <span class="text-yellow">tym taniej dla każdego.</span>
+          </h2>
+        </div>
+        <div class="cennik-info">
+          Lekcja: <strong>45 min lub 90 min</strong> — wybierasz przy rezerwacji<br />
+          Cena podana <strong>za 1 osobę · za 45 minut</strong>
+        </div>
+      </div>
+
+      <h3 class="cennik-section-h">Szkoła · Liceum · Matura — 45 minut</h3>
+      <div class="cennik-table-wrap">
+        <div class="cennik-table">
+          <div class="cennik-row cennik-header-row">
+            <div>POZIOM</div>
+            <div class="cennik-cell-r">1 OS</div>
+            <div class="cennik-cell-r">2 OS</div>
+            <div class="cennik-cell-r">3 OS</div>
+            <div class="cennik-cell-r">4 OS</div>
+            <div class="cennik-cell-r">5-6 OS</div>
+          </div>
+          {cennikSzkola.map((row) => (
+            <div class="cennik-row">
+              <div>
+                <strong>{row.name}</strong>
+                {row.sub && <div class="cennik-sub">{row.sub}</div>}
+              </div>
+              <div class="cennik-cell-r yellow"><strong>{row.prices['1']} zł</strong></div>
+              <div class="cennik-cell-r">{row.prices['2']} zł</div>
+              <div class="cennik-cell-r">{row.prices['3']} zł</div>
+              <div class="cennik-cell-r">{row.prices['4']} zł</div>
+              <div class="cennik-cell-r teal"><strong>{row.prices['56']} zł</strong></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <h3 class="cennik-section-h" style="margin-top:24px">Studia — wszystkie przedmioty matematyczne</h3>
+      <div class="cennik-table-wrap">
+        <div class="cennik-table">
+          <div class="cennik-row cennik-header-row">
+            <div>POZIOM</div>
+            <div class="cennik-cell-r">1 OS</div>
+            <div class="cennik-cell-r">2 OS</div>
+            <div class="cennik-cell-r">3 OS</div>
+            <div class="cennik-cell-r">4 OS</div>
+            <div class="cennik-cell-r">5-6 OS</div>
+          </div>
+          {cennikStudia.map((row) => (
+            <div class="cennik-row">
+              <div>
+                <strong>{row.name}</strong>
+                {row.sub && <div class="cennik-sub">{row.sub}</div>}
+              </div>
+              <div class="cennik-cell-r yellow"><strong>{row.prices['1']} zł</strong></div>
+              <div class="cennik-cell-r">{row.prices['2']} zł</div>
+              <div class="cennik-cell-r">{row.prices['3']} zł</div>
+              <div class="cennik-cell-r">{row.prices['4']} zł</div>
+              <div class="cennik-cell-r teal"><strong>{row.prices['56']} zł</strong></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- INFO BOX: Lekcja 90 min = cena × 2 -->
+      <div class="cennik-info-90">
+        <div class="cennik-info-90-icon">💡</div>
+        <div class="cennik-info-90-content">
+          <strong>Lekcja 90 minut?</strong>
+          <span>Pomnóż cenę z tabeli przez 2. Przykład: szkoła indywidualnie 90 min = <strong style="color:#FFDE59">130 zł × 2 = 260 zł</strong>.</span>
+        </div>
+      </div>
+
+      <!-- Lista przedmiotów ze studiów -->
+      <div class="przedmioty-studiow">
+        <div class="ps-header">
+          <i class="ti ti-school ps-icon"></i>
+          <div>
+            <strong>Uczę wszystkich matematycznych przedmiotów ze studiów:</strong>
+            <span class="ps-sub">jedna cena niezależnie od przedmiotu</span>
+          </div>
+        </div>
+        <div class="ps-chips">
+          {przedmiotyStudiow.map((p) => (
+            <span class="ps-chip">{p}</span>
+          ))}
+          <a href="/kontakt" class="ps-chip ps-chip-other">+ inny przedmiot? Napisz →</a>
+        </div>
+      </div>
+
+      <!-- Info o płatnościach — 3 sposoby (gotówka / BLIK / przelew) -->
+      <PaymentMethods variant="full" />
+    </div>
+  </section>
+
+  <!-- BOOKING SELECTOR — wybierz wariant -->
+  <BookingSelector />
+
+  <!-- CUSTOM CALENDAR — własny widget rezerwacji MATHOUSE -->
+  <section id="kalendarz">
+    <CustomCalendar />
+  </section>
+
+  <!-- CO DOSTAJESZ -->
+  <section class="section-dostajesz">
+    <div class="container-content">
+      <div class="section-label">CO DOSTAJESZ JAKO UCZEŃ</div>
+      <h2 class="dost-title">Wszystkie narzędzia, których potrzebujesz.</h2>
+      <div class="dostajesz-grid">
+        {dostajesz.map((d) => (
+          <div class="card dostajesz-card">
+            <div class={`dostajesz-icon ${d.color}`}>
+              {d.letter && <span class="dost-letter">{d.letter}</span>}
+              {d.icon && <i class={`ti ti-${d.icon}`}></i>}
+            </div>
+            <div>
+              <div class="dostajesz-title">{d.title}</div>
+              <p class="dostajesz-desc" set:html={d.desc}></p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-faq">
+    <div class="container-content faq-grid">
+      <div>
+        <div class="section-label">CZĘSTE PYTANIA</div>
+        <h2 class="faq-title">Zasady, które warto znać przed pierwszą lekcją.</h2>
+      </div>
+      <div class="faq-list">
+        {faq.map((item, i) => (
+          <details class="faq-item" open={i === 0}>
+            <summary class="faq-summary">
+              <span>{item.question}</span>
+              <span class="faq-icon"></span>
+            </summary>
+            <p class="faq-answer" set:html={item.answer}></p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-cta-korep">
+    <div class="container-content cta-korep-inner">
+      <div>
+        <h3 class="cta-title">Gotowy żeby zacząć?</h3>
+        <p class="cta-desc">Wybierz wariant lekcji i znajdź pasujący termin.</p>
+      </div>
+      <a href="#rezerwuj" class="cta-button">Wybierz i rezerwuj ↑</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .breadcrumb {
+    padding: 14px 0;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb span { color: #FFDE59; }
+  .text-yellow { color: #FFDE59; }
+
+  /* HERO */
+  .korep-hero { padding: 48px 0; }
+  .korep-hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .korep-title {
+    font-size: 46px;
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -1.2px;
+    margin: 18px 0 14px;
+  }
+  .korep-desc {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.65;
+    margin-bottom: 22px;
+    max-width: 400px;
+  }
+  .korep-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .korep-stat-num {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFDE59;
+  }
+  .korep-stat-num.teal { color: #3FCECF; }
+  .korep-stat-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 2px;
+  }
+  .korep-stat-sep {
+    width: 1px;
+    background: rgba(235, 238, 255, 0.1);
+  }
+  .korep-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Wideo */
+  .korep-video-wrap { position: relative; }
+  .korep-video-bg {
+    position: absolute;
+    inset: 0;
+    background: #3FCECF;
+    border-radius: 16px;
+    transform: rotate(-3deg);
+  }
+  .korep-video-frame {
+    position: relative;
+    background: #000;
+    border-radius: 16px;
+    aspect-ratio: 16/10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .korep-play {
+    width: 68px;
+    height: 68px;
+    background: #FFDE59;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #050A24;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+  }
+  .korep-video-badge {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: rgba(255, 222, 89, 0.95);
+    color: #050A24;
+    padding: 5px 11px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .korep-video-time {
+    position: absolute;
+    bottom: 14px;
+    left: 18px;
+    color: #EBEEFF;
+    font-size: 12px;
+  }
+
+  /* 4 KROKI */
+  .section-kroki { padding: 40px 0; }
+  .kroki-label { text-align: center; }
+  .kroki-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .krok-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 14px;
+    padding: 22px;
+    position: relative;
+  }
+  .krok-num-bg {
+    font-size: 42px;
+    font-weight: 600;
+    color: rgba(255, 222, 89, 0.15);
+    position: absolute;
+    top: 10px;
+    right: 18px;
+  }
+  .krok-icon {
+    font-size: 24px;
+    color: #FFDE59;
+  }
+  .krok-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+  .krok-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 5px;
+    line-height: 1.55;
+  }
+
+  /* CENNIK */
+  .section-cennik {
+    padding: 40px 0;
+    background: rgba(63, 206, 207, 0.05);
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .cennik-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .cennik-title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+  .cennik-info {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    text-align: right;
+    line-height: 1.6;
+    max-width: 280px;
+  }
+  .cennik-info strong { color: #EBEEFF; }
+  .cennik-section-h {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(235, 238, 255, 0.85);
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .cennik-table-wrap { overflow-x: auto; }
+  .cennik-table {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 14px;
+    overflow: hidden;
+    min-width: 600px;
+  }
+  .cennik-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+    padding: 14px 18px;
+    font-size: 13px;
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .cennik-header-row {
+    background: rgba(63, 206, 207, 0.06);
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    letter-spacing: 1.5px;
+    border-top: none;
+  }
+  .cennik-cell-r { text-align: right; }
+  .cennik-cell-r.yellow strong { color: #FFDE59; font-weight: 600; }
+  .cennik-cell-r.teal strong { color: #3FCECF; font-weight: 600; }
+  .cennik-sub {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 2px;
+  }
+
+  /* === INFO BOX: lekcja 90 min × 2 === */
+  .cennik-info-90 {
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.08) 0%, rgba(63, 206, 207, 0.06) 100%);
+    border: 1px solid rgba(255, 222, 89, 0.25);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .cennik-info-90-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .cennik-info-90-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cennik-info-90-content strong {
+    color: #FFDE59;
+    font-size: 14px;
+  }
+  .cennik-info-90-content span {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.5;
+  }
+
+  /* === PRZEDMIOTY STUDIÓW === */
+  .przedmioty-studiow {
+    background: rgba(63, 206, 207, 0.08);
+    border: 1px solid rgba(63, 206, 207, 0.25);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 18px;
+  }
+  .ps-header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .ps-icon {
+    font-size: 22px;
+    color: #3FCECF;
+    flex-shrink: 0;
+  }
+  .ps-header strong {
+    font-size: 14px;
+    color: #EBEEFF;
+    display: block;
+  }
+  .ps-sub {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.6);
+  }
+  .ps-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ps-chip {
+    background: rgba(255, 255, 255, 0.06);
+    color: #EBEEFF;
+    padding: 6px 12px;
+    border-radius: 14px;
+    font-size: 11px;
+    border: 1px solid rgba(235, 238, 255, 0.08);
+    text-decoration: none;
+  }
+  .ps-chip-other {
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+    border-color: rgba(255, 222, 89, 0.3);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .ps-chip-other:hover {
+    background: rgba(255, 222, 89, 0.25);
+  }
+
+  /* === INFO O PŁATNOŚCIACH === */
+  .platnosc-info {
+    background: linear-gradient(90deg, rgba(255, 222, 89, 0.12), rgba(255, 222, 89, 0.04));
+    border: 1px solid rgba(255, 222, 89, 0.3);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 12px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .pi-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 222, 89, 0.2);
+    color: #FFDE59;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .pi-icon i {
+    font-size: 22px;
+  }
+  .pi-content {
+    flex: 1;
+  }
+  .pi-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFDE59;
+    margin-bottom: 4px;
+  }
+  .pi-text {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.6;
+  }
+  .pi-text strong {
+    color: #EBEEFF;
+  }
+  .text-yellow {
+    color: #FFDE59;
+  }
+
+  /* CO DOSTAJESZ */
+  .section-dostajesz {
+    padding: 40px 0;
+    background: rgba(63, 206, 207, 0.05);
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .dost-title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-top: 6px;
+    margin-bottom: 18px;
+  }
+  .dostajesz-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .dostajesz-card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .dostajesz-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .dostajesz-icon.yellow {
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+  }
+  .dostajesz-icon.teal {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+  }
+  .dost-letter { font-size: 20px; font-weight: 600; }
+  .dostajesz-icon i { font-size: 20px; }
+  .dostajesz-title {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .dostajesz-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 4px;
+    line-height: 1.55;
+  }
+  .dostajesz-desc strong { color: #EBEEFF; }
+
+  /* FAQ */
+  .section-faq { padding: 40px 0; }
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 36px;
+  }
+  .faq-title {
+    font-size: 26px;
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .faq-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .faq-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-summary::-webkit-details-marker { display: none; }
+  .faq-icon {
+    color: rgba(235, 238, 255, 0.5);
+    font-size: 18px;
+    width: 16px;
+    text-align: center;
+  }
+  .faq-icon::before { content: '+'; }
+  .faq-item[open] .faq-icon::before {
+    content: '−';
+    color: #FFDE59;
+  }
+  .faq-answer {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .faq-answer strong { color: #EBEEFF; }
+
+  /* CTA */
+  .section-cta-korep {
+    background: #FFDE59;
+    color: #050A24;
+    padding: 36px 0;
+  }
+  .cta-korep-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .cta-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .cta-desc {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .cta-button {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 13px 24px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .korep-hero-grid,
+    .faq-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .kroki-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .korep-title {
+      font-size: 36px;
+    }
+    .cennik-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .cennik-info {
+      text-align: left;
+    }
+  }
+  @media (max-width: 768px) {
+    .dostajesz-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .korep-hero { padding: 32px 0; }
+    .kroki-grid {
+      grid-template-columns: 1fr;
+    }
+    .cta-korep-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+    .cta-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

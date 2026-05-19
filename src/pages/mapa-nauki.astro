@@ -1,0 +1,493 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+// =====================================================
+// MAPA NAUKI MATEMATYKI - graf wszystkich kursów
+// =====================================================
+// Klasa 1 - WSZYSTKIE z linkami do kurs.mathouse.pl
+// Klasa 2/3/4 - oznaczone "Już wkrótce"
+// =====================================================
+
+const klasa1 = [
+  { num: '1.1', tytul: 'Zbiory Liczbowe', dzialki: ['Zbiory liczbowe, cyfry, liczby pierwsze', 'Liczby naturalne, podzielność, NWD, NWW', 'Liczby całkowite i wymierne', 'Liczby niewymierne i rzeczywiste', 'Działania na zbiorach, przedziały'], url: 'https://kurs.mathouse.pl/s/zbiory-liczbowe.html', status: 'live' },
+  { num: '1.2', tytul: 'Równania i nierówności 1 stopnia', dzialki: ['Równania 1 stopnia cz1', 'Dziedzina równania', 'Równania 1 stopnia cz2', 'Nierówności 1 stopnia'], url: 'https://kurs.mathouse.pl/s/rownania-i-nierownosci-1-stopnia.html', status: 'live' },
+  { num: '1.3', tytul: 'Procenty, Błąd, Przybliżenie', dzialki: ['Procenty', 'Procenty - zadania tekstowe', 'Punkty procentowe', 'Błąd względny i bezwzględny'], url: 'https://kurs.mathouse.pl/s/procenty-punkt-procentowy.html', status: 'live' },
+  { num: '1.4', tytul: 'Potęgi', dzialki: ['Potęga naturalna', 'Pierwiastki arytmetyczne', 'Potęga całkowita i ujemna', 'Notacja wykładnicza', 'Potęga wymierna i rzeczywista'], url: 'https://kurs.mathouse.pl/s/potegi.html', status: 'live' },
+  { num: '1.5', tytul: 'Logarytmy', dzialki: ['Obliczanie logarytmów', 'Dodawanie i odejmowanie logarytmów', 'Logarytm jako wykładnik', 'Zastosowanie logarytmów'], url: 'https://kurs.mathouse.pl/s/logarytmy.html', status: 'live' },
+  { num: '1.6', tytul: 'Wyrażenia algebraiczne', dzialki: ['Działania na wyrażeniach', 'Dowody', 'Przekształcenia wzorów', 'Średnie'], url: 'https://kurs.mathouse.pl/s/wyrazenia-algebraiczne.html', status: 'live' },
+  { num: '1.7', tytul: 'Wzory skróconego mnożenia', dzialki: ['Kwadrat sumy', 'Kwadrat różnicy', 'Różnica kwadratów', 'Usuwanie niewymierności'], url: 'https://kurs.mathouse.pl/s/wzory-skroconego-mnozenie.html', status: 'live' },
+  { num: '1.8', tytul: 'Funkcje', dzialki: ['Pojęcie funkcji', 'Wykres funkcji', 'Dziedzina', 'Zbiór wartości', 'Miejsca zerowe', 'Monotoniczność'], url: 'https://kurs.mathouse.pl/s/funkcja.html', status: 'live' },
+  { num: '1.9', tytul: 'Funkcja liniowa', dzialki: ['Rysowanie wykresów', 'Miejsca zerowe', 'Monotoniczność', 'Wyznaczanie wzoru', 'Zadania z parametrami', 'Proste równoległe'], url: 'https://kurs.mathouse.pl/s/funkcja-liniowa.html', status: 'live' },
+  { num: '1.10', tytul: 'Układy równań', dzialki: ['Metoda graficzna', 'Metoda podstawiania', 'Metoda przeciwnych współczynników', 'Zadania tekstowe'], url: 'https://kurs.mathouse.pl/s/uklady-rownan.html', status: 'live' },
+  { num: '1.11', tytul: 'Geometria płaska cz. 1', dzialki: ['Punkt, prosta, odcinek, kąt', 'Twierdzenie Talesa', 'Twierdzenie Pitagorasa', 'Przystawanie trójkątów', 'Wektory'], url: 'https://kurs.mathouse.pl/s/11-geometria-plaska-cz1-klasa-1.html', status: 'live' },
+  { num: '1.12', tytul: 'Trygonometria', dzialki: ['Funkcje sin/cos/tg/ctg', 'Wartości dla kątów 30°, 45°, 60°', 'Zależności między funkcjami'], url: 'https://kurs.mathouse.pl/s/trygonometria-cz1.html', status: 'live' },
+];
+
+const klasa2 = [
+  { num: '2.1', tytul: 'Przekształcenia wykresów' },
+  { num: '2.2', tytul: 'Wartość bezwzględna' },
+  { num: '2.3', tytul: 'Funkcja kwadratowa' },
+  { num: '2.4', tytul: 'Geometria płaska — okręgi' },
+  { num: '2.5', tytul: 'Trygonometria zaawansowana' },
+  { num: '2.6', tytul: 'Geometria analityczna' },
+  { num: '2.7', tytul: 'Trójkąty, pole, koła' },
+  { num: '2.8', tytul: 'Wielomiany' },
+];
+
+const klasa3 = [
+  { num: '3.1', tytul: 'Ułamki algebraiczne, równania wymierne' },
+  { num: '3.2', tytul: 'Ciągi (arytmetyczny, geometryczny)' },
+  { num: '3.3', tytul: 'Kombinatoryka' },
+  { num: '3.4', tytul: 'Czworokąty' },
+  { num: '3.5', tytul: 'Pole czworokąta' },
+  { num: '3.6', tytul: 'Geometria analityczna cz. 2' },
+];
+
+const klasa4 = [
+  { num: '4.1', tytul: 'Funkcja wykładnicza' },
+  { num: '4.2', tytul: 'Funkcja logarytmiczna' },
+  { num: '4.3', tytul: 'Statystyka' },
+  { num: '4.4', tytul: 'Rachunek prawdopodobieństwa' },
+  { num: '4.5', tytul: 'Geometria przestrzenna — wielościany' },
+  { num: '4.6', tytul: 'Bryły obrotowe' },
+];
+---
+
+<Layout
+  title="Mapa Nauki Matematyki — wszystkie kursy MATHOUSE"
+  description="Pełna ścieżka nauki matematyki od podstawówki do matury. Cały plan krok po kroku: egzamin 8-klasisty, liceum (klasa 1-4), matura podstawowa i rozszerzona."
+>
+  <Navigation />
+
+  <main class="mapa-page">
+    <div class="container-content">
+
+      <!-- HERO -->
+      <section class="mapa-hero">
+        <div class="section-label">🗺️ MAPA NAUKI MATEMATYKI</div>
+        <h1 class="mapa-title">Cały plan nauki<br /><span class="text-yellow">krok po kroku.</span></h1>
+        <p class="mapa-sub">
+          Od podstawówki po maturę rozszerzoną.<br />
+          <strong>Wszystkie kursy MATHOUSE</strong> w jednej wizualnej mapie. Kliknij dział, żeby przejść do lekcji.
+        </p>
+        <div class="mapa-legend">
+          <span class="mapa-legend-item"><span class="mapa-status mapa-status-live">●</span> Gotowy</span>
+          <span class="mapa-legend-item"><span class="mapa-status mapa-status-soon">○</span> W przygotowaniu</span>
+        </div>
+      </section>
+
+      <!-- ŚCIEŻKA: EGZAMIN 8-KLASISTY -->
+      <section class="mapa-sciezka" id="egzamin-osmoklasisty">
+        <div class="mapa-sciezka-header">
+          <div class="mapa-sciezka-icon">🎓</div>
+          <div>
+            <div class="mapa-sciezka-label">ŚCIEŻKA 1</div>
+            <h2 class="mapa-sciezka-title">Egzamin 8-klasisty</h2>
+            <p class="mapa-sciezka-desc">Przygotowanie do egzaminu kończącego szkołę podstawową. Wszystkie kluczowe działy + arkusze.</p>
+          </div>
+          <div class="mapa-sciezka-status">
+            <span class="mapa-status mapa-status-soon">○</span>
+            <span>Już wkrótce</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ŚCIEŻKA: LICEUM (PODSTAWA) -->
+      <section class="mapa-sciezka mapa-sciezka-featured" id="liceum-podstawa">
+        <div class="mapa-sciezka-header">
+          <div class="mapa-sciezka-icon">📘</div>
+          <div>
+            <div class="mapa-sciezka-label">ŚCIEŻKA 2</div>
+            <h2 class="mapa-sciezka-title">Liceum (kurs podstawowy)</h2>
+            <p class="mapa-sciezka-desc">4 lata · 32 działy · cała matematyka szkoły średniej. Idź klasą po klasie, działem po dziale.</p>
+          </div>
+          <div class="mapa-sciezka-status">
+            <span class="mapa-status mapa-status-live">●</span>
+            <span>Klasa 1: gotowa</span>
+          </div>
+        </div>
+
+        <!-- KLASY -->
+        <div class="klasy-grid">
+          <!-- KLASA 1 -->
+          <div class="klasa-box klasa-box-live">
+            <div class="klasa-header">
+              <span class="klasa-num">KLASA 1</span>
+              <span class="klasa-count">12 działów · ✅ Gotowy</span>
+            </div>
+            <div class="dzialy-list">
+              {klasa1.map((d) => (
+                <a href={d.url} target="_blank" rel="noopener noreferrer" class="dzial-item dzial-item-live">
+                  <div class="dzial-header">
+                    <span class="dzial-num">{d.num}</span>
+                    <span class="dzial-tytul">{d.tytul}</span>
+                  </div>
+                  <ul class="dzial-list">
+                    {d.dzialki.slice(0, 3).map((p) => <li>{p}</li>)}
+                    {d.dzialki.length > 3 && <li class="dzial-more">+ {d.dzialki.length - 3} więcej</li>}
+                  </ul>
+                  <span class="dzial-cta">Przejdź do lekcji →</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- KLASA 2 -->
+          <div class="klasa-box klasa-box-soon">
+            <div class="klasa-header">
+              <span class="klasa-num">KLASA 2</span>
+              <span class="klasa-count">{klasa2.length} działów · ⏳ Wkrótce</span>
+            </div>
+            <div class="dzialy-list">
+              {klasa2.map((d) => (
+                <div class="dzial-item dzial-item-soon">
+                  <div class="dzial-header">
+                    <span class="dzial-num">{d.num}</span>
+                    <span class="dzial-tytul">{d.tytul}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- KLASA 3 -->
+          <div class="klasa-box klasa-box-soon">
+            <div class="klasa-header">
+              <span class="klasa-num">KLASA 3</span>
+              <span class="klasa-count">{klasa3.length} działów · ⏳ Wkrótce</span>
+            </div>
+            <div class="dzialy-list">
+              {klasa3.map((d) => (
+                <div class="dzial-item dzial-item-soon">
+                  <div class="dzial-header">
+                    <span class="dzial-num">{d.num}</span>
+                    <span class="dzial-tytul">{d.tytul}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- KLASA 4 -->
+          <div class="klasa-box klasa-box-soon">
+            <div class="klasa-header">
+              <span class="klasa-num">KLASA 4</span>
+              <span class="klasa-count">{klasa4.length} działów · ⏳ Wkrótce</span>
+            </div>
+            <div class="dzialy-list">
+              {klasa4.map((d) => (
+                <div class="dzial-item dzial-item-soon">
+                  <div class="dzial-header">
+                    <span class="dzial-num">{d.num}</span>
+                    <span class="dzial-tytul">{d.tytul}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ŚCIEŻKA: MATURA PODSTAWOWA -->
+      <section class="mapa-sciezka" id="matura-podstawowa">
+        <div class="mapa-sciezka-header">
+          <div class="mapa-sciezka-icon">📕</div>
+          <div>
+            <div class="mapa-sciezka-label">ŚCIEŻKA 3</div>
+            <h2 class="mapa-sciezka-title">Matura podstawowa</h2>
+            <p class="mapa-sciezka-desc">Powtórka całego materiału szkoły średniej + arkusze maturalne + 14-dniowa powtórka.</p>
+          </div>
+          <div class="mapa-sciezka-status">
+            <span class="mapa-status mapa-status-live">●</span>
+            <span>Dostępne: 14-dniowa powtórka</span>
+          </div>
+        </div>
+        <div class="mapa-cta-row">
+          <a href="/landing-powtorka-14-dni" class="btn-primary">14-dniowa powtórka (197 zł) →</a>
+          <a href="/landing-maturalny-sprint" class="btn-secondary">Maturalny sprint (67 zł) →</a>
+          <a href="/arkusze" class="btn-secondary">Arkusze CKE (gratis) →</a>
+        </div>
+      </section>
+
+      <!-- ŚCIEŻKA: MATURA ROZSZERZONA -->
+      <section class="mapa-sciezka" id="matura-rozszerzona">
+        <div class="mapa-sciezka-header">
+          <div class="mapa-sciezka-icon">🔬</div>
+          <div>
+            <div class="mapa-sciezka-label">ŚCIEŻKA 4</div>
+            <h2 class="mapa-sciezka-title">Matura rozszerzona</h2>
+            <p class="mapa-sciezka-desc">Wszystko z podstawy + dodatki rozszerzenia: zaawansowana funkcja kwadratowa, wielomiany, geometria, dowody.</p>
+          </div>
+          <div class="mapa-sciezka-status">
+            <span class="mapa-status mapa-status-soon">○</span>
+            <span>Już wkrótce</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA: Korepetycje -->
+      <section class="mapa-final">
+        <div class="mapa-final-box">
+          <h2>Potrzebujesz pomocy z konkretnym działem?</h2>
+          <p>Umów korepetycje 1-na-1 lub w grupie. Tłumaczę aż zrozumiesz.</p>
+          <a href="/korepetycje" class="btn-primary">Sprawdź korepetycje →</a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .mapa-page { color: #EBEEFF; padding: 40px 0 80px; }
+  .text-yellow { color: #FFDE59; }
+
+  /* HERO */
+  .mapa-hero {
+    text-align: center;
+    padding: 40px 0 60px;
+  }
+  .mapa-title {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin: 12px 0 16px;
+  }
+  .mapa-sub {
+    font-size: 16px;
+    color: rgba(235, 238, 255, 0.7);
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 auto 24px;
+  }
+  .mapa-legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .mapa-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.55);
+  }
+  .mapa-status {
+    font-size: 14px;
+  }
+  .mapa-status-live { color: #3FCECF; }
+  .mapa-status-soon { color: rgba(235, 238, 255, 0.4); }
+
+  /* ŚCIEŻKA */
+  .mapa-sciezka {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(235, 238, 255, 0.08);
+    border-radius: 18px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .mapa-sciezka-featured {
+    background: rgba(255, 222, 89, 0.04);
+    border-color: rgba(255, 222, 89, 0.2);
+  }
+  .mapa-sciezka-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .mapa-sciezka-icon {
+    font-size: 48px;
+    line-height: 1;
+  }
+  .mapa-sciezka-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #3FCECF;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .mapa-sciezka-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.5px;
+  }
+  .mapa-sciezka-desc {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    margin: 0;
+    line-height: 1.55;
+  }
+  .mapa-sciezka-status {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.55);
+    text-align: center;
+  }
+
+  /* KLASY */
+  .klasy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .klasa-box {
+    background: rgba(5, 10, 36, 0.5);
+    border: 1px solid rgba(235, 238, 255, 0.08);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .klasa-box-live {
+    border-color: rgba(63, 206, 207, 0.3);
+  }
+  .klasa-box-soon {
+    opacity: 0.65;
+  }
+  .klasa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(235, 238, 255, 0.08);
+  }
+  .klasa-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFDE59;
+    letter-spacing: 1px;
+  }
+  .klasa-count {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.55);
+  }
+  .dzialy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .dzial-item {
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(235, 238, 255, 0.06);
+    border-radius: 9px;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .dzial-item-live {
+    cursor: pointer;
+  }
+  .dzial-item-live:hover {
+    background: rgba(255, 222, 89, 0.05);
+    border-color: rgba(255, 222, 89, 0.3);
+    transform: translateX(2px);
+  }
+  .dzial-item-soon {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  .dzial-header {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+  .dzial-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3FCECF;
+    background: rgba(63, 206, 207, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .dzial-tytul {
+    font-size: 13px;
+    font-weight: 600;
+    color: #EBEEFF;
+  }
+  .dzial-list {
+    list-style: none;
+    padding: 6px 0 0 38px;
+    margin: 0;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.55);
+    line-height: 1.5;
+  }
+  .dzial-list li:before {
+    content: '·';
+    margin-right: 6px;
+    color: #3FCECF;
+  }
+  .dzial-more {
+    color: rgba(255, 222, 89, 0.7) !important;
+    font-style: italic;
+  }
+  .dzial-cta {
+    font-size: 11px;
+    color: #FFDE59;
+    font-weight: 600;
+    margin-top: 6px;
+    display: block;
+    padding-left: 38px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .dzial-item-live:hover .dzial-cta {
+    opacity: 1;
+  }
+
+  .mapa-cta-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* FINAL CTA */
+  .mapa-final {
+    margin-top: 60px;
+  }
+  .mapa-final-box {
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.08) 0%, rgba(63, 206, 207, 0.06) 100%);
+    border: 1px solid rgba(255, 222, 89, 0.2);
+    border-radius: 18px;
+    padding: 40px;
+    text-align: center;
+  }
+  .mapa-final-box h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 12px;
+  }
+  .mapa-final-box p {
+    font-size: 15px;
+    color: rgba(235, 238, 255, 0.7);
+    margin: 0 0 20px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .mapa-title { font-size: 32px; }
+    .mapa-sciezka { padding: 22px; }
+    .mapa-sciezka-header {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .mapa-sciezka-icon { font-size: 40px; margin: 0 auto; }
+    .klasy-grid { grid-template-columns: 1fr; }
+    .mapa-cta-row { flex-direction: column; }
+    .mapa-final-box { padding: 24px; }
+  }
+</style>
