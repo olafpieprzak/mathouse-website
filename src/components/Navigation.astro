@@ -178,9 +178,10 @@ const currentPath = Astro.url.pathname;
       </button>
     </div>
   </div>
+</header>
 
-  <!-- MOBILE MENU — STYL "OFERTA / INNE" jak na screenie -->
-  <div class="nav-mobile" id="mathouseMobileMenu">
+<!-- MOBILE MENU — POZA <header>! (backdrop-filter na .main-nav tworzy containing block, który łamie position:fixed w potomkach) -->
+<div class="nav-mobile" id="mathouseMobileMenu">
     <!-- Header z X close -->
     <div class="mobile-header">
       <a href="/" class="mobile-logo">
@@ -264,7 +265,6 @@ const currentPath = Astro.url.pathname;
     <!-- CTA -->
     <a href="/kursy" class="btn-primary mobile-cta">Sprawdź kursy →</a>
   </div>
-</header>
 
 <script is:inline>
   // GLOBALNE funkcje przypięte do window - dostępne dla onclick="..." w HTML
@@ -525,6 +525,9 @@ const currentPath = Astro.url.pathname;
 
   /* ====================================================
      MOBILE MENU — STYL Z SCREENU (OFERTA / INNE)
+     UWAGA: ten element MUSI być poza <header class="main-nav">,
+     bo backdrop-filter na .main-nav tworzy containing block
+     i łamie position:fixed (menu wtedy "siedzi" w pasku navi).
      ==================================================== */
   .nav-mobile {
     display: none;
@@ -534,10 +537,14 @@ const currentPath = Astro.url.pathname;
     left: 0;
     right: 0;
     bottom: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh; /* dynamic viewport - lepiej na mobile (uwzględnia pasek przeglądarki) */
     background: #050A24;
-    z-index: 999;
+    z-index: 9999; /* wyżej niż .main-nav (100) */
     padding: 16px 20px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .nav-mobile.is-open {
     display: flex !important;
