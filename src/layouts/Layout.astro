@@ -1,0 +1,150 @@
+---
+// =====================================================
+// GŁÓWNY LAYOUT — używany przez wszystkie podstrony
+// =====================================================
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'Coś więcej niż matma. Kursy matematyki online, korepetycje, kompendia maturalne. Uczę od 2012 roku — Olaf Pieprzak.',
+  image = '/images/og-image.jpg',
+  noindex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Tytuł i meta opisy -->
+    <title>{title} | MATHOUSE</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph (Facebook, LinkedIn, Slack) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={`${title} | MATHOUSE`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.url)} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={`${title} | MATHOUSE`} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+    <!-- Favicon - ZASTĄPISZ PLIKAMI Z mathouse.pl -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Fonty z Google Fonts (preconnect przyspiesza ładowanie) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tabler Icons (ikony interfejsu) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+    />
+
+    <!-- Wskazanie języka treści (SEO) -->
+    <meta name="language" content="Polish" />
+    <meta name="author" content="Olaf Pieprzak — MATHOUSE" />
+
+    <!-- Schema.org dla wyszukiwarki -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'EducationalOrganization',
+      name: 'MATHOUSE',
+      alternateName: 'Coś więcej niż matma',
+      url: 'https://mathouse.pl',
+      logo: 'https://mathouse.pl/images/logo.svg',
+      founder: {
+        '@type': 'Person',
+        name: 'Olaf Pieprzak',
+      },
+      foundingDate: '2012',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'ul. Piłsudskiego 26A/16',
+        addressLocality: 'Ropczyce',
+        postalCode: '39-100',
+        addressCountry: 'PL',
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+48570840416',
+        contactType: 'Customer Service',
+        email: 'olaf.pieprzak@gmail.com',
+        availableLanguage: ['Polish'],
+      },
+      sameAs: [
+        'https://www.tiktok.com/@mathouse_pl',
+        'https://www.instagram.com/mathouse_pl/',
+        'https://www.youtube.com/@olafpieprzak9987',
+        'https://www.facebook.com/Mathousepl',
+      ],
+    })} />
+  </head>
+
+  <body class="bg-navy text-lavender font-sans antialiased">
+    <Navigation />
+
+    <main>
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  /* Globalne resetowanie + smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Selekcja tekstu w brand colors */
+  ::selection {
+    background-color: #FFDE59;
+    color: #050A24;
+  }
+
+  /* Scrollbar w stylu brandu */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 222, 89, 0.3);
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 222, 89, 0.5);
+  }
+</style>

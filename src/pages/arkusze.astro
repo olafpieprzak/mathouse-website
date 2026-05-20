@@ -1,0 +1,727 @@
+---
+// =====================================================
+// STRONA ARKUSZE CKE
+// =====================================================
+import Layout from '../layouts/Layout.astro';
+
+// Arkusze matura podstawowa
+const arkuszePodst = [
+  { date: 'MARZEC 2026', name: 'Matura podst. próbna', meta: '35 zadań · podstawa 2023+', badge: 'NOWE' },
+  { date: 'MAJ 2025', name: 'Matura podst.', meta: '35 zadań · podstawa 2023+' },
+  { date: 'MARZEC 2025', name: 'Matura próbna', meta: '35 zadań · podstawa 2023+' },
+  { date: 'MAJ 2024', name: 'Matura podst.', meta: '34 zadań · podstawa 2023+' },
+];
+
+// Arkusze matura rozszerzona
+const arkuszeRozsz = [
+  { date: 'CZERWIEC 2025', name: 'Matura rozsz.', meta: '12 zadań · podstawa 2023+', badge: 'NOWE' },
+  { date: 'MAJ 2025', name: 'Matura rozsz.', meta: '12 zadań · podstawa 2023+' },
+  { date: 'MARZEC 2025', name: 'Matura rozsz. próbna', meta: '12 zadań · podstawa 2023+' },
+  { date: 'MAJ 2024', name: 'Matura rozsz.', meta: '13 zadań · podstawa 2023+' },
+];
+
+const arkusze8 = [
+  { name: 'EO maj 2025', meta: 'właściwy · 19 zadań' },
+  { name: 'EO styczeń 2025', meta: 'próbny · 20 zadań' },
+  { name: 'EO maj 2024', meta: 'właściwy · 19 zadań' },
+];
+
+const materialy = [
+  { name: 'Wymagania CKE matura 2026', meta: 'co musisz umieć', icon: 'file-text', color: 'yellow' },
+  { name: 'Tablice matematyczne', meta: 'wzory z matury', icon: 'math-function', color: 'teal' },
+  { name: 'Informator ósmoklasisty', meta: 'zakres egzaminu', icon: 'book', color: 'yellow' },
+  { name: 'Konkurs J. Marszała', meta: 'arkusze konkursowe', icon: 'trophy', color: 'teal' },
+];
+---
+
+<Layout
+  title="Arkusze CKE — całe archiwum"
+  description="Wszystkie arkusze CKE z matury podstawowej, rozszerzonej i egzaminu ósmoklasisty — z odpowiedziami i rozwiązaniami wideo. Podział wg podstawy programowej. Za darmo."
+>
+  <div class="breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> / <span>Arkusze CKE</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="arkusze-hero">
+    <div class="container-content arkusze-hero-inner">
+      <span class="tag-teal">📄 darmowe · CKE · 2010-2026</span>
+      <h1 class="arkusze-title">
+        Arkusze CKE — <span class="text-yellow">całe archiwum</span>
+      </h1>
+      <p class="arkusze-desc">
+        Wszystkie arkusze matury i ósmoklasisty — podzielone podstawą programową,
+        z odpowiedziami i moimi rozwiązaniami wideo. Za darmo.
+      </p>
+
+      <div class="arkusze-jump">
+        <a href="#podst" class="jump-chip jump-yellow">↓ Matura podstawowa</a>
+        <a href="#rozsz" class="jump-chip jump-teal">↓ Matura rozszerzona</a>
+        <a href="#osmo" class="jump-chip jump-lav">↓ Ósmoklasista</a>
+        <a href="#tablice" class="jump-chip jump-soft">↓ Tablice CKE</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATY -->
+  <section class="arkusze-staty">
+    <div class="container-content staty-grid">
+      <div class="staty-item">
+        <div class="staty-num">200+</div>
+        <div class="staty-label">arkuszy CKE</div>
+      </div>
+      <div class="staty-item">
+        <div class="staty-num">17 lat</div>
+        <div class="staty-label">archiwum (2010-2026)</div>
+      </div>
+      <div class="staty-item">
+        <div class="staty-num teal">100%</div>
+        <div class="staty-label">z odpowiedziami</div>
+      </div>
+      <div class="staty-item">
+        <div class="staty-num teal">FREE</div>
+        <div class="staty-label">wszystko gratis</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFO O PODSTAWIE -->
+  <section class="podstawa-info">
+    <div class="container-content podstawa-inner">
+      <div class="podstawa-icon"><i class="ti ti-info-circle"></i></div>
+      <div>
+        <div class="podstawa-title">Podział wg podstawy programowej</div>
+        <p class="podstawa-text">
+          Arkusze pogrupowałem wg lat obowiązywania podstawy programowej. Ważne, bo CKE zmieniał wymagania w 2015 i 2023. Filtruj po dacie, żeby trafić na właściwy zakres.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATURA PODSTAWOWA -->
+  <section id="podst" class="section-arkusze">
+    <div class="container-content">
+      <div class="section-header">
+        <div>
+          <div class="section-label yellow">§ 01 · MATURA PODSTAWOWA</div>
+          <h2 class="ark-title">Poziom <span class="text-yellow">podstawowy</span></h2>
+        </div>
+        <div class="filtry">
+          <span class="filtr-label">podstawa:</span>
+          <button class="filtr filtr-active">wszystkie</button>
+          <button class="filtr">2023+</button>
+          <button class="filtr">2015-2022</button>
+          <button class="filtr">do 2014</button>
+        </div>
+      </div>
+
+      <div class="arkusze-grid">
+        {arkuszePodst.map((a) => (
+          <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-new' : ''}`}>
+            {a.badge && <span class="ark-badge">{a.badge}</span>}
+            <div class={`ark-date ${a.badge ? 'yellow' : ''}`}>{a.date}</div>
+            <div class="ark-name">{a.name}</div>
+            <div class="ark-meta">{a.meta}</div>
+            <div class="ark-actions">
+              <a href="#" class="btn-primary ark-pdf">PDF ↓</a>
+              <a href="#" class="ark-play">▶</a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="ark-more-wrap">
+        <a href="#" class="ark-more">Pokaż wszystkie 70+ arkuszy podstawowych →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATURA ROZSZERZONA -->
+  <section id="rozsz" class="section-arkusze section-arkusze-teal">
+    <div class="container-content">
+      <div class="section-header">
+        <div>
+          <div class="section-label">§ 02 · MATURA ROZSZERZONA</div>
+          <h2 class="ark-title">Poziom <span class="text-teal">rozszerzony</span></h2>
+        </div>
+        <div class="filtry-info">filtry: podstawa programowa →</div>
+      </div>
+
+      <div class="arkusze-grid">
+        {arkuszeRozsz.map((a) => (
+          <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-teal-new' : ''}`}>
+            {a.badge && <span class="ark-badge teal">{a.badge}</span>}
+            <div class={`ark-date ${a.badge ? 'teal' : ''}`}>{a.date}</div>
+            <div class="ark-name">{a.name}</div>
+            <div class="ark-meta">{a.meta}</div>
+            <div class="ark-actions">
+              <a href="#" class="btn-primary ark-pdf">PDF ↓</a>
+              <a href="#" class="ark-play">▶</a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="ark-more-wrap">
+        <a href="#" class="ark-more">Pokaż wszystkie 60+ arkuszy rozszerzonych →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 KLASA + TABLICE -->
+  <section id="osmo" class="section-osmo-tablice">
+    <div class="container-content osmo-grid">
+      <div>
+        <div class="section-label lavender">§ 03 · ÓSMOKLASISTA</div>
+        <h2 class="ark-title">Egzamin po klasie 8</h2>
+        <div class="ark-rows">
+          {arkusze8.map((a) => (
+            <div class="ark-row">
+              <div>
+                <strong>{a.name}</strong>
+                <div class="ark-row-meta">{a.meta}</div>
+              </div>
+              <a href="#" class="btn-primary ark-pdf-sm">PDF ↓</a>
+            </div>
+          ))}
+          <div style="text-align:center;margin-top:4px;">
+            <a href="#" class="ark-all-teal">Wszystkie 40+ arkuszy →</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="tablice">
+        <div class="section-label lavender">§ 04 · TABLICE I INFORMATOR</div>
+        <h2 class="ark-title">Materiały <span class="lavender">CKE</span></h2>
+        <div class="ark-rows">
+          {materialy.map((m) => (
+            <div class="ark-row">
+              <div class="ark-row-icon-grp">
+                <i class={`ti ti-${m.icon} ark-row-icon ${m.color}`}></i>
+                <div>
+                  <strong>{m.name}</strong>
+                  <div class="ark-row-meta">{m.meta}</div>
+                </div>
+              </div>
+              <a href="#" class="btn-primary ark-pdf-sm">PDF ↓</a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPSELL: cała matura wideo -->
+  <section class="upsell-bar">
+    <div class="container-content upsell-inner">
+      <div class="upsell-info">
+        <div class="upsell-icon"><i class="ti ti-video"></i></div>
+        <div>
+          <div class="upsell-name">Cała matura rozwiązana krok po kroku</div>
+          <div class="upsell-desc">Wideo z rozwiązaniem każdego zadania z wybranej matury — w jednym miejscu.</div>
+        </div>
+      </div>
+      <a href="#" class="btn-primary upsell-cta">Zobacz wideo-rozwiązania →</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-cta-arkusze">
+    <div class="container-content cta-inner">
+      <div>
+        <h3 class="cta-title">Robisz arkusz i utknąłeś?</h3>
+        <p class="cta-desc">Obejrzyj rozwiązania wideo albo weź kurs maturalny.</p>
+      </div>
+      <div class="cta-buttons">
+        <a href="https://www.youtube.com/@olafpieprzak9987" target="_blank" rel="noopener noreferrer" class="cta-button">▶ Rozwiązania na YT</a>
+        <a href="/kursy" class="cta-button-out">Kurs maturalny</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .breadcrumb {
+    padding: 14px 0;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb span { color: #FFDE59; }
+  .text-yellow { color: #FFDE59; }
+  .text-teal { color: #3FCECF; }
+  .lavender { color: #EBEEFF; opacity: 0.85; }
+
+  /* ===================================================== */
+  /* HERO                                                   */
+  /* ===================================================== */
+  .arkusze-hero {
+    padding: 48px 0 32px;
+  }
+  .arkusze-hero-inner {
+    text-align: center;
+  }
+  .arkusze-title {
+    font-size: 46px;
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -1.2px;
+    margin: 18px 0 14px;
+  }
+  .arkusze-desc {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .arkusze-jump {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .jump-chip {
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .jump-yellow {
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+    border: 1px solid rgba(255, 222, 89, 0.3);
+  }
+  .jump-teal {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.3);
+  }
+  .jump-lav {
+    background: rgba(235, 238, 255, 0.08);
+    color: #EBEEFF;
+    border: 1px solid rgba(235, 238, 255, 0.15);
+  }
+  .jump-soft {
+    background: rgba(235, 238, 255, 0.05);
+    color: rgba(235, 238, 255, 0.7);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+  }
+
+  /* ===================================================== */
+  /* STATY                                                  */
+  /* ===================================================== */
+  .arkusze-staty {
+    background: rgba(63, 206, 207, 0.06);
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .staty-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .staty-item {
+    padding: 18px;
+    text-align: center;
+    border-right: 1px solid rgba(235, 238, 255, 0.08);
+  }
+  .staty-item:last-child {
+    border-right: none;
+  }
+  .staty-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    color: #FFDE59;
+  }
+  .staty-num.teal {
+    color: #3FCECF;
+  }
+  .staty-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.65);
+  }
+
+  /* ===================================================== */
+  /* PODSTAWA INFO                                          */
+  /* ===================================================== */
+  .podstawa-info {
+    padding: 22px 0;
+    background: rgba(255, 222, 89, 0.05);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .podstawa-inner {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .podstawa-icon {
+    width: 42px;
+    height: 42px;
+    background: #FFDE59;
+    color: #050A24;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .podstawa-icon i {
+    font-size: 22px;
+  }
+  .podstawa-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFDE59;
+  }
+  .podstawa-text {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 3px;
+    line-height: 1.55;
+  }
+
+  /* ===================================================== */
+  /* SECTION ARKUSZE                                        */
+  /* ===================================================== */
+  .section-arkusze {
+    padding: 36px 0;
+  }
+  .section-arkusze-teal {
+    background: rgba(63, 206, 207, 0.05);
+    border-top: 1px solid rgba(63, 206, 207, 0.2);
+    border-bottom: 1px solid rgba(63, 206, 207, 0.2);
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .ark-title {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  /* === Filtry === */
+  .filtry {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filtr-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+  .filtr {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(235, 238, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+  }
+  .filtr-active {
+    background: #FFDE59;
+    color: #050A24;
+    font-weight: 600;
+  }
+  .filtry-info {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+
+  /* === Arkusze grid === */
+  .arkusze-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .arkusz-tile {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+  }
+  .arkusz-tile-new {
+    border-color: rgba(255, 222, 89, 0.25);
+  }
+  .arkusz-tile-teal-new {
+    border-color: rgba(63, 206, 207, 0.25);
+  }
+  .ark-badge {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: #FFDE59;
+    color: #050A24;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .ark-badge.teal {
+    background: #3FCECF;
+  }
+  .ark-date {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .ark-date.yellow {
+    color: #FFDE59;
+  }
+  .ark-date.teal {
+    color: #3FCECF;
+  }
+  .ark-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+  .ark-meta {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 6px;
+  }
+  .ark-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .ark-pdf {
+    flex: 1;
+    text-align: center;
+    font-size: 11px;
+    padding: 7px;
+  }
+  .ark-play {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    text-decoration: none;
+  }
+
+  .ark-more-wrap {
+    text-align: center;
+    margin-top: 14px;
+  }
+  .ark-more {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(235, 238, 255, 0.15);
+    color: rgba(235, 238, 255, 0.85);
+    padding: 11px 24px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-decoration: none;
+  }
+  .ark-more:hover {
+    border-color: rgba(255, 222, 89, 0.3);
+  }
+
+  /* ===================================================== */
+  /* 8 KLASA + TABLICE                                      */
+  /* ===================================================== */
+  .section-osmo-tablice {
+    padding: 36px 0;
+  }
+  .osmo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .ark-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 14px;
+  }
+  .ark-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 8px;
+    padding: 11px 13px;
+  }
+  .ark-row-icon-grp {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .ark-row-icon {
+    font-size: 16px;
+  }
+  .ark-row-icon.yellow {
+    color: #FFDE59;
+  }
+  .ark-row-icon.teal {
+    color: #3FCECF;
+  }
+  .ark-row-meta {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 2px;
+  }
+  .ark-pdf-sm {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  .ark-all-teal {
+    font-size: 11px;
+    color: #3FCECF;
+    text-decoration: none;
+  }
+
+  /* ===================================================== */
+  /* UPSELL                                                 */
+  /* ===================================================== */
+  .upsell-bar {
+    padding: 24px 0;
+    background: linear-gradient(90deg, rgba(255, 222, 89, 0.12), rgba(63, 206, 207, 0.12));
+    border-top: 1px solid rgba(255, 222, 89, 0.3);
+    border-bottom: 1px solid rgba(255, 222, 89, 0.3);
+  }
+  .upsell-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .upsell-info {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex: 1;
+  }
+  .upsell-icon {
+    width: 46px;
+    height: 46px;
+    background: #FFDE59;
+    color: #050A24;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .upsell-icon i {
+    font-size: 22px;
+  }
+  .upsell-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .upsell-desc {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 3px;
+  }
+  .upsell-cta {
+    white-space: nowrap;
+  }
+
+  /* ===================================================== */
+  /* CTA                                                    */
+  /* ===================================================== */
+  .section-cta-arkusze {
+    background: #FFDE59;
+    color: #050A24;
+    padding: 32px 0;
+  }
+  .cta-inner {
+    text-align: center;
+  }
+  .cta-title {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .cta-desc {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .cta-button {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .cta-button-out {
+    background: transparent;
+    color: #050A24;
+    border: 1px solid #050A24;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* ===================================================== */
+  /* RESPONSIVE                                             */
+  /* ===================================================== */
+  @media (max-width: 1024px) {
+    .arkusze-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .osmo-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .staty-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .staty-item {
+      border-right: none;
+      border-bottom: 1px solid rgba(235, 238, 255, 0.08);
+    }
+  }
+  @media (max-width: 640px) {
+    .arkusze-title {
+      font-size: 32px;
+    }
+    .ark-title {
+      font-size: 20px;
+    }
+    .arkusze-grid {
+      grid-template-columns: 1fr;
+    }
+    .upsell-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .upsell-cta {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
