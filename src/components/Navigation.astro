@@ -180,7 +180,7 @@ const currentPath = Astro.url.pathname;
   </div>
 
   <!-- MOBILE MENU — STYL "OFERTA / INNE" jak na screenie -->
-  <div class="nav-mobile" data-nav-mobile hidden>
+  <div class="nav-mobile" data-nav-mobile>
     <!-- Header z X close -->
     <div class="mobile-header">
       <a href="/" class="mobile-logo">
@@ -267,48 +267,73 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script is:inline>
-  // Czekaj na DOM
-  document.addEventListener('DOMContentLoaded', function() {
-    const toggle = document.querySelector('[data-nav-toggle]');
-    const closeBtn = document.querySelector('[data-nav-close]');
-    const mobile = document.querySelector('[data-nav-mobile]');
+  (function() {
+    function initMobileMenu() {
+      const toggle = document.querySelector('[data-nav-toggle]');
+      const closeBtn = document.querySelector('[data-nav-close]');
+      const mobile = document.querySelector('[data-nav-mobile]');
 
-    if (!toggle || !mobile) {
-      console.warn('[Navigation] Brak elementów menu mobilnego');
-      return;
-    }
+      if (!toggle || !mobile) {
+        console.warn('[Navigation] Brak elementów menu mobilnego');
+        return;
+      }
 
-    function openMenu() {
-      mobile.removeAttribute('hidden');
-      toggle.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeMenu() {
-      mobile.setAttribute('hidden', '');
-      toggle.classList.remove('open');
-      document.body.style.overflow = '';
-    }
+      // Mark as initialized żeby nie inicjalizować 2x
+      if (toggle.dataset.initialized === 'true') return;
+      toggle.dataset.initialized = 'true';
 
-    toggle.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      const isOpen = !mobile.hasAttribute('hidden');
-      if (isOpen) closeMenu();
-      else openMenu();
-    });
+      function openMenu() {
+        mobile.classList.add('is-open');
+        toggle.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navigation] Menu OTWARTE');
+      }
 
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function(e) {
+      function closeMenu() {
+        mobile.classList.remove('is-open');
+        toggle.classList.remove('open');
+        document.body.style.overflow = '';
+        console.log('[Navigation] Menu ZAMKNIĘTE');
+      }
+
+      toggle.addEventListener('click', function(e) {
         e.preventDefault();
-        closeMenu();
+        e.stopPropagation();
+        const isOpen = mobile.classList.contains('is-open');
+        if (isOpen) closeMenu();
+        else openMenu();
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          closeMenu();
+        });
+      }
+
+      // Zamknij po kliknięciu w link (nie summary)
+      const links = mobile.querySelectorAll('a.mobile-item, a.mobile-sublink, a.mobile-cta');
+      links.forEach(function(link) {
+        link.addEventListener('click', function() {
+          closeMenu();
+        });
+      });
+
+      // ESC key zamyka menu
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobile.classList.contains('is-open')) {
+          closeMenu();
+        }
       });
     }
 
-    // Zamknij po kliknięciu w link (z wyjątkiem details summary)
-    document.querySelectorAll('.mobile-item:not(.mobile-item-summary), .mobile-sublink, .mobile-cta').forEach(function(link) {
-      link.addEventListener('click', closeMenu);
-    });
-  });
+    // Init na różnych stadiach - na pewno zadziała
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMobileMenu);
+    } else {
+      initMobileMenu();
+    }
+  })();
 </script>
 
 <style>
@@ -515,7 +540,7 @@ const currentPath = Astro.url.pathname;
      MOBILE MENU — STYL Z SCREENU (OFERTA / INNE)
      ==================================================== */
   .nav-mobile {
-    display: flex;
+    display: none;
     flex-direction: column;
     position: fixed;
     top: 0;
@@ -527,8 +552,8 @@ const currentPath = Astro.url.pathname;
     padding: 16px 20px;
     overflow-y: auto;
   }
-  .nav-mobile[hidden] {
-    display: none !important;
+  .nav-mobile.is-open {
+    display: flex !important;
   }
 
   /* Header z X */
