@@ -3,35 +3,12 @@
 // STRONA ARKUSZE CKE
 // =====================================================
 import Layout from '../layouts/Layout.astro';
+import { arkuszePodst, arkuszeRozsz, arkusze8, informatory, zbioryZadan } from '../data/arkusze.js';
 
-// Arkusze matura podstawowa
-const arkuszePodst = [
-  { date: 'MARZEC 2026', name: 'Matura podst. próbna', meta: '35 zadań · podstawa 2023+', badge: 'NOWE' },
-  { date: 'MAJ 2025', name: 'Matura podst.', meta: '35 zadań · podstawa 2023+' },
-  { date: 'MARZEC 2025', name: 'Matura próbna', meta: '35 zadań · podstawa 2023+' },
-  { date: 'MAJ 2024', name: 'Matura podst.', meta: '34 zadań · podstawa 2023+' },
-];
-
-// Arkusze matura rozszerzona
-const arkuszeRozsz = [
-  { date: 'CZERWIEC 2025', name: 'Matura rozsz.', meta: '12 zadań · podstawa 2023+', badge: 'NOWE' },
-  { date: 'MAJ 2025', name: 'Matura rozsz.', meta: '12 zadań · podstawa 2023+' },
-  { date: 'MARZEC 2025', name: 'Matura rozsz. próbna', meta: '12 zadań · podstawa 2023+' },
-  { date: 'MAJ 2024', name: 'Matura rozsz.', meta: '13 zadań · podstawa 2023+' },
-];
-
-const arkusze8 = [
-  { name: 'EO maj 2025', meta: 'właściwy · 19 zadań' },
-  { name: 'EO styczeń 2025', meta: 'próbny · 20 zadań' },
-  { name: 'EO maj 2024', meta: 'właściwy · 19 zadań' },
-];
-
-const materialy = [
-  { name: 'Wymagania CKE matura 2026', meta: 'co musisz umieć', icon: 'file-text', color: 'yellow' },
-  { name: 'Tablice matematyczne', meta: 'wzory z matury', icon: 'math-function', color: 'teal' },
-  { name: 'Informator ósmoklasisty', meta: 'zakres egzaminu', icon: 'book', color: 'yellow' },
-  { name: 'Konkurs J. Marszała', meta: 'arkusze konkursowe', icon: 'trophy', color: 'teal' },
-];
+// Lista jest już posortowana w arkusze.js (najnowsze pierwsze)
+// Pierwsze 4 = NAJNOWSZE (preview na stronie), reszta ukryta pod "Pokaż wszystkie"
+const arkuszePodstTop = arkuszePodst.slice(0, 4);
+const arkuszePodstReszta = arkuszePodst.slice(4);
 ---
 
 <Layout
@@ -69,16 +46,16 @@ const materialy = [
   <section class="arkusze-staty">
     <div class="container-content staty-grid">
       <div class="staty-item">
-        <div class="staty-num">200+</div>
+        <div class="staty-num">{arkuszePodst.length + arkusze8.length}</div>
         <div class="staty-label">arkuszy CKE</div>
       </div>
       <div class="staty-item">
-        <div class="staty-num">17 lat</div>
-        <div class="staty-label">archiwum (2010-2026)</div>
+        <div class="staty-num">23 lata</div>
+        <div class="staty-label">archiwum (2003-2026)</div>
       </div>
       <div class="staty-item">
-        <div class="staty-num teal">100%</div>
-        <div class="staty-label">z odpowiedziami</div>
+        <div class="staty-num teal">{informatory.length}</div>
+        <div class="staty-label">informatorów CKE</div>
       </div>
       <div class="staty-item">
         <div class="staty-num teal">FREE</div>
@@ -110,29 +87,48 @@ const materialy = [
         </div>
         <div class="filtry">
           <span class="filtr-label">podstawa:</span>
-          <button class="filtr filtr-active">wszystkie</button>
-          <button class="filtr">2023+</button>
-          <button class="filtr">2015-2022</button>
-          <button class="filtr">do 2014</button>
+          <button class="filtr filtr-active" data-filtr="all" onclick="filtrujArkusze(this, 'all')">wszystkie</button>
+          <button class="filtr" data-filtr="2023+" onclick="filtrujArkusze(this, '2023+')">2023+</button>
+          <button class="filtr" data-filtr="2015-2022" onclick="filtrujArkusze(this, '2015-2022')">2015-2022</button>
+          <button class="filtr" data-filtr="do 2014" onclick="filtrujArkusze(this, 'do 2014')">do 2014</button>
         </div>
       </div>
 
-      <div class="arkusze-grid">
-        {arkuszePodst.map((a) => (
-          <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-new' : ''}`}>
+      <!-- Najnowsze 4 arkusze - widoczne od razu -->
+      <div class="arkusze-grid" id="arkusze-grid-top">
+        {arkuszePodstTop.map((a) => (
+          <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-new' : ''}`} data-podstawa={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
             {a.badge && <span class="ark-badge">{a.badge}</span>}
-            <div class={`ark-date ${a.badge ? 'yellow' : ''}`}>{a.date}</div>
+            <div class={`ark-date ${a.badge ? 'yellow' : ''}`}>{a.monthLabel}</div>
             <div class="ark-name">{a.name}</div>
             <div class="ark-meta">{a.meta}</div>
             <div class="ark-actions">
-              <a href="#" class="btn-primary ark-pdf">PDF ↓</a>
-              <a href="#" class="ark-play">▶</a>
+              <a href={a.pdf} class="btn-primary ark-pdf" target="_blank" rel="noopener">PDF ↓</a>
+              <a href="#" class="ark-play" title="Rozwiązania wideo (wkrótce)">▶</a>
             </div>
           </article>
         ))}
       </div>
+
+      <!-- Pełna lista pozostałych arkuszy - rozwijana -->
+      <div class="arkusze-grid arkusze-grid-hidden" id="arkusze-grid-reszta">
+        {arkuszePodstReszta.map((a) => (
+          <article class="arkusz-tile" data-podstawa={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
+            <div class="ark-date">{a.monthLabel}</div>
+            <div class="ark-name">{a.name}</div>
+            <div class="ark-meta">{a.meta}</div>
+            <div class="ark-actions">
+              <a href={a.pdf} class="btn-primary ark-pdf" target="_blank" rel="noopener">PDF ↓</a>
+              <a href="#" class="ark-play" title="Rozwiązania wideo (wkrótce)">▶</a>
+            </div>
+          </article>
+        ))}
+      </div>
+
       <div class="ark-more-wrap">
-        <a href="#" class="ark-more">Pokaż wszystkie 70+ arkuszy podstawowych →</a>
+        <button type="button" class="ark-more" id="ark-more-toggle" onclick="toggleWszystkieArkusze(this)">
+          Pokaż wszystkie {arkuszePodst.length} arkuszy podstawowych →
+        </button>
       </div>
     </div>
   </section>
@@ -148,27 +144,35 @@ const materialy = [
         <div class="filtry-info">filtry: podstawa programowa →</div>
       </div>
 
-      <div class="arkusze-grid">
-        {arkuszeRozsz.map((a) => (
-          <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-teal-new' : ''}`}>
-            {a.badge && <span class="ark-badge teal">{a.badge}</span>}
-            <div class={`ark-date ${a.badge ? 'teal' : ''}`}>{a.date}</div>
-            <div class="ark-name">{a.name}</div>
-            <div class="ark-meta">{a.meta}</div>
-            <div class="ark-actions">
-              <a href="#" class="btn-primary ark-pdf">PDF ↓</a>
-              <a href="#" class="ark-play">▶</a>
-            </div>
-          </article>
-        ))}
-      </div>
-      <div class="ark-more-wrap">
-        <a href="#" class="ark-more">Pokaż wszystkie 60+ arkuszy rozszerzonych →</a>
-      </div>
+      {arkuszeRozsz.length === 0 ? (
+        <div class="ark-empty">
+          <div class="ark-empty-icon">📋</div>
+          <div class="ark-empty-title">Arkusze rozszerzone — wkrótce</div>
+          <div class="ark-empty-desc">Pracuję nad uzupełnieniem archiwum poziomu rozszerzonego. Na razie znajdziesz tu informator rozszerzony 2023 w sekcji "Materiały CKE" poniżej.</div>
+          <a href="#tablice" class="ark-empty-cta">↓ Zobacz informator rozszerzony</a>
+        </div>
+      ) : (
+        <>
+          <div class="arkusze-grid">
+            {arkuszeRozsz.map((a) => (
+              <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-teal-new' : ''}`}>
+                {a.badge && <span class="ark-badge teal">{a.badge}</span>}
+                <div class={`ark-date ${a.badge ? 'teal' : ''}`}>{a.monthLabel}</div>
+                <div class="ark-name">{a.name}</div>
+                <div class="ark-meta">{a.meta}</div>
+                <div class="ark-actions">
+                  <a href={a.pdf} class="btn-primary ark-pdf" target="_blank" rel="noopener">PDF ↓</a>
+                  <a href="#" class="ark-play">▶</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   </section>
 
-  <!-- 8 KLASA + TABLICE -->
+  <!-- 8 KLASA + MATERIAŁY CKE -->
   <section id="osmo" class="section-osmo-tablice">
     <div class="container-content osmo-grid">
       <div>
@@ -178,32 +182,44 @@ const materialy = [
           {arkusze8.map((a) => (
             <div class="ark-row">
               <div>
-                <strong>{a.name}</strong>
+                <strong>{a.monthLabel} — {a.name}</strong>
                 <div class="ark-row-meta">{a.meta}</div>
               </div>
-              <a href="#" class="btn-primary ark-pdf-sm">PDF ↓</a>
+              <a href={a.pdf} class="btn-primary ark-pdf-sm" target="_blank" rel="noopener">PDF ↓</a>
             </div>
           ))}
-          <div style="text-align:center;margin-top:4px;">
-            <a href="#" class="ark-all-teal">Wszystkie 40+ arkuszy →</a>
+          <div style="text-align:center;margin-top:8px;color:rgba(235,238,255,0.5);font-size:11px;">
+            Więcej arkuszy ósmoklasisty — wkrótce
           </div>
         </div>
       </div>
 
       <div id="tablice">
-        <div class="section-label lavender">§ 04 · TABLICE I INFORMATOR</div>
+        <div class="section-label lavender">§ 04 · INFORMATORY CKE</div>
         <h2 class="ark-title">Materiały <span class="lavender">CKE</span></h2>
         <div class="ark-rows">
-          {materialy.map((m) => (
+          {informatory.map((m) => (
             <div class="ark-row">
               <div class="ark-row-icon-grp">
-                <i class={`ti ti-${m.icon} ark-row-icon ${m.color}`}></i>
+                <i class={`ti ti-file-text ark-row-icon ${m.color}`}></i>
                 <div>
                   <strong>{m.name}</strong>
                   <div class="ark-row-meta">{m.meta}</div>
                 </div>
               </div>
-              <a href="#" class="btn-primary ark-pdf-sm">PDF ↓</a>
+              <a href={m.pdf} class="btn-primary ark-pdf-sm" target="_blank" rel="noopener">PDF ↓</a>
+            </div>
+          ))}
+          {zbioryZadan.map((m) => (
+            <div class="ark-row">
+              <div class="ark-row-icon-grp">
+                <i class={`ti ti-book ark-row-icon ${m.color}`}></i>
+                <div>
+                  <strong>{m.name}</strong>
+                  <div class="ark-row-meta">{m.meta}</div>
+                </div>
+              </div>
+              <a href={m.pdf} class="btn-primary ark-pdf-sm" target="_blank" rel="noopener">PDF ↓</a>
             </div>
           ))}
         </div>
@@ -239,6 +255,44 @@ const materialy = [
     </div>
   </section>
 </Layout>
+
+<script is:inline>
+  // Filtrowanie arkuszy podstawowych po podstawie programowej
+  function filtrujArkusze(btn, filtr) {
+    // Aktywny przycisk
+    document.querySelectorAll('.filtr').forEach(b => b.classList.remove('filtr-active'));
+    btn.classList.add('filtr-active');
+
+    // Pokaż/ukryj kafelki
+    var kafelki = document.querySelectorAll('.arkusz-tile[data-podstawa]');
+    kafelki.forEach(function(k) {
+      var p = k.getAttribute('data-podstawa');
+      if (filtr === 'all' || p === filtr) {
+        k.style.display = '';
+      } else {
+        k.style.display = 'none';
+      }
+    });
+
+    // Jeśli filtrujemy, automatycznie rozwijamy pełną listę (bo top może zawierać 0 wyników)
+    var reszta = document.getElementById('arkusze-grid-reszta');
+    var toggleBtn = document.getElementById('ark-more-toggle');
+    if (filtr !== 'all' && reszta && reszta.classList.contains('arkusze-grid-hidden')) {
+      reszta.classList.remove('arkusze-grid-hidden');
+      if (toggleBtn) toggleBtn.textContent = 'Zwiń listę ←';
+    }
+  }
+
+  // Rozwijanie pełnej listy arkuszy
+  function toggleWszystkieArkusze(btn) {
+    var reszta = document.getElementById('arkusze-grid-reszta');
+    if (!reszta) return;
+    var hidden = reszta.classList.toggle('arkusze-grid-hidden');
+    btn.textContent = hidden
+      ? 'Pokaż wszystkie ' + (document.querySelectorAll('.arkusz-tile[data-podstawa]').length) + ' arkuszy podstawowych →'
+      : 'Zwiń listę ←';
+  }
+</script>
 
 <style>
   .breadcrumb {
@@ -723,5 +777,70 @@ const materialy = [
       width: 100%;
       text-align: center;
     }
+  }
+  /* ===================================================== */
+  /* NOWE STYLE: ukrywanie listy + empty state              */
+  /* ===================================================== */
+  .arkusze-grid-hidden {
+    display: none !important;
+  }
+
+  /* Przycisk "Pokaż wszystkie" - zamiast linka */
+  button.ark-more {
+    background: transparent;
+    border: 1px solid rgba(255, 222, 89, 0.3);
+    color: #FFDE59;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  button.ark-more:hover {
+    background: rgba(255, 222, 89, 0.1);
+    border-color: #FFDE59;
+  }
+
+  /* Empty state dla matury rozszerzonej */
+  .ark-empty {
+    background: rgba(63, 206, 207, 0.05);
+    border: 1px dashed rgba(63, 206, 207, 0.3);
+    border-radius: 16px;
+    padding: 40px 28px;
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .ark-empty-icon {
+    font-size: 44px;
+    margin-bottom: 12px;
+  }
+  .ark-empty-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #3FCECF;
+    margin-bottom: 8px;
+  }
+  .ark-empty-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(235, 238, 255, 0.7);
+    margin-bottom: 18px;
+  }
+  .ark-empty-cta {
+    display: inline-block;
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.4);
+    padding: 9px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .ark-empty-cta:hover {
+    background: rgba(63, 206, 207, 0.25);
   }
 </style>
