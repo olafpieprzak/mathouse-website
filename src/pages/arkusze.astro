@@ -3,12 +3,15 @@
 // STRONA ARKUSZE CKE
 // =====================================================
 import Layout from '../layouts/Layout.astro';
-import { arkuszePodst, arkuszeRozsz, arkusze8, informatory, zbioryZadan } from '../data/arkusze.js';
+import ArkuszMaterialy from '../components/ArkuszMaterialy.astro';
+import { arkuszePodst, arkuszeRozsz, arkusze8, informatory, zbioryZadan, getMaterialy } from '../data/arkusze.js';
 
 // Lista jest już posortowana w arkusze.js (najnowsze pierwsze)
 // Pierwsze 4 = NAJNOWSZE (preview na stronie), reszta ukryta pod "Pokaż wszystkie"
 const arkuszePodstTop = arkuszePodst.slice(0, 4);
 const arkuszePodstReszta = arkuszePodst.slice(4);
+const arkuszeRozszTop = arkuszeRozsz.slice(0, 4);
+const arkuszeRozszReszta = arkuszeRozsz.slice(4);
 ---
 
 <Layout
@@ -46,7 +49,7 @@ const arkuszePodstReszta = arkuszePodst.slice(4);
   <section class="arkusze-staty">
     <div class="container-content staty-grid">
       <div class="staty-item">
-        <div class="staty-num">{arkuszePodst.length + arkusze8.length}</div>
+        <div class="staty-num">{arkuszePodst.length + arkuszeRozsz.length + arkusze8.length}</div>
         <div class="staty-label">arkuszy CKE</div>
       </div>
       <div class="staty-item">
@@ -102,10 +105,7 @@ const arkuszePodstReszta = arkuszePodst.slice(4);
             <div class={`ark-date ${a.badge ? 'yellow' : ''}`}>{a.monthLabel}</div>
             <div class="ark-name">{a.name}</div>
             <div class="ark-meta">{a.meta}</div>
-            <div class="ark-actions">
-              <a href={a.pdf} class="btn-primary ark-pdf" target="_blank" rel="noopener">PDF ↓</a>
-              <a href="#" class="ark-play" title="Rozwiązania wideo (wkrótce)">▶</a>
-            </div>
+            <ArkuszMaterialy arkusz={a} poziom="podst" />
           </article>
         ))}
       </div>
@@ -117,10 +117,7 @@ const arkuszePodstReszta = arkuszePodst.slice(4);
             <div class="ark-date">{a.monthLabel}</div>
             <div class="ark-name">{a.name}</div>
             <div class="ark-meta">{a.meta}</div>
-            <div class="ark-actions">
-              <a href={a.pdf} class="btn-primary ark-pdf" target="_blank" rel="noopener">PDF ↓</a>
-              <a href="#" class="ark-play" title="Rozwiązania wideo (wkrótce)">▶</a>
-            </div>
+            <ArkuszMaterialy arkusz={a} poziom="podst" />
           </article>
         ))}
       </div>
@@ -148,24 +145,46 @@ const arkuszePodstReszta = arkuszePodst.slice(4);
         <div class="ark-empty">
           <div class="ark-empty-icon">📋</div>
           <div class="ark-empty-title">Arkusze rozszerzone — wkrótce</div>
-          <div class="ark-empty-desc">Pracuję nad uzupełnieniem archiwum poziomu rozszerzonego. Na razie znajdziesz tu informator rozszerzony 2023 w sekcji "Materiały CKE" poniżej.</div>
-          <a href="#tablice" class="ark-empty-cta">↓ Zobacz informator rozszerzony</a>
+          <div class="ark-empty-desc">Pracuję nad uzupełnieniem archiwum poziomu rozszerzonego.</div>
         </div>
       ) : (
         <>
-          <div class="arkusze-grid">
-            {arkuszeRozsz.map((a) => (
-              <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-teal-new' : ''}`}>
+          <div class="filtry filtry-rozsz">
+            <span class="filtr-label">podstawa:</span>
+            <button class="filtr filtr-active" data-filtr-r="all" onclick="filtrujArkuszeRozsz(this, 'all')">wszystkie</button>
+            <button class="filtr" data-filtr-r="2023+" onclick="filtrujArkuszeRozsz(this, '2023+')">2023+</button>
+            <button class="filtr" data-filtr-r="2015-2022" onclick="filtrujArkuszeRozsz(this, '2015-2022')">2015-2022</button>
+          </div>
+
+          <!-- Najnowsze 4 rozszerzone - widoczne od razu -->
+          <div class="arkusze-grid" id="arkusze-grid-rozsz-top">
+            {arkuszeRozszTop.map((a) => (
+              <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-teal-new' : ''}`} data-podstawa-r={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
                 {a.badge && <span class="ark-badge teal">{a.badge}</span>}
                 <div class={`ark-date ${a.badge ? 'teal' : ''}`}>{a.monthLabel}</div>
                 <div class="ark-name">{a.name}</div>
                 <div class="ark-meta">{a.meta}</div>
-                <div class="ark-actions">
-                  <a href={a.pdf} class="btn-primary ark-pdf" target="_blank" rel="noopener">PDF ↓</a>
-                  <a href="#" class="ark-play">▶</a>
-                </div>
+                <ArkuszMaterialy arkusz={a} poziom="rozsz" />
               </article>
             ))}
+          </div>
+
+          <!-- Pełna lista pozostałych arkuszy rozszerzonych - rozwijana -->
+          <div class="arkusze-grid arkusze-grid-hidden" id="arkusze-grid-rozsz-reszta">
+            {arkuszeRozszReszta.map((a) => (
+              <article class="arkusz-tile" data-podstawa-r={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
+                <div class="ark-date">{a.monthLabel}</div>
+                <div class="ark-name">{a.name}</div>
+                <div class="ark-meta">{a.meta}</div>
+                <ArkuszMaterialy arkusz={a} poziom="rozsz" />
+              </article>
+            ))}
+          </div>
+
+          <div class="ark-more-wrap">
+            <button type="button" class="ark-more ark-more-teal" id="ark-more-toggle-rozsz" onclick="toggleWszystkieArkuszeRozsz(this)">
+              Pokaż wszystkie {arkuszeRozsz.length} arkuszy rozszerzonych →
+            </button>
           </div>
         </>
       )}
@@ -290,6 +309,38 @@ const arkuszePodstReszta = arkuszePodst.slice(4);
     var hidden = reszta.classList.toggle('arkusze-grid-hidden');
     btn.textContent = hidden
       ? 'Pokaż wszystkie ' + (document.querySelectorAll('.arkusz-tile[data-podstawa]').length) + ' arkuszy podstawowych →'
+      : 'Zwiń listę ←';
+  }
+
+  // ============ ROZSZERZONA - filtry i toggle ============
+  function filtrujArkuszeRozsz(btn, filtr) {
+    document.querySelectorAll('.filtry-rozsz .filtr').forEach(b => b.classList.remove('filtr-active'));
+    btn.classList.add('filtr-active');
+
+    var kafelki = document.querySelectorAll('.arkusz-tile[data-podstawa-r]');
+    kafelki.forEach(function(k) {
+      var p = k.getAttribute('data-podstawa-r');
+      if (filtr === 'all' || p === filtr) {
+        k.style.display = '';
+      } else {
+        k.style.display = 'none';
+      }
+    });
+
+    var reszta = document.getElementById('arkusze-grid-rozsz-reszta');
+    var toggleBtn = document.getElementById('ark-more-toggle-rozsz');
+    if (filtr !== 'all' && reszta && reszta.classList.contains('arkusze-grid-hidden')) {
+      reszta.classList.remove('arkusze-grid-hidden');
+      if (toggleBtn) toggleBtn.textContent = 'Zwiń listę ←';
+    }
+  }
+
+  function toggleWszystkieArkuszeRozsz(btn) {
+    var reszta = document.getElementById('arkusze-grid-rozsz-reszta');
+    if (!reszta) return;
+    var hidden = reszta.classList.toggle('arkusze-grid-hidden');
+    btn.textContent = hidden
+      ? 'Pokaż wszystkie ' + (document.querySelectorAll('.arkusz-tile[data-podstawa-r]').length) + ' arkuszy rozszerzonych →'
       : 'Zwiń listę ←';
   }
 </script>
@@ -801,6 +852,24 @@ const arkuszePodstReszta = arkuszePodst.slice(4);
   button.ark-more:hover {
     background: rgba(255, 222, 89, 0.1);
     border-color: #FFDE59;
+  }
+  /* Wariant turkusowy dla matury rozszerzonej */
+  button.ark-more.ark-more-teal {
+    border-color: rgba(63, 206, 207, 0.4);
+    color: #3FCECF;
+  }
+  button.ark-more.ark-more-teal:hover {
+    background: rgba(63, 206, 207, 0.1);
+    border-color: #3FCECF;
+  }
+  /* Filtry dla matury rozszerzonej - odstęp od nagłówka */
+  .filtry-rozsz {
+    margin-bottom: 22px;
+  }
+  .filtry-rozsz .filtr-active {
+    background: rgba(63, 206, 207, 0.15);
+    border-color: rgba(63, 206, 207, 0.5);
+    color: #3FCECF;
   }
 
   /* Empty state dla matury rozszerzonej */

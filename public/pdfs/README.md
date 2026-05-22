@@ -82,6 +82,38 @@ matematyka-2003-maj-matura-podstawowa.pdf
 matematyka-2022-czerwiec-egzamin-osmoklasisty-dodatkowy.pdf
 ```
 
+### Arkusze matury rozszerzonej (28 plików)
+```
+matematyka-2026-maj-matura-rozszerzona.pdf
+matematyka-2025-czerwiec-matura-rozszerzona.pdf
+matematyka-2025-maj-matura-rozszerzona.pdf
+matematyka-2024-grudzien-probna-rozszerzona.pdf
+matematyka-2024-czerwiec-matura-rozszerzona.pdf
+matematyka-2024-maj-matura-rozszerzona.pdf
+matematyka-2023-czerwiec-matura-rozszerzona.pdf
+matematyka-2023-maj-matura-rozszerzona.pdf
+matematyka-2023-przykladowy-arkusz-cke-rozszerzona.pdf
+matematyka-2022-grudzien-probna-rozszerzona.pdf
+matematyka-2022-czerwiec-matura-rozszerzona.pdf
+matematyka-2022-maj-matura-rozszerzona.pdf
+matematyka-2021-czerwiec-matura-rozszerzona.pdf
+matematyka-2021-maj-matura-rozszerzona.pdf
+matematyka-2021-marzec-probna-rozszerzona.pdf
+matematyka-2020-lipiec-matura-rozszerzona.pdf
+matematyka-2020-czerwiec-matura-rozszerzona.pdf
+matematyka-2020-kwiecien-probna-rozszerzona.pdf
+matematyka-2019-czerwiec-matura-rozszerzona.pdf
+matematyka-2019-maj-matura-rozszerzona.pdf
+matematyka-2018-czerwiec-matura-rozszerzona.pdf
+matematyka-2018-maj-matura-rozszerzona.pdf
+matematyka-2017-czerwiec-matura-rozszerzona.pdf
+matematyka-2017-maj-matura-rozszerzona.pdf
+matematyka-2016-czerwiec-matura-rozszerzona.pdf
+matematyka-2016-maj-matura-rozszerzona.pdf
+matematyka-2015-czerwiec-matura-rozszerzona.pdf
+matematyka-2015-maj-matura-rozszerzona.pdf
+```
+
 ### ⚠️ JEDEN PLIK WYMAGA ZMIANY NAZWY:
 - Plik z polskimi krzakami **`Matematyka - 2013-12 - Matura podstawowa - Pr�bny - Formu�a 2015 - CKE - Arkusz.pdf`** zmień nazwę na:
   ```
@@ -97,7 +129,9 @@ Wrzuć tu **6 informatorów + zbiór zadań** (7 plików razem):
 
 ### Informatory CKE
 ```
+informator-maturalny-matematyka-2025-poziom-rozszerzony.pdf
 informator-maturalny-matematyka-2025-poziom-podstawowy.pdf
+informator-maturalny-matematyka-2023-poziom-rozszerzony-aneks.pdf
 informator-maturalny-matematyka-2023-poziom-rozszerzony.pdf
 informator-maturalny-matematyka-2023-poziom-podstawowy.pdf
 informator-maturalny-matematyka-2021-aneks.pdf
