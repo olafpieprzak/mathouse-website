@@ -20,16 +20,17 @@
 // =====================================================
 // FALLBACKI - używane gdy konkretny materiał nie jest jeszcze gotowy
 // =====================================================
-export const MATHOUSE_YT_CHANNEL = 'https://www.youtube.com/channel/UC2JMZTWz4nzONF24sdvizgw';
-export const MATHOUSE_YT_MATURY_PLAYLIST = 'https://www.youtube.com/playlist?list=PLqHUT_xzK5RLv5lwfJyo7SQFS4xk4scN7';
+// Twój kanał YouTube - handle @olafpieprzak9987
+// (jeśli kiedyś zmienisz handle na np. @mathouse, podmień tutaj w jednym miejscu)
+export const MATHOUSE_YT_CHANNEL = 'https://www.youtube.com/@olafpieprzak9987';
 
 // Gdy brak konkretnego PDF (klucz / moje rozwiązanie) - wracamy na stronę arkuszy
 export const FALLBACK_PDF_PODST = '/arkusze#podst';
 export const FALLBACK_PDF_ROZSZ = '/arkusze#rozsz';
 export const FALLBACK_PDF_8KLASA = '/arkusze#osmo';
 
-// Gdy brak konkretnego wideo - wracamy na kanał YT / playlistę MATURY
-export const FALLBACK_VIDEO = MATHOUSE_YT_MATURY_PLAYLIST;
+// Gdy brak konkretnego wideo - wracamy na Twój kanał YT
+export const FALLBACK_VIDEO = MATHOUSE_YT_CHANNEL;
 
 // Helper - określa podstawę programową na podstawie roku
 function getPodstawa(year) {
