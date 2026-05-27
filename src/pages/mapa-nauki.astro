@@ -59,8 +59,16 @@ const wszystkieKlasy = [
                 <div class="step-name">{d.short}</div>
                 <div class="step-content">
                   <div class="step-content-title">📚 W tym dziale:</div>
-                  <ul class="step-content-list">
-                    {d.podpunkty.map((p) => <li>{p}</li>)}
+                  <ul class="step-content-list step-content-list-collapsible">
+                    {d.podpunkty.slice(0, 3).map((p) => <li>{p}</li>)}
+                    {d.podpunkty.slice(3).map((p) => <li class="step-content-extra">{p}</li>)}
+                    {d.podpunkty.length > 3 && (
+                      <li class="step-content-more">
+                        <button type="button" onclick="togglePodpunkty(event, this)" class="step-more-btn">
+                          + pokaż jeszcze {d.podpunkty.length - 3}
+                        </button>
+                      </li>
+                    )}
                   </ul>
                 </div>
                 <div class="step-content-cta">Przejdź do kursu →</div>

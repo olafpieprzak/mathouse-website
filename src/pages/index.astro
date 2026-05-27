@@ -51,7 +51,7 @@ import HeroMedia from '../components/HeroMedia.astro';
           </div>
           <div class="stat-sep"></div>
           <div class="stat">
-            <div class="stat-num text-yellow">od 47 zł</div>
+            <div class="stat-num text-yellow">od 67 zł</div>
             <div class="stat-label">jednorazowo</div>
           </div>
           <div class="stat-sep"></div>
@@ -126,17 +126,19 @@ import HeroMedia from '../components/HeroMedia.astro';
             <strong class="text-yellow">+ tablice gratis</strong>
           </p>
           <div class="feature-price">197 zł</div>
+          <a href="/landing-powtorka-14-dni" class="feature-cta">Sprawdź →</a>
         </article>
 
         <!-- Karta - Sprint -->
         <article class="card-feature">
-          <span class="feature-badge">START 47 ZŁ</span>
+          <span class="feature-badge">START 67 ZŁ</span>
           <i class="ti ti-bolt feature-icon feature-icon-yellow"></i>
           <h3 class="feature-title">3-dniowy<br />Maturalny Sprint</h3>
           <p class="feature-desc">
             Zaczyna się od najprostszej ceny — sprawdź czy mój styl Ci pasuje.
           </p>
-          <div class="feature-price">47 zł</div>
+          <div class="feature-price">67 zł</div>
+          <a href="/landing-maturalny-sprint" class="feature-cta">Sprawdź →</a>
         </article>
       </div>
     </div>
@@ -632,6 +634,33 @@ import HeroMedia from '../components/HeroMedia.astro';
     font-weight: 600;
     color: #FFDE59;
     margin-top: 14px;
+  }
+  .feature-cta {
+    display: block;
+    margin-top: 14px;
+    padding: 11px 16px;
+    background: #FFDE59;
+    color: #050A24;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
+    letter-spacing: 0.3px;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .feature-cta:hover {
+    background: #FFE680;
+    transform: translateY(-1px);
+  }
+  .card-feature-teal .feature-cta {
+    background: rgba(63, 206, 207, 0.2);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.4);
+  }
+  .card-feature-teal .feature-cta:hover {
+    background: rgba(63, 206, 207, 0.3);
+    border-color: #3FCECF;
   }
 
   /* ===================================================== */

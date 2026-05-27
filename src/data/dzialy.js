@@ -95,8 +95,8 @@ export const dzialy = [
     num: '1.2',
     klasa: 'klasa 1 liceum',
     klasaNum: 1,
-    name: 'Równania i nierówności 1 stopnia',
-    short: 'Równania i nierów. 1°',
+    name: 'Równania i nierówności pierwszego stopnia',
+    short: 'Równania i nierówności pierwszego stopnia',
     desc: 'Podstawowy warsztat całego liceum — bez tego ani rusz dalej. Uczę rozwiązywać równania, nierówności i zadania tekstowe metodycznie, krok po kroku. 119 podlekcji w 4 sekcjach.',
     podpunkty: [
       'Równania 1 stopnia I',
@@ -189,6 +189,9 @@ export const dzialy = [
         rozwiazanie: 'Błąd bezwzględny: |12,3 − 12,5| = 0,2 cm. Błąd względny: 0,2/12,5 = 0,016 = 1,6%.',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',
     price: 197,
     priceOld: 399,
     duration: '69 lekcji wideo + PDF',
@@ -246,6 +249,8 @@ export const dzialy = [
       },
     ],
     sklepUrl: 'https://kurs.mathouse.pl/next/public/catalog/product/kurs-potegi',
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     price: 197,
     priceOld: 399,
     duration: '174 lekcje wideo + PDF',
@@ -258,12 +263,23 @@ export const dzialy = [
     klasaNum: 1,
     name: 'Logarytmy',
     short: 'Logarytmy',
-    desc: 'Cały dział logarytmów w jednym kursie wideo. Od definicji po trudne zadania maturalne. Tłumaczę aż zrozumiesz.',
+    desc: 'Cały dział logarytmów w jednym kursie wideo. Od definicji po trudne zadania maturalne. Tłumaczę aż zrozumiesz. 64 podlekcje w 4 sekcjach.',
     podpunkty: [
       'Obliczanie logarytmów',
       'Dodawanie i odejmowanie logarytmów',
-      'Logarytm jako wykładnik',
+      'Logarytmy jako wykładnik',
       'Zastosowanie logarytmów',
+    ],
+    lekcjeSklep: [
+      { num: '5.1', title: 'Obliczanie logarytmów', count: 39 },
+      { num: '5.2', title: 'Dodawanie i odejmowanie logarytmów', count: 11 },
+      { num: '5.3', title: 'Logarytmy jako wykładnik', count: 8 },
+      { num: '5.4', title: 'Zastosowanie logarytmów', count: 6 },
+    ],
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
     ],
     teoria: [
       'Definicja: log_a(b) = c oznacza, że a^c = b. Tu a > 0, a ≠ 1, b > 0.',
@@ -282,9 +298,12 @@ export const dzialy = [
         rozwiazanie: 'log_3(9) = 2, log_3(27) = 3 → suma = 5. Lub: log_3(9·27) = log_3(243) = log_3(3⁵) = 5.',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',      // opcjonalnie URL strony produktu w kurs.mathouse.pl
     price: 197,
     priceOld: 399,
-    duration: '~4 godz wideo',
+    duration: '64 lekcje wideo + PDF',
     status: 'live',
   },
   {
@@ -294,12 +313,23 @@ export const dzialy = [
     klasaNum: 1,
     name: 'Wyrażenia algebraiczne',
     short: 'Wyrażenia algebraiczne',
-    desc: 'Działania na wyrażeniach z literkami — dodawanie, odejmowanie, mnożenie, redukcja. Plus dowody algebraiczne, średnie i przekształcanie wzorów.',
+    desc: 'Działania na wyrażeniach z literkami — dodawanie, odejmowanie, mnożenie, redukcja. Plus dowody algebraiczne, średnie i przekształcanie wzorów. 113 podlekcji w 4 sekcjach.',
     podpunkty: [
-      'Działania na wyrażeniach algebraicznych',
-      'Dowody algebraiczne',
-      'Przekształcanie wzorów',
+      'Działania na wyrażeniach',
+      'Dowody',
+      'Przekształcenia wzorów',
       'Średnie',
+    ],
+    lekcjeSklep: [
+      { num: '6.1', title: 'Działania na wyrażeniach', count: 60 },
+      { num: '6.2', title: 'Dowody', count: 23 },
+      { num: '6.3', title: 'Przekształcenia wzorów', count: 16 },
+      { num: '6.4', title: 'Średnie', count: 14 },
+    ],
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
     ],
     teoria: [
       'Redukcja wyrazów podobnych: wyrazy o tych samych literach i tej samej potędze sumujemy/odejmujemy.',
@@ -318,9 +348,12 @@ export const dzialy = [
         rozwiazanie: 'a² + b² − 2ab = (a − b)² ≥ 0 (kwadrat dowolnej liczby jest nieujemny). C.B.D.O.',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',
     price: 197,
     priceOld: 399,
-    duration: '~3 godz wideo',
+    duration: '113 lekcji wideo + PDF',
     status: 'live',
   },
   {
@@ -329,13 +362,28 @@ export const dzialy = [
     klasa: 'klasa 1 liceum',
     klasaNum: 1,
     name: 'Wzory skróconego mnożenia',
-    short: 'Wzory skróc. mnożenia',
-    desc: 'Trzy wzory, które musisz znać na pamięć i widzieć z daleka. Kwadrat sumy, kwadrat różnicy, różnica kwadratów. Plus usuwanie niewymierności z mianownika.',
+    short: 'Wzory skróconego mnożenia',
+    desc: 'Trzy wzory, które musisz znać na pamięć i widzieć z daleka. Kwadrat sumy, kwadrat różnicy, różnica kwadratów. Plus usuwanie niewymierności z mianownika, zadania różne i dowody. 76 podlekcji w 6 sekcjach.',
     podpunkty: [
       'Kwadrat sumy',
       'Kwadrat różnicy',
       'Różnica kwadratów',
       'Usuwanie niewymierności z mianownika',
+      'Zadania różne',
+      'Dowody',
+    ],
+    lekcjeSklep: [
+      { num: '7.1', title: 'Wzory skróconego mnożenia - kwadrat sumy', count: 10 },
+      { num: '7.2', title: 'Wzory skróconego mnożenia - kwadrat różnicy', count: 10 },
+      { num: '7.3', title: 'Wzory skróconego mnożenia - różnica kwadratów', count: 9 },
+      { num: '7.4', title: 'Usuwanie niewymierności z mianownika', count: 10 },
+      { num: '7.5', title: 'Wzory skróconego mnożenia - zadania różne', count: 36 },
+      { num: '7.6', title: 'Wzory skróconego mnożenia - dowody', count: 1 },
+    ],
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
     ],
     teoria: [
       '(a + b)² = a² + 2ab + b².',
@@ -354,9 +402,12 @@ export const dzialy = [
         rozwiazanie: '1/(√5−√2) · (√5+√2)/(√5+√2) = (√5+√2)/(5−2) = (√5+√2)/3.',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',
     price: 197,
     priceOld: 399,
-    duration: '~3 godz wideo',
+    duration: '76 lekcji wideo + PDF',
     status: 'live',
   },
   {
@@ -364,15 +415,37 @@ export const dzialy = [
     num: '1.8',
     klasa: 'klasa 1 liceum',
     klasaNum: 1,
-    name: 'Funkcje — podstawy',
-    short: 'Funkcje',
-    desc: 'Czym jest funkcja, dziedzina, zbiór wartości, miejsca zerowe. Pojęcia podstawowe, których będziesz używać przez całe liceum i maturę.',
+    name: 'Funkcje i jej własności',
+    short: 'Funkcje i własności',
+    desc: 'Wszystko o funkcjach — od definicji przez wykres, dziedzinę, monotoniczność, po praktyczne zastosowania. Najobszerniejszy dział klasy 1 — 203 podlekcje w 10 sekcjach.',
     podpunkty: [
-      'Pojęcie funkcji',
+      'Pojęcie funkcji. Funkcja liczbowa. Sposoby opisywania funkcji',
       'Wykres funkcji',
       'Dziedzina funkcji',
-      'Zbiór wartości',
-      'Miejsca zerowe',
+      'Zbiór wartości funkcji. Najmniejsza i największa wartość',
+      'Miejsca zerowe funkcji',
+      'Monotoniczność funkcji',
+      'Różnowartościowość funkcji',
+      'Odczytywanie własności funkcji',
+      'Szkicowanie wykresów funkcji',
+      'Zastosowanie funkcji w zadaniach praktycznych',
+    ],
+    lekcjeSklep: [
+      { num: '8.1', title: 'Pojęcie funkcji. Funkcja liczbowa. Sposoby opisywania funkcji', count: 24 },
+      { num: '8.2', title: 'Wykres funkcji', count: 27 },
+      { num: '8.3', title: 'Dziedzina funkcji', count: 35 },
+      { num: '8.4', title: 'Zbiór wartości funkcji. Najmniejsza i największa wartość funkcji', count: 19 },
+      { num: '8.5', title: 'Miejsca zerowe funkcji', count: 53 },
+      { num: '8.6', title: 'Monotoniczność funkcji', count: 9 },
+      { num: '8.7', title: 'Różnowartościowość funkcji', count: 13 },
+      { num: '8.8', title: 'Odczytywanie własności funkcji', count: 14 },
+      { num: '8.9', title: 'Szkicowanie wykresów funkcji', count: 4 },
+      { num: '8.10', title: 'Zastosowanie funkcji w zadaniach praktycznych', count: 5 },
+    ],
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
     ],
     teoria: [
       'Funkcja f: X → Y to przyporządkowanie, w którym każdy element X ma dokładnie jeden obraz w Y.',
@@ -380,6 +453,7 @@ export const dzialy = [
       'Zbiór wartości (ZWf) — zbiór wszystkich y, które funkcja może przyjąć.',
       'Miejsce zerowe — taki x ∈ Df, że f(x) = 0. Geometrycznie: przecięcie wykresu z osią OX.',
       'Funkcja rosnąca: x₁ < x₂ ⇒ f(x₁) < f(x₂). Malejąca: x₁ < x₂ ⇒ f(x₁) > f(x₂).',
+      'Funkcja różnowartościowa: x₁ ≠ x₂ ⇒ f(x₁) ≠ f(x₂).',
     ],
     przyklady: [
       {
@@ -391,9 +465,12 @@ export const dzialy = [
         rozwiazanie: '2x − 6 = 0 → x = 3.',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',
     price: 197,
     priceOld: 399,
-    duration: '~3 godz wideo',
+    duration: '203 lekcje wideo + PDF',
     status: 'live',
   },
   {
@@ -403,13 +480,35 @@ export const dzialy = [
     klasaNum: 1,
     name: 'Funkcja liniowa',
     short: 'Funkcja liniowa',
-    desc: 'Pierwsza konkretna funkcja, którą poznajesz w liceum. Wzór, wykres, miejsca zerowe, monotoniczność, parametr — wszystko na jednym kursie.',
+    desc: 'Pierwsza konkretna funkcja, którą poznajesz w liceum. Wzór, wykres, miejsca zerowe, monotoniczność, parametr, proporcjonalność prosta, proste równoległe i prostopadłe. 159 podlekcji w 10 sekcjach.',
     podpunkty: [
-      'Wykres funkcji liniowej',
-      'Miejsca zerowe',
-      'Monotoniczność',
-      'Wyznaczanie wzoru',
-      'Funkcja liniowa z parametrem',
+      'Funkcja liniowa. Rysowanie wykresu',
+      'Miejsca zerowe funkcji liniowej',
+      'Monotoniczność funkcji liniowej',
+      'Wyznaczanie wzoru funkcji liniowej',
+      'Funkcja liniowa - zadania z parametrami',
+      'Proste równoległe',
+      'Proste prostopadłe',
+      'Funkcja liniowa - zadania różne',
+      'Zastosowanie do zadań praktycznych',
+      'Proporcjonalność prosta',
+    ],
+    lekcjeSklep: [
+      { num: '9.1', title: 'Funkcja liniowa. Rysowanie wykresu funkcji liniowej', count: 31 },
+      { num: '9.2', title: 'Miejsca zerowe funkcji liniowej', count: 19 },
+      { num: '9.3', title: 'Monotoniczność funkcji liniowej', count: 16 },
+      { num: '9.4', title: 'Wyznaczanie wzoru funkcji liniowej', count: 13 },
+      { num: '9.5', title: 'Funkcja liniowa - zadania z parametrami', count: 16 },
+      { num: '9.6', title: 'Proste równoległe', count: 17 },
+      { num: '9.7', title: 'Proste prostopadłe', count: 9 },
+      { num: '9.8', title: 'Funkcja liniowa - zadania różne', count: 15 },
+      { num: '9.9', title: 'Zastosowanie funkcji liniowej do rozwiązywania zadań praktycznych', count: 13 },
+      { num: '9.10', title: 'Proporcjonalność prosta', count: 10 },
+    ],
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
     ],
     teoria: [
       'Funkcja liniowa: f(x) = ax + b. Wykres = prosta. a — współczynnik kierunkowy, b — wyraz wolny (przecięcie z OY).',
@@ -428,9 +527,12 @@ export const dzialy = [
         rozwiazanie: 'Malejąca ⇔ a < 0 ⇔ m − 2 < 0 ⇔ m < 2.',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',
     price: 197,
     priceOld: 399,
-    duration: '~3 godz wideo',
+    duration: '159 lekcji wideo + PDF',
     status: 'live',
   },
   {
@@ -438,14 +540,27 @@ export const dzialy = [
     num: '1.10',
     klasa: 'klasa 1 liceum',
     klasaNum: 1,
-    name: 'Układy równań',
-    short: 'Układy równań',
-    desc: 'Trzy metody rozwiązywania układów: graficzna, podstawiania, przeciwnych współczynników. Plus klasyczne zadania tekstowe maturalne.',
+    name: 'Układy równań liniowych z dwiema niewiadomymi',
+    short: 'Układy równań liniowych',
+    desc: 'Trzy metody rozwiązywania układów: graficzna, podstawiania, przeciwnych współczynników. Plus klasyczne zadania tekstowe maturalne. 116 podlekcji w 5 sekcjach.',
     podpunkty: [
+      'Równania pierwszego stopnia z dwiema niewiadomymi',
       'Metoda graficzna',
       'Metoda podstawiania',
       'Metoda przeciwnych współczynników',
-      'Zadania tekstowe',
+      'Zastosowanie do zadań',
+    ],
+    lekcjeSklep: [
+      { num: '10.1', title: 'Równania pierwszego stopnia z dwiema niewiadomymi', count: 28 },
+      { num: '10.2', title: 'Rozwiązywanie układów równań z dwiema niewiadomymi - metodą graficzną', count: 27 },
+      { num: '10.3', title: 'Rozwiązywanie układów równań z dwiema niewiadomymi - metodą podstawiania', count: 15 },
+      { num: '10.4', title: 'Rozwiązywanie układów równań z dwiema niewiadomymi - metodą przeciwnych współczynników', count: 16 },
+      { num: '10.5', title: 'Zastosowanie układów równań do rozwiązywania zadań', count: 30 },
+    ],
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
     ],
     teoria: [
       'Układ równań liniowych dwóch zmiennych: dwa równania, dwie niewiadome.',
@@ -464,9 +579,12 @@ export const dzialy = [
         rozwiazanie: 'O = 2T, O + T = 36 → 2T + T = 36 → T = 12, O = 24.',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',
     price: 197,
     priceOld: 399,
-    duration: '~3 godz wideo',
+    duration: '116 lekcji wideo + PDF',
     status: 'live',
   },
   {
@@ -475,21 +593,44 @@ export const dzialy = [
     klasa: 'klasa 1 liceum',
     klasaNum: 1,
     name: 'Geometria płaska — część 1',
-    short: 'Geometria 1',
-    desc: 'Wstęp do geometrii liceum: kąty, twierdzenie Talesa, twierdzenie Pitagorasa, przystawanie trójkątów i wektory.',
+    short: 'Geometria płaska 1',
+    desc: 'Wstęp do geometrii liceum: punkty, proste, kąty, trójkąty, twierdzenie Talesa, twierdzenie Pitagorasa, przystawanie i podobieństwo. 199 podlekcji w 10 sekcjach. Część 2 (więcej zaawansowanych zagadnień) — w klasie 2.',
     podpunkty: [
-      'Punkt, prosta, kąt',
+      'Punkt, prosta, odcinek, półprosta, kąt, figura wypukła i wklęsła',
+      'Prosta na płaszczyźnie, odległości, symetralna, dwusieczna',
+      'Dwie proste przecięte trzecią prostą, suma kątów w trójkącie',
+      'Wielokąty, wielokąt foremny, suma kątów w wielokącie, łamane',
       'Twierdzenie Talesa',
+      'Podział trójkątów, nierówność trójkąta, odcinek łączący środki boków',
       'Twierdzenie Pitagorasa',
+      'Wysokość i środkowe w trójkącie',
       'Przystawanie trójkątów',
-      'Wektory',
+      'Podobieństwo trójkątów',
+    ],
+    lekcjeSklep: [
+      { num: '11.1', title: 'Punkt, prosta, odcinek, półprosta, kąt, figura wypukła i wklęsła, figura ograniczona i nieograniczona', count: 22 },
+      { num: '11.2', title: 'Prosta na płaszczyźnie, odległość punktu od prostej, odległość między prostymi równoległymi, symetralna, dwusieczna', count: 5 },
+      { num: '11.3', title: 'Dwie proste przecięte trzecią prostą, suma kątów w trójkącie', count: 18 },
+      { num: '11.4', title: 'Wielokąty. Wielokąt foremny. Suma kątów w wielokącie. Łamane zwyczajne, zwyczajne zamknięte', count: 20 },
+      { num: '11.5', title: 'Twierdzenie Talesa', count: 19 },
+      { num: '11.6', title: 'Podział trójkątów. Nierówność trójkąta. Odcinek łączący środki boków w trójkącie', count: 19 },
+      { num: '11.7', title: 'Twierdzenie Pitagorasa', count: 23 },
+      { num: '11.8', title: 'Wysokość w trójkącie i środkowe w trójkącie', count: 16 },
+      { num: '11.9', title: 'Przystawanie trójkątów', count: 13 },
+      { num: '11.10', title: 'Podobieństwo trójkątów. Zastosowania podobieństwa trójkątów', count: 34 },
+    ],
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
     ],
     teoria: [
-      'Suma kątów w trójkącie = 180°. W czworokącie = 360°.',
+      'Suma kątów w trójkącie = 180°. W czworokącie = 360°. W n-kącie wypukłym: (n−2)·180°.',
       'Tw. Pitagorasa: w trójkącie prostokątnym a² + b² = c², gdzie c — przeciwprostokątna.',
-      'Tw. Talesa: jeśli ramiona kąta przecinają proste równoległe, odcinki są proporcjonalne.',
-      'Przystawanie trójkątów: cechy bbb, bkb, kbk (kąt boczny kąt) — wystarcza, by trójkąty były przystające.',
-      'Wektor: AB = [x_B − x_A, y_B − y_A]. Długość: |AB| = √((x_B−x_A)² + (y_B−y_A)²).',
+      'Tw. Talesa: jeśli ramiona kąta przecinają proste równoległe, odcinki na ramionach są proporcjonalne.',
+      'Cechy przystawania trójkątów: bbb, bkb, kbk — wystarczają, by trójkąty były przystające.',
+      'Cechy podobieństwa: dwa kąty równe (kk), boki proporcjonalne (bbb), bkb.',
+      'Nierówność trójkąta: |a − b| < c < a + b.',
     ],
     przyklady: [
       {
@@ -497,13 +638,16 @@ export const dzialy = [
         rozwiazanie: 'c² = 3² + 4² = 25 → c = 5.',
       },
       {
-        zadanie: 'Dane A(1, 2), B(4, 6). Wyznacz wektor AB i jego długość.',
-        rozwiazanie: 'AB = [4−1, 6−2] = [3, 4]. |AB| = √(9 + 16) = 5.',
+        zadanie: 'Wyznacz sumę kątów w sześciokącie wypukłym.',
+        rozwiazanie: '(6−2)·180° = 4·180° = 720°.',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',
     price: 197,
     priceOld: 399,
-    duration: '~4 godz wideo',
+    duration: '199 lekcji wideo + PDF',
     status: 'live',
   },
   {
@@ -513,11 +657,21 @@ export const dzialy = [
     klasaNum: 1,
     name: 'Trygonometria — część 1',
     short: 'Trygonometria 1',
-    desc: 'Sinus, cosinus, tangens, cotangens w trójkącie prostokątnym. Wartości dla kątów 30°, 45°, 60° — to musisz znać na pamięć.',
+    desc: 'Sinus, cosinus, tangens, cotangens w trójkącie prostokątnym. Wartości dla kątów 30°, 45°, 60° — to musisz znać na pamięć. 61 podlekcji w 3 sekcjach. Część 2 (więcej zaawansowanych zagadnień) — w klasie 2.',
     podpunkty: [
-      'Funkcje sin / cos / tg / ctg',
-      'Wartości dla 30° / 45° / 60°',
-      'Zależności między funkcjami',
+      'Określanie funkcji sinus, cosinus, tangens, cotangens',
+      'Wartość funkcji dla kątów 30°, 45° i 60°',
+      'Zależności między funkcjami trygonometrycznymi tego samego kąta',
+    ],
+    lekcjeSklep: [
+      { num: '12.1', title: 'Określanie funkcji sinus, cosinus, tangens, cotangens', count: 14 },
+      { num: '12.2', title: 'Wartość funkcji dla kątów 30, 45 i 60 stopni', count: 9 },
+      { num: '12.3', title: 'Zależności między funkcjami trygonometrycznymi tego samego kąta', count: 38 },
+    ],
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
     ],
     teoria: [
       'W trójkącie prostokątnym (kąt α ostry): sin α = przeciwprost./przeciwprostokątna; cos α = przyległa/przeciwprost.; tg α = przeciwprost./przyległa.',
@@ -536,9 +690,12 @@ export const dzialy = [
         rozwiazanie: 'sin²α = 1 − cos²α = 1 − 9/25 = 16/25 → sin α = 4/5 (dodatnia, bo α ostry).',
       },
     ],
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepUrl: '',
     price: 197,
     priceOld: 399,
-    duration: '~3 godz wideo',
+    duration: '61 lekcji wideo + PDF',
     status: 'live',
   },
 

@@ -1,20 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { dzialy } from '../../data/dzialy.js';
 
-const klasa1 = [
-  { num: '1.1', tytul: 'Zbiory liczbowe', url: 'https://kurs.mathouse.pl/s/zbiory-liczbowe.html', live: true },
-  { num: '1.2', tytul: 'Równania i nierówności 1°', url: 'https://kurs.mathouse.pl/s/rownania-i-nierownosci-1-stopnia.html', live: true },
-  { num: '1.3', tytul: 'Procenty · Błąd · Przybliżenie', url: 'https://kurs.mathouse.pl/s/procenty-punkt-procentowy.html', live: true },
-  { num: '1.4', tytul: 'Potęgi', url: 'https://kurs.mathouse.pl/s/potegi.html', live: true },
-  { num: '1.5', tytul: 'Logarytmy', url: 'https://kurs.mathouse.pl/s/logarytmy.html', live: true },
-  { num: '1.6', tytul: 'Wyrażenia algebraiczne', url: 'https://kurs.mathouse.pl/s/wyrazenia-algebraiczne.html', live: true },
-  { num: '1.7', tytul: 'Wzory skróconego mnożenia', url: 'https://kurs.mathouse.pl/s/wzory-skroconego-mnozenie.html', live: true },
-  { num: '1.8', tytul: 'Funkcje', url: 'https://kurs.mathouse.pl/s/funkcja.html', live: true },
-  { num: '1.9', tytul: 'Funkcja liniowa', url: 'https://kurs.mathouse.pl/s/funkcja-liniowa.html', live: true },
-  { num: '1.10', tytul: 'Układy równań', url: 'https://kurs.mathouse.pl/s/uklady-rownan.html', live: true },
-  { num: '1.11', tytul: 'Geometria płaska 1', url: 'https://kurs.mathouse.pl/s/11-geometria-plaska-cz1-klasa-1.html', live: true },
-  { num: '1.12', tytul: 'Trygonometria 1', url: 'https://kurs.mathouse.pl/s/trygonometria-cz1.html', live: true },
-];
+// Klasa 1 - bierzemy z centralnej bazy dzialy.js
+const klasa1 = dzialy.filter(d => d.klasaNum === 1);
 
 const klasa2 = ['Przekształcenia wykresów', 'Wartość bezwzględna', 'Funkcja kwadratowa', 'Geometria — okręgi', 'Trygonometria zaawansowana', 'Geometria analityczna', 'Trójkąty, pola, koła', 'Wielomiany'];
 const klasa3 = ['Ułamki algebraiczne', 'Ciągi (arytmetyczny, geometryczny)', 'Kombinatoryka', 'Czworokąty', 'Pole czworokąta', 'Geometria analityczna cz. 2'];
@@ -47,12 +36,34 @@ const klasa4 = ['Funkcja wykładnicza', 'Funkcja logarytmiczna', 'Statystyka', '
           </div>
           <p class="klasa-desc">Pełen rok pierwszy — wszystkie działy dostępne na platformie.</p>
         </div>
-        <div class="dzialy-grid">
-          {klasa1.map((d) => (
-            <a href={d.url} target="_blank" rel="noopener noreferrer" class="dzial-card dzial-card-live">
-              <div class="dzial-num-badge">{d.num}</div>
-              <div class="dzial-name">{d.tytul}</div>
-              <div class="dzial-cta">Otwórz kurs →</div>
+        <div class="dzialy-grid-expanded">
+          {klasa1.map((k) => (
+            <a href={`/kursy/${k.slug}`} class="dzial-card-expanded">
+              <div class="dzial-card-head">
+                <div class="dzial-num-badge">{k.num}</div>
+                <div class="dzial-card-meta">
+                  <div class="dzial-name">{k.short || k.name}</div>
+                  {k.lekcjeSklep && (
+                    <div class="dzial-podlekcje">
+                      {k.lekcjeSklep.reduce((s,l)=>s+l.count, 0)} podlekcji · {k.lekcjeSklep.length} sekcji
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div class="dzial-card-body">
+                <div class="dzial-podtitle">📚 W tym dziale:</div>
+                <ul class="dzial-podpunkty">
+                  {k.podpunkty.slice(0, 3).map((p) => <li>{p}</li>)}
+                  {k.podpunkty.length > 3 && <li class="dzial-podpunkt-more">+ {k.podpunkty.length - 3} kolejnych</li>}
+                </ul>
+              </div>
+              <div class="dzial-card-foot">
+                <div class="dzial-price-row">
+                  <span class="dzial-price">{k.price} zł</span>
+                  {k.priceOld && <span class="dzial-price-old">{k.priceOld} zł</span>}
+                </div>
+                <div class="dzial-cta">Zobacz kurs →</div>
+              </div>
             </a>
           ))}
         </div>
@@ -203,6 +214,133 @@ const klasa4 = ['Funkcja wykładnicza', 'Funkcja logarytmiczna', 'Statystyka', '
     color: #FFDE59;
     font-weight: 700;
     margin-top: 4px;
+  }
+
+  /* === ROZBUDOWANE KAFELKI DZIAŁÓW (spójne z /kursy) === */
+  .dzialy-grid-expanded {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .dzial-card-expanded {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 14px;
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.18s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .dzial-card-expanded:hover {
+    border-color: rgba(255, 222, 89, 0.45);
+    background: rgba(255, 222, 89, 0.04);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  }
+  .dzial-card-expanded .dzial-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .dzial-card-expanded .dzial-num-badge {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .dzial-card-expanded .dzial-card-meta { flex: 1; min-width: 0; }
+  .dzial-card-expanded .dzial-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #EBEEFF;
+    margin: 0 0 4px;
+    line-height: 1.25;
+  }
+  .dzial-card-expanded .dzial-podlekcje {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.55);
+    font-weight: 500;
+  }
+  .dzial-card-expanded .dzial-card-body { flex: 1; min-height: 0; }
+  .dzial-card-expanded .dzial-podtitle {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+  }
+  .dzial-card-expanded .dzial-podpunkty {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .dzial-card-expanded .dzial-podpunkty li {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.45;
+    padding-left: 12px;
+    position: relative;
+  }
+  .dzial-card-expanded .dzial-podpunkty li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: #FFDE59;
+    font-weight: 700;
+  }
+  .dzial-card-expanded .dzial-podpunkt-more {
+    color: rgba(63, 206, 207, 0.7) !important;
+    font-style: italic;
+    font-size: 11px !important;
+  }
+  .dzial-card-expanded .dzial-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(235, 238, 255, 0.08);
+  }
+  .dzial-card-expanded .dzial-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .dzial-card-expanded .dzial-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFDE59;
+    margin: 0;
+  }
+  .dzial-card-expanded .dzial-price-old {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.4);
+    text-decoration: line-through;
+  }
+  .dzial-card-expanded .dzial-cta {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFDE59;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    margin-top: 0;
+  }
+
+  @media (max-width: 900px) {
+    .dzialy-grid-expanded { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .dzialy-grid-expanded { grid-template-columns: 1fr; }
   }
 
   .hub-final { margin-top: 40px; }
