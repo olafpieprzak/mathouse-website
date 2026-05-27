@@ -3,22 +3,10 @@
 // STRONA KURSY (wariant C — lista wszystkich)
 // =====================================================
 import Layout from '../layouts/Layout.astro';
+import { dzialy } from '../data/dzialy.js';
 
-// Kursy klasy 1 liceum
-const kursyKlasa1 = [
-  { num: '1.1', name: 'Zbiory liczbowe', slug: 'zbiory-liczbowe' },
-  { num: '1.2', name: 'Równania i nierów. 1°', slug: 'rownania-pierwszego-stopnia' },
-  { num: '1.3', name: 'Procenty i błędy', slug: 'procenty' },
-  { num: '1.4', name: 'Potęgi', slug: 'potegi' },
-  { num: '1.5', name: 'Logarytmy', slug: 'logarytmy' },
-  { num: '1.6', name: 'Wyrażenia algebr.', slug: 'wyrazenia-algebraiczne' },
-  { num: '1.7', name: 'Wzory skr. mnoż.', slug: 'wzory-skroconego-mnozenia' },
-  { num: '1.8', name: 'Funkcje i własności', slug: 'funkcje-wlasnosci' },
-  { num: '1.9', name: 'Funkcja liniowa', slug: 'funkcja-liniowa' },
-  { num: '1.10', name: 'Układy równań', slug: 'uklady-rownan' },
-  { num: '1.11', name: 'Geometria pł. cz1', slug: 'geometria-plaska-1' },
-  { num: '1.12', name: 'Trygonometria cz1', slug: 'trygonometria-1' },
-];
+// Kursy klasy 1 liceum - pobieramy z centralnej bazy dzialy.js
+const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
 ---
 
 <Layout
@@ -85,12 +73,34 @@ const kursyKlasa1 = [
       </div>
 
       <div class="dzialy-label">LUB KUP POJEDYNCZE DZIAŁY · 197 ZŁ / DZIAŁ</div>
-      <div class="dzialy-grid">
+      <div class="dzialy-grid-expanded">
         {kursyKlasa1.map((k) => (
-          <a href={`/kursy/${k.slug}`} class="dzial-tile">
-            <div class="dzial-num">{k.num}</div>
-            <div class="dzial-name">{k.name}</div>
-            <div class="dzial-price">197 zł</div>
+          <a href={`/kursy/${k.slug}`} class="dzial-card">
+            <div class="dzial-card-head">
+              <div class="dzial-num">{k.num}</div>
+              <div class="dzial-card-meta">
+                <div class="dzial-name">{k.short || k.name}</div>
+                {k.lekcjeSklep && (
+                  <div class="dzial-podlekcje">
+                    {k.lekcjeSklep.reduce((s,l)=>s+l.count, 0)} podlekcji · {k.lekcjeSklep.length} sekcji
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="dzial-card-body">
+              <div class="dzial-podtitle">📚 W tym dziale:</div>
+              <ul class="dzial-podpunkty">
+                {k.podpunkty.slice(0, 5).map((p) => <li>{p}</li>)}
+                {k.podpunkty.length > 5 && <li class="dzial-podpunkt-more">+ {k.podpunkty.length - 5} kolejnych</li>}
+              </ul>
+            </div>
+            <div class="dzial-card-foot">
+              <div class="dzial-price-row">
+                <span class="dzial-price">{k.price} zł</span>
+                {k.priceOld && <span class="dzial-price-old">{k.priceOld} zł</span>}
+              </div>
+              <div class="dzial-cta">Zobacz kurs →</div>
+            </div>
           </a>
         ))}
       </div>
@@ -395,6 +405,132 @@ const kursyKlasa1 = [
     color: #FFDE59;
     margin-top: 8px;
     font-weight: 600;
+  }
+
+  /* === ROZBUDOWANE KAFELKI DZIAŁÓW === */
+  .dzialy-grid-expanded {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .dzial-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 14px;
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.18s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .dzial-card:hover {
+    border-color: rgba(255, 222, 89, 0.45);
+    background: rgba(255, 222, 89, 0.04);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  }
+  .dzial-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .dzial-card .dzial-num {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .dzial-card-meta { flex: 1; min-width: 0; }
+  .dzial-card .dzial-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #EBEEFF;
+    margin: 0 0 4px;
+    line-height: 1.25;
+  }
+  .dzial-podlekcje {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.55);
+    font-weight: 500;
+  }
+  .dzial-card-body { flex: 1; min-height: 0; }
+  .dzial-podtitle {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+  }
+  .dzial-podpunkty {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .dzial-podpunkty li {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.45;
+    padding-left: 12px;
+    position: relative;
+  }
+  .dzial-podpunkty li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: #FFDE59;
+    font-weight: 700;
+  }
+  .dzial-podpunkt-more {
+    color: rgba(63, 206, 207, 0.7) !important;
+    font-style: italic;
+    font-size: 11px !important;
+  }
+  .dzial-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(235, 238, 255, 0.08);
+  }
+  .dzial-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .dzial-card .dzial-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFDE59;
+    margin: 0;
+  }
+  .dzial-price-old {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.4);
+    text-decoration: line-through;
+  }
+  .dzial-cta {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFDE59;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .dzialy-grid-expanded { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .dzialy-grid-expanded { grid-template-columns: 1fr; }
   }
 
   .klasy-soon {

@@ -164,6 +164,7 @@ const currentPath = Astro.url.pathname;
         </div>
       </div>
 
+      <a href="/kalkulatory" class={currentPath.startsWith('/kalkulatory') ? 'nav-link active' : 'nav-link'}>Kalkulatory</a>
       <a href="/o-mnie" class={currentPath === '/o-mnie' ? 'nav-link active' : 'nav-link'}>O mnie</a>
       <a href="/kontakt" class={currentPath === '/kontakt' ? 'nav-link active' : 'nav-link'}>Kontakt</a>
     </nav>
@@ -238,10 +239,10 @@ const currentPath = Astro.url.pathname;
         </div>
       </details>
 
-      <a href="/kalkulatory" class="mobile-item mobile-item-soon">
+      <a href="/kalkulatory" class="mobile-item">
         <span class="mobile-icon">🧮</span>
         <span class="mobile-name">Kalkulatory</span>
-        <span class="mobile-badge-soon">wkrótce</span>
+        <span class="mobile-badge mobile-badge-new">NOWE</span>
       </a>
     </div>
 
@@ -637,6 +638,11 @@ const currentPath = Astro.url.pathname;
     background: rgba(63, 206, 207, 0.15);
     color: #3FCECF;
     border: 1px solid rgba(63, 206, 207, 0.3);
+  }
+  .mobile-badge-new {
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+    border: 1px solid rgba(255, 222, 89, 0.35);
   }
   .mobile-badge-soon {
     font-size: 10px;

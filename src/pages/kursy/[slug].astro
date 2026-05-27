@@ -272,7 +272,7 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
 
   <!-- WIDGET PŁATNOŚCI Web To Learn - finalny moment zakupu -->
   {kurs.sklepEmbedId && (
-    <KupTerazWidget embedId={kurs.sklepEmbedId} productName={kurs.name.toLowerCase()} />
+    <KupTerazWidget embedId={kurs.sklepEmbedId} productName={kurs.name.toLowerCase()} price={kurs.price} priceOld={kurs.priceOld} />
   )}
 
   <!-- NAWIGACJA: poprzedni / następny dział -->
