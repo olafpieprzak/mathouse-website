@@ -1,0 +1,923 @@
+---
+// =====================================================
+// STRONA GŁÓWNA — bohaterem są kursy
+// =====================================================
+import Layout from '../layouts/Layout.astro';
+import HeroMedia from '../components/HeroMedia.astro';
+---
+
+<Layout
+  title="Coś więcej niż matma"
+  description="Kursy matematyki online dla liceum i matury. Uczę od 2012 roku, pomogłem 1000+ uczniom. Cała matma w jednym miejscu — kursy wideo, korepetycje, kompendia. Olaf Pieprzak, MATHOUSE."
+>
+  <!-- ===================================================== -->
+  <!-- HERO                                                   -->
+  <!-- ===================================================== -->
+  <section class="hero">
+    <div class="hero-bg-sin" aria-hidden="true">
+      <svg viewBox="0 0 800 200" preserveAspectRatio="none">
+        <path
+          d="M0,100 Q100,30 200,100 T400,100 T600,100 T800,100"
+          stroke="#3FCECF"
+          stroke-width="2"
+          fill="none"
+        />
+        <path
+          d="M0,100 Q100,170 200,100 T400,100 T600,100 T800,100"
+          stroke="#FFDE59"
+          stroke-width="2"
+          fill="none"
+          opacity="0.5"
+        />
+      </svg>
+    </div>
+
+    <div class="container-content hero-grid">
+      <div class="hero-text">
+        <span class="tag-teal">▶ Kursy wideo · ucz się we własnym tempie</span>
+        <h1 class="hero-title">
+          Cała matma liceum<br />
+          w <span class="text-yellow">jednym</span> miejscu.
+        </h1>
+        <p class="hero-desc">
+          Cześć, jestem <strong>Olaf</strong>. Nagrałem ci kursy do każdej klasy liceum,
+          każdego działu i obu poziomów matury. Oglądasz kiedy chcesz, ile razy chcesz.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num text-yellow">12+</div>
+            <div class="stat-label">aktywnych kursów</div>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat">
+            <div class="stat-num text-yellow">od 67 zł</div>
+            <div class="stat-label">jednorazowo</div>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat">
+            <div class="stat-num text-teal">24/7</div>
+            <div class="stat-label">dostęp na zawsze</div>
+          </div>
+        </div>
+
+        <div class="hero-cta">
+          <a href="/kursy" class="btn-primary">Zobacz wszystkie kursy →</a>
+          <a href="#wideo-intro" class="btn-secondary">▶ Obejrzyj intro</a>
+        </div>
+
+        <!-- Link do korepetycji ze scarcity barem -->
+        <a href="/korepetycje" class="hero-korep-link">
+          <div class="hero-korep-icon"><i class="ti ti-school"></i></div>
+          <div class="hero-korep-text">
+            <div class="hero-korep-title">Wolisz korepetycje 1-na-1?</div>
+            <div class="hero-korep-stats">
+              <span class="hero-korep-dot"></span>
+              <span>aktualnie <strong data-hero-free>3</strong> <span data-hero-label>wolne miejsca</span></span>
+              <span class="hero-korep-sep">·</span>
+              <span>od 40 zł / os.</span>
+            </div>
+          </div>
+          <div class="hero-korep-arrow">→</div>
+        </a>
+      </div>
+
+      <!-- Hero media (zdjęcie / wideo - sterowane przez src/data/media.js) -->
+      <HeroMedia slot="heroGlowna" />
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- BESTSELLERY                                            -->
+  <!-- ===================================================== -->
+  <section class="section-bestsellery">
+    <div class="container-content">
+      <div class="section-header">
+        <div>
+          <div class="section-label">★ NAJPOPULARNIEJSZE</div>
+          <h2 class="section-title">Bestsellery — od czego zacząć.</h2>
+        </div>
+        <a href="/kursy" class="section-more">→ wszystkie kursy</a>
+      </div>
+
+      <div class="bestsellery-grid">
+        <!-- Karta główna - PAKIET -->
+        <article class="card-pakiet">
+          <span class="pakiet-badge">PAKIET · -14%</span>
+          <div class="pakiet-eyebrow">⭐ NAJLEPSZA WARTOŚĆ</div>
+          <h3 class="pakiet-title">Pakiet podstawowy<br />klasa 1</h3>
+          <p class="pakiet-desc">
+            Wszystkie 12 działów klasy 1 liceum — od zbiorów liczbowych po trygonometrię.
+          </p>
+          <div class="pakiet-cena">
+            <span class="cena-now">597 zł</span>
+            <span class="cena-old">697 zł</span>
+          </div>
+          <a href="/kursy/pakiet-klasa-1" class="pakiet-cta">Kup pakiet →</a>
+        </article>
+
+        <!-- Karta - 14-dniowa powtórka -->
+        <article class="card-feature card-feature-teal">
+          <span class="feature-badge feature-badge-teal">MATURA</span>
+          <i class="ti ti-clock feature-icon"></i>
+          <h3 class="feature-title">14-dniowa powtórka<br />do matury podst.</h3>
+          <p class="feature-desc">
+            Najszybsza droga do zdania matury podstawowej.
+            <strong class="text-yellow">+ tablice gratis</strong>
+          </p>
+          <div class="feature-price">197 zł</div>
+          <a href="/landing-powtorka-14-dni" class="feature-cta">Sprawdź →</a>
+        </article>
+
+        <!-- Karta - Sprint -->
+        <article class="card-feature">
+          <span class="feature-badge">START 67 ZŁ</span>
+          <i class="ti ti-bolt feature-icon feature-icon-yellow"></i>
+          <h3 class="feature-title">3-dniowy<br />Maturalny Sprint</h3>
+          <p class="feature-desc">
+            Zaczyna się od najprostszej ceny — sprawdź czy mój styl Ci pasuje.
+          </p>
+          <div class="feature-price">67 zł</div>
+          <a href="/landing-maturalny-sprint" class="feature-cta">Sprawdź →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- DLACZEGO KURSY                                         -->
+  <!-- ===================================================== -->
+  <section class="section-dlaczego">
+    <div class="container-content dlaczego-grid">
+      <div>
+        <div class="section-label">DLACZEGO KURSY</div>
+        <h2 class="section-title">
+          Cała matura w cenie<br />
+          <span class="text-yellow">5 korepetycji.</span>
+        </h2>
+        <p class="dlaczego-desc">
+          Kurs to dziesiątki godzin materiału, których nie zrobiłbyś na korepetycjach
+          — bo nie zdążyłbyś. Plus dostęp 24/7 i możesz wracać do trudnych tematów.
+        </p>
+      </div>
+
+      <div class="dlaczego-features">
+        <div class="card">
+          <i class="ti ti-clock-24 dl-icon dl-icon-yellow"></i>
+          <div class="dl-title">Dostęp 24/7</div>
+          <div class="dl-desc">Bez terminów, bez czekania.</div>
+        </div>
+        <div class="card">
+          <i class="ti ti-repeat dl-icon dl-icon-yellow"></i>
+          <div class="dl-title">Oglądaj wielokrotnie</div>
+          <div class="dl-desc">Wracasz do tematu ile chcesz.</div>
+        </div>
+        <div class="card">
+          <i class="ti ti-coin dl-icon dl-icon-teal"></i>
+          <div class="dl-title">Tańsze niż korepetycje</div>
+          <div class="dl-desc">5 lekcji = pełny kurs działu.</div>
+        </div>
+        <div class="card">
+          <i class="ti ti-device-mobile dl-icon dl-icon-teal"></i>
+          <div class="dl-title">Z każdego urządzenia</div>
+          <div class="dl-desc">Telefon, tablet, komputer.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- CO JESZCZE ZNAJDZIESZ                                  -->
+  <!-- ===================================================== -->
+  <section class="section-co-jeszcze">
+    <div class="container-content">
+      <div class="section-label">CO JESZCZE ZNAJDZIESZ</div>
+      <div class="co-jeszcze-grid">
+        <a href="/korepetycje" class="card co-tile">
+          <i class="ti ti-school co-icon co-icon-yellow"></i>
+          <div>
+            <div class="co-name">Korepetycje 1-na-1</div>
+            <div class="co-meta">grafik 95% wypełniony · od 130 zł</div>
+          </div>
+        </a>
+        <a href="/sklep" class="card co-tile">
+          <i class="ti ti-book co-icon co-icon-teal"></i>
+          <div>
+            <div class="co-name">
+              Sklep <span class="co-soon">· wkrótce</span>
+            </div>
+            <div class="co-meta">kompendia, mapy myśli, ebooki</div>
+          </div>
+        </a>
+        <a href="/arkusze" class="card co-tile">
+          <i class="ti ti-file-text co-icon co-icon-teal"></i>
+          <div>
+            <div class="co-name">Arkusze CKE · gratis</div>
+            <div class="co-meta">matura, ósmoklasista</div>
+          </div>
+        </a>
+        <a href="/kalkulatory" class="card co-tile">
+          <i class="ti ti-calculator co-icon co-icon-yellow"></i>
+          <div>
+            <div class="co-name">
+              Kalkulatory <span class="co-new">· NOWE</span>
+            </div>
+            <div class="co-meta">wielomiany 2-12°, dodawane stopniowo</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- LICZBY                                                 -->
+  <!-- ===================================================== -->
+  <section class="section-liczby">
+    <div class="container-content">
+      <div class="liczby-grid">
+        <div class="liczba">
+          <div class="liczba-num">1000+</div>
+          <div class="liczba-label">uczniów od 2012</div>
+        </div>
+        <div class="liczba liczba-border">
+          <div class="liczba-num">★ 4.9</div>
+          <div class="liczba-label">średnia ocena kursów</div>
+        </div>
+        <div class="liczba">
+          <div class="liczba-num">99%</div>
+          <div class="liczba-label">uczniów zdaje maturę</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- CTA KOŃCOWE                                            -->
+  <!-- ===================================================== -->
+  <section class="section-cta">
+    <div class="container-content cta-inner">
+      <div>
+        <h3 class="cta-title">Zacznij od darmowej lekcji.</h3>
+        <p class="cta-desc">Po obejrzeniu sam zdecydujesz czy chcesz cały kurs.</p>
+      </div>
+      <a href="/kursy" class="cta-button">▶ Darmowa lekcja →</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ===================================================== */
+  /* HERO                                                   */
+  /* ===================================================== */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 64px 0 40px;
+  }
+  .hero-bg-sin {
+    position: absolute;
+    top: 60%;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  .hero-bg-sin svg {
+    width: 100%;
+    height: 100%;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-title {
+    font-size: 54px;
+    line-height: 1.02;
+    font-weight: 600;
+    letter-spacing: -1.8px;
+    margin: 18px 0 16px;
+  }
+  .text-yellow {
+    color: #FFDE59;
+  }
+  .text-teal {
+    color: #3FCECF;
+  }
+  .hero-desc {
+    font-size: 15px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.65;
+    margin-bottom: 26px;
+    max-width: 440px;
+  }
+  .hero-desc strong {
+    color: #EBEEFF;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 26px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .stat-num {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 2px;
+  }
+  .stat-sep {
+    width: 1px;
+    height: 28px;
+    background: rgba(235, 238, 255, 0.1);
+  }
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* === Link do korepetycji w hero === */
+  .hero-korep-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(90deg, rgba(255, 222, 89, 0.08), rgba(63, 206, 207, 0.08));
+    border: 1px solid rgba(255, 222, 89, 0.25);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 22px;
+    text-decoration: none;
+    color: inherit;
+    max-width: 460px;
+    transition: all 0.2s ease;
+  }
+  .hero-korep-link:hover {
+    border-color: rgba(255, 222, 89, 0.5);
+    transform: translateY(-2px);
+  }
+  .hero-korep-icon {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 222, 89, 0.15);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFDE59;
+    flex-shrink: 0;
+  }
+  .hero-korep-icon i {
+    font-size: 20px;
+  }
+  .hero-korep-text {
+    flex: 1;
+  }
+  .hero-korep-title {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .hero-korep-stats {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .hero-korep-stats strong {
+    color: #FFDE59;
+  }
+  .hero-korep-dot {
+    width: 7px;
+    height: 7px;
+    background: #3FCECF;
+    border-radius: 50%;
+    animation: pulse-hero 2s ease-in-out infinite;
+  }
+  @keyframes pulse-hero {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+  }
+  .hero-korep-sep {
+    color: rgba(235, 238, 255, 0.3);
+  }
+  .hero-korep-arrow {
+    font-size: 18px;
+    color: #FFDE59;
+  }
+
+  /* Wideo */
+  .hero-video {
+    position: relative;
+    z-index: 2;
+  }
+  .video-bg-deco {
+    position: absolute;
+    inset: 0;
+    background: #3FCECF;
+    border-radius: 18px;
+    transform: rotate(-3deg);
+  }
+  .video-frame {
+    position: relative;
+    background: #000;
+    border-radius: 18px;
+    aspect-ratio: 9/16;
+    max-width: 360px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    overflow: hidden;
+  }
+  .video-play {
+    width: 74px;
+    height: 74px;
+    background: #FFDE59;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #050A24;
+    font-size: 28px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 8px 24px rgba(255, 222, 89, 0.3);
+    transition: transform 0.15s ease;
+  }
+  .video-play:hover {
+    transform: scale(1.08);
+  }
+  .video-badge {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: rgba(255, 222, 89, 0.95);
+    color: #050A24;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .video-time {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    color: #EBEEFF;
+    font-size: 13px;
+  }
+
+  /* ===================================================== */
+  /* SECTION HEADER (wspólny dla sekcji)                    */
+  /* ===================================================== */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .section-title {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+  .section-more {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.65);
+    text-decoration: none;
+  }
+
+  /* ===================================================== */
+  /* BESTSELLERY                                            */
+  /* ===================================================== */
+  .section-bestsellery {
+    padding: 40px 0;
+    background: rgba(63, 206, 207, 0.05);
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .bestsellery-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* Pakiet - duża żółta karta */
+  .card-pakiet {
+    background: #FFDE59;
+    color: #050A24;
+    border-radius: 16px;
+    padding: 26px;
+    position: relative;
+    text-decoration: none;
+  }
+  .pakiet-badge {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    background: #050A24;
+    color: #FFDE59;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .pakiet-eyebrow {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .pakiet-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .pakiet-desc {
+    font-size: 12px;
+    opacity: 0.75;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .pakiet-cena {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .cena-now {
+    font-size: 30px;
+    font-weight: 700;
+  }
+  .cena-old {
+    font-size: 14px;
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+  .pakiet-cta {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+  }
+  .pakiet-cta:hover {
+    transform: translateY(-1px);
+  }
+
+  /* Karty bestsellerów */
+  .card-feature {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 16px;
+    padding: 22px;
+    position: relative;
+  }
+  .card-feature-teal {
+    border-color: rgba(63, 206, 207, 0.3);
+  }
+  .feature-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #FFDE59;
+    color: #050A24;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .feature-badge-teal {
+    background: #3FCECF;
+  }
+  .feature-icon {
+    font-size: 22px;
+    color: #3FCECF;
+  }
+  .feature-icon-yellow {
+    color: #FFDE59;
+  }
+  .feature-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 14px;
+  }
+  .feature-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .feature-price {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFDE59;
+    margin-top: 14px;
+  }
+  .feature-cta {
+    display: block;
+    margin-top: 14px;
+    padding: 11px 16px;
+    background: #FFDE59;
+    color: #050A24;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
+    letter-spacing: 0.3px;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .feature-cta:hover {
+    background: #FFE680;
+    transform: translateY(-1px);
+  }
+  .card-feature-teal .feature-cta {
+    background: rgba(63, 206, 207, 0.2);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.4);
+  }
+  .card-feature-teal .feature-cta:hover {
+    background: rgba(63, 206, 207, 0.3);
+    border-color: #3FCECF;
+  }
+
+  /* ===================================================== */
+  /* DLACZEGO KURSY                                         */
+  /* ===================================================== */
+  .section-dlaczego {
+    padding: 48px 0;
+  }
+  .dlaczego-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .dlaczego-desc {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.65;
+    max-width: 380px;
+    margin-top: 14px;
+  }
+  .dlaczego-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .dl-icon {
+    font-size: 20px;
+  }
+  .dl-icon-yellow {
+    color: #FFDE59;
+  }
+  .dl-icon-teal {
+    color: #3FCECF;
+  }
+  .dl-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  .dl-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 4px;
+  }
+
+  /* ===================================================== */
+  /* CO JESZCZE ZNAJDZIESZ                                  */
+  /* ===================================================== */
+  .section-co-jeszcze {
+    padding: 0 0 40px;
+  }
+  .co-jeszcze-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .co-tile {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    color: inherit;
+  }
+  .co-tile-disabled {
+    opacity: 0.6;
+  }
+  .co-icon {
+    font-size: 24px;
+  }
+  .co-icon-yellow {
+    color: #FFDE59;
+  }
+  .co-icon-teal {
+    color: #3FCECF;
+  }
+  .co-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .co-soon {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    font-weight: 400;
+  }
+  .co-new {
+    font-size: 10px;
+    color: #FFDE59;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .co-meta {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 3px;
+  }
+
+  /* ===================================================== */
+  /* LICZBY                                                 */
+  /* ===================================================== */
+  .section-liczby {
+    padding: 32px 0;
+    background: rgba(255, 222, 89, 0.06);
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .liczby-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    align-items: center;
+  }
+  .liczba {
+    text-align: center;
+  }
+  .liczba-border {
+    border-left: 1px solid rgba(235, 238, 255, 0.1);
+    border-right: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .liczba-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 42px;
+    color: #FFDE59;
+    line-height: 1;
+  }
+  .liczba-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.65);
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+
+  /* ===================================================== */
+  /* CTA KOŃCOWE                                            */
+  /* ===================================================== */
+  .section-cta {
+    background: #FFDE59;
+    color: #050A24;
+    padding: 36px 0;
+  }
+  .cta-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .cta-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .cta-desc {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .cta-button {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 14px 26px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s ease;
+  }
+  .cta-button:hover {
+    transform: translateY(-2px);
+  }
+
+  /* ===================================================== */
+  /* RESPONSIVE                                             */
+  /* ===================================================== */
+  @media (max-width: 1024px) {
+    .hero-grid,
+    .dlaczego-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .bestsellery-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .co-jeszcze-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .hero-title {
+      font-size: 44px;
+    }
+  }
+  @media (max-width: 640px) {
+    .hero {
+      padding: 36px 0 28px;
+    }
+    .hero-title {
+      font-size: 34px;
+      letter-spacing: -1px;
+    }
+    .section-title {
+      font-size: 22px;
+    }
+    .bestsellery-grid,
+    .dlaczego-features,
+    .co-jeszcze-grid,
+    .liczby-grid {
+      grid-template-columns: 1fr;
+    }
+    .liczba-border {
+      border-left: none;
+      border-right: none;
+      border-top: 1px solid rgba(235, 238, 255, 0.1);
+      border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+      padding: 16px 0;
+    }
+    .pakiet-title {
+      font-size: 20px;
+    }
+    .cta-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+    .cta-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  // === Aktualizacja licznika "X wolnych miejsc" w hero ===
+  import { fetchAvailability } from '../config/tidycal.js';
+
+  async function updateHeroAvailability() {
+    try {
+      const data = await fetchAvailability();
+      const freeEl = document.querySelector('[data-hero-free]');
+      const labelEl = document.querySelector('[data-hero-label]');
+      if (freeEl && data.free_slots_this_week !== undefined) {
+        freeEl.textContent = String(data.free_slots_this_week);
+      }
+      if (labelEl && data.free_slots_this_week !== undefined) {
+        const n = data.free_slots_this_week;
+        labelEl.textContent = n === 1
+          ? 'wolne miejsce'
+          : (n >= 2 && n <= 4)
+            ? 'wolne miejsca'
+            : 'wolnych miejsc';
+      }
+    } catch (err) {
+      console.warn('[Hero] błąd:', err);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateHeroAvailability);
+  } else {
+    updateHeroAvailability();
+  }
+</script>

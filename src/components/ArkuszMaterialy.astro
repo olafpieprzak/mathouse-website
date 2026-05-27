@@ -1,0 +1,211 @@
+---
+// =====================================================
+// Komponent: 4-przyciskowy rząd materiałów dla arkusza
+// =====================================================
+// Props:
+//   arkusz   - obiekt arkusza z arkusze.js
+//   poziom   - 'podst' / 'rozsz' / '8klasa' (dla fallbacka)
+//
+// Każdy przycisk:
+//   - aktywny (kolorowy) gdy materiał istnieje
+//   - przygaszony "Wkrótce" gdy null - link wraca do strony arkuszy / kanału YT
+// =====================================================
+import { getMaterialy } from '../data/arkusze.js';
+
+const { arkusz, poziom = 'podst' } = Astro.props;
+const m = getMaterialy(arkusz, poziom);
+---
+
+<div class="ark-materialy">
+  <a
+    href={m.arkuszPdf}
+    class={`mat-btn mat-arkusz ${m.arkuszReady ? '' : 'mat-soon'}`}
+    target={m.arkuszReady ? '_blank' : '_self'}
+    rel="noopener"
+    title={m.arkuszReady ? 'Otwórz arkusz CKE w PDF' : 'Wkrótce dostępne'}
+  >
+    <span class="mat-ico">📄</span>
+    <span class="mat-lbl">
+      <strong>Arkusz CKE</strong>
+      <em>{m.arkuszReady ? 'PDF · pobierz' : 'wkrótce'}</em>
+    </span>
+  </a>
+
+  <a
+    href={m.kluczPdf}
+    class={`mat-btn mat-klucz ${m.kluczReady ? '' : 'mat-soon'}`}
+    target={m.kluczReady ? '_blank' : '_self'}
+    rel="noopener"
+    title={m.kluczReady ? 'Otwórz klucz odpowiedzi CKE' : 'Wkrótce dostępne'}
+  >
+    <span class="mat-ico">🔑</span>
+    <span class="mat-lbl">
+      <strong>Klucz CKE</strong>
+      <em>{m.kluczReady ? 'odpowiedzi' : 'wkrótce'}</em>
+    </span>
+  </a>
+
+  <a
+    href={m.mojeRozwiazaniePdf}
+    class={`mat-btn mat-moje ${m.mojeRozwiazanieReady ? '' : 'mat-soon'}`}
+    target={m.mojeRozwiazanieReady ? '_blank' : '_self'}
+    rel="noopener"
+    title={m.mojeRozwiazanieReady ? 'Moje rozwiązanie krok po kroku' : 'Wkrótce dostępne'}
+  >
+    <span class="mat-ico">📝</span>
+    <span class="mat-lbl">
+      <strong>Moje rozwiązanie</strong>
+      <em>{m.mojeRozwiazanieReady ? 'PDF · krok po kroku' : 'wkrótce'}</em>
+    </span>
+  </a>
+
+  <a
+    href={m.videoUrl}
+    class={`mat-btn mat-video ${m.videoReady ? '' : 'mat-yt-fallback'}`}
+    target="_blank"
+    rel="noopener"
+    title={m.videoReady ? 'Obejrzyj wideo-rozwiązanie' : 'Zobacz inne moje wideo na YouTube'}
+  >
+    <span class="mat-ico">▶</span>
+    <span class="mat-lbl">
+      <strong>Wideo MATHOUSE</strong>
+      <em>{m.videoReady ? 'YouTube · obejrzyj' : 'kanał YT'}</em>
+    </span>
+  </a>
+</div>
+
+<style>
+  .ark-materialy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .mat-btn {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 11px;
+    border-radius: 9px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: transform 0.12s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    min-height: 50px;
+  }
+  .mat-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  }
+  .mat-ico {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .mat-lbl {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+  .mat-lbl strong {
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mat-lbl em {
+    font-size: 9.5px;
+    font-style: normal;
+    opacity: 0.7;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  /* === ARKUSZ CKE (żółty, główny CTA) === */
+  .mat-arkusz {
+    background: #FFDE59;
+    color: #050A24;
+  }
+  .mat-arkusz:hover {
+    background: #FFE574;
+    border-color: #FFDE59;
+  }
+
+  /* === KLUCZ CKE (turkusowy) === */
+  .mat-klucz {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    border-color: rgba(63, 206, 207, 0.35);
+  }
+  .mat-klucz:hover {
+    background: rgba(63, 206, 207, 0.25);
+    border-color: #3FCECF;
+  }
+
+  /* === MOJE ROZWIĄZANIE (lawendowy/fioletowy) === */
+  .mat-moje {
+    background: rgba(167, 139, 250, 0.15);
+    color: #C4B5FD;
+    border-color: rgba(167, 139, 250, 0.35);
+  }
+  .mat-moje:hover {
+    background: rgba(167, 139, 250, 0.25);
+    border-color: #C4B5FD;
+  }
+
+  /* === WIDEO (czerwony jak YouTube) === */
+  .mat-video {
+    background: #CC0000;
+    color: #fff;
+    font-weight: 700;
+  }
+  .mat-video:hover {
+    background: #E60000;
+    box-shadow: 0 4px 14px rgba(204, 0, 0, 0.4);
+  }
+  .mat-video .mat-ico {
+    background: #fff;
+    color: #CC0000;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    padding-left: 2px;
+  }
+  /* Wideo - gdy fallback (kanał YT, nie konkretny film) - lekko subtelniejsze */
+  .mat-yt-fallback {
+    background: rgba(204, 0, 0, 0.6);
+  }
+
+  /* === STAN "WKRÓTCE" - przygaszony === */
+  .mat-soon {
+    background: rgba(235, 238, 255, 0.04) !important;
+    color: rgba(235, 238, 255, 0.4) !important;
+    border-color: rgba(235, 238, 255, 0.08) !important;
+    cursor: pointer;
+  }
+  .mat-soon:hover {
+    background: rgba(235, 238, 255, 0.08) !important;
+    border-color: rgba(235, 238, 255, 0.15) !important;
+    transform: none;
+  }
+  .mat-soon .mat-ico {
+    opacity: 0.5;
+    background: transparent !important;
+    color: inherit !important;
+  }
+
+  /* Layout responsywny - na bardzo wąskich = 1 kolumna */
+  @media (max-width: 380px) {
+    .ark-materialy {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

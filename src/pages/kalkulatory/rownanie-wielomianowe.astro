@@ -1,0 +1,1470 @@
+---
+// =====================================================
+// KALKULATOR: Równanie wielomianowe (stopień 2-12)
+// Pierwszy aktywny kalkulator MATHOUSE.
+// =====================================================
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Kalkulator równań wielomianowych — MATHOUSE"
+  description="Darmowy kalkulator online do rozwiązywania równań wielomianowych stopnia 2-12. Metoda Hornera, delta, pierwiastki rzeczywiste i zespolone. Sprawdza wszystkie kandydatów ±p/q i pokazuje rozwiązanie krok po kroku."
+>
+  <!-- Breadcrumb -->
+  <div class="kalk-breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> /
+      <a href="/kalkulatory">Kalkulatory</a> /
+      <span>Równanie wielomianowe</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="kalk-hero">
+    <div class="container-content">
+      <div class="section-label">⚙️ KALKULATOR · BETA</div>
+      <h1 class="kalk-title">Równanie <span class="text-yellow">wielomianowe</span>.</h1>
+      <p class="kalk-desc">
+        Rozwiąż równanie postaci <strong>ax<sup>n</sup> + bx<sup>n−1</sup> + … + z = 0</strong>
+        dla stopni od <strong>2 do 12</strong>. Wprowadź współczynniki — kalkulator pokaże
+        pełne rozwiązanie krok po kroku (metoda Hornera lub delty dla równania kwadratowego).
+      </p>
+    </div>
+  </section>
+
+  <!-- WŁAŚCIWY KALKULATOR -->
+  <section class="kalk-section">
+    <div class="kalk-app-wrap">
+      <div id="oblicz-app">
+        <div class="container">
+          <div class="related">
+            Wypróbuj też:
+            <a href="/kalkulatory">Wszystkie kalkulatory MATHOUSE</a> ·
+            <a href="/kursy/wzory-skroconego-mnozenia">Wzory skróconego mnożenia</a> ·
+            <a href="/kursy/wyrazenia-algebraiczne">Wyrażenia algebraiczne</a>
+          </div>
+
+          <div class="tabs">
+            <button class="tab-btn" onclick="setDegree(2,this)">2. stopień</button>
+            <button class="tab-btn" onclick="setDegree(3,this)">3. stopień</button>
+            <button class="tab-btn active" onclick="setDegree(4,this)">4. stopień</button>
+            <button class="tab-btn" onclick="setDegree(5,this)">5. stopień</button>
+            <button class="tab-btn" id="tab-n" onclick="setDegreeN(this)">n. stopień</button>
+          </div>
+
+          <div class="panel">
+            <div id="n-degree-panel" style="display:none; margin-bottom:20px;">
+              <div class="section-title">Wybierz stopień wielomianu:</div>
+              <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:4px;">
+                <button class="deg-pick" onclick="pickN(6)">6</button>
+                <button class="deg-pick" onclick="pickN(7)">7</button>
+                <button class="deg-pick" onclick="pickN(8)">8</button>
+                <button class="deg-pick" onclick="pickN(9)">9</button>
+                <button class="deg-pick" onclick="pickN(10)">10</button>
+                <button class="deg-pick" onclick="pickN(11)">11</button>
+                <button class="deg-pick" onclick="pickN(12)">12</button>
+              </div>
+            </div>
+            <div class="section-title">Podaj współczynniki równania:</div>
+            <div class="coeff-wrap">
+              <div class="coeff-horizontal" id="coeff-grid"></div>
+            </div>
+
+            <div class="equation-display" id="eq-display">
+              <span class="eq-zero">Równanie pojawi się tutaj...</span>
+            </div>
+
+            <div class="mode-toggle" id="method-toggle" style="display:none;">
+              <label>Metoda rozwiązania:</label>
+              <div class="toggle-btns">
+                <button class="toggle-btn active" id="btn-delta" onclick="setMethod('delta')">Δ Delta</button>
+                <div class="toggle-sep-v"></div>
+                <button class="toggle-btn" id="btn-horner" onclick="setMethod('horner')">Horner</button>
+              </div>
+              <span class="mode-hint" id="method-hint">Wyróżnik (delta) + wzory</span>
+            </div>
+
+            <div class="mode-toggle" id="nww-toggle" style="display:none;">
+              <label>Przy ułamkowych współczynnikach:</label>
+              <div class="toggle-btns">
+                <button class="toggle-btn" id="btn-nww-yes" onclick="setNWW(true)">Pomnóż przez NWW</button>
+                <div class="toggle-sep-v"></div>
+                <button class="toggle-btn active" id="btn-nww-no" onclick="setNWW(false)">Zostaw ułamki</button>
+              </div>
+              <span class="mode-hint" id="nww-hint">Szukaj pierwiastków bez zamiany na liczby całkowite</span>
+            </div>
+
+            <div class="mode-toggle">
+              <label>Wyświetl pierwiastki:</label>
+              <div class="toggle-btns">
+                <button class="toggle-btn active" id="btn-real" onclick="setMode('real')">Rzeczywiste</button>
+                <div class="toggle-sep-v"></div>
+                <button class="toggle-btn" id="btn-complex" onclick="setMode('complex')">Zespolone</button>
+              </div>
+              <span class="mode-hint" id="mode-hint">Tylko pierwiastki rzeczywiste</span>
+            </div>
+
+            <div class="error-msg" id="error-msg"></div>
+
+            <div class="btn-row">
+              <button class="btn-solve" onclick="solve()">
+                Rozwiąż
+                <span class="spinner" id="spinner"></span>
+              </button>
+              <button class="btn-clear" onclick="clearAll()">Wyczyść</button>
+            </div>
+          </div>
+
+          <div class="results-panel" id="results-panel">
+            <div class="section-title">Obliczenie</div>
+            <div id="results-content"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POWIĄZANE KURSY MATHOUSE -->
+  <section class="kalk-related">
+    <div class="container-content">
+      <div class="section-label">🎓 NAUCZ SIĘ TEMATU</div>
+      <h2 class="related-title">Powiązane kursy MATHOUSE</h2>
+      <div class="related-cards">
+        <a href="/kursy/wielomiany" class="related-card">
+          <div class="related-card-num">2.8</div>
+          <div class="related-card-name">Wielomiany</div>
+          <div class="related-card-desc">Działania na wielomianach, twierdzenie Bézouta, rozkład na czynniki, równania wielomianowe.</div>
+        </a>
+        <a href="/kursy/wzory-skroconego-mnozenia" class="related-card">
+          <div class="related-card-num">1.7</div>
+          <div class="related-card-name">Wzory skróconego mnożenia</div>
+          <div class="related-card-desc">Kwadrat sumy, różnicy, różnica kwadratów. Niezbędnik do rozkładu wielomianów.</div>
+        </a>
+        <a href="/kursy/funkcja-kwadratowa" class="related-card">
+          <div class="related-card-num">2.3</div>
+          <div class="related-card-name">Funkcja kwadratowa</div>
+          <div class="related-card-desc">Wyróżnik delta, wzory Viète'a, postać kanoniczna. Wszystko o równaniach 2 stopnia.</div>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<!-- =============== STYLE KALKULATORA (1:1 z oryginału) =============== -->
+<style is:global>
+  #oblicz-app *, #oblicz-app *::before, #oblicz-app *::after {
+    box-sizing: border-box;
+  }
+
+  #oblicz-app {
+    font-family: 'Montserrat', sans-serif;
+    background: #f0f2ff;
+    color: #050A24;
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  #oblicz-app .container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+  }
+
+  #oblicz-app .related {
+    font-size: .88rem;
+    color: #7a8ab0;
+    margin-bottom: 20px;
+    line-height: 1.9;
+  }
+  #oblicz-app .related a { color: #3FCECF; text-decoration: none; font-weight: 600; }
+  #oblicz-app .related a:hover { color: #050A24; text-decoration: underline; }
+
+  /* TABS */
+  #oblicz-app .tabs { display: flex; flex-wrap: wrap; border-bottom: 2px solid #3FCECF; }
+  #oblicz-app .tab-btn {
+    background: #EBEEFF; border: 1px solid #c8cde8; border-bottom: none;
+    padding: 9px 15px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: .84rem;
+    font-weight: 700; color: #050A24; border-radius: 4px 4px 0 0; margin-right: 3px;
+    transition: background .15s, color .15s;
+  }
+  #oblicz-app .tab-btn.active { background: #050A24; color: #FFDE59; border-color: #050A24; }
+  #oblicz-app .tab-btn:hover:not(.active) { background: #3FCECF; color: #fff; }
+
+  /* PANEL */
+  #oblicz-app .panel {
+    background: #EBEEFF; border: 1px solid #c8cde8; border-top: none;
+    border-radius: 0 0 8px 8px; padding: 24px;
+    box-shadow: 0 4px 16px rgba(63,206,207,.1); margin-bottom: 22px;
+  }
+  #oblicz-app .section-title {
+    font-size: .78rem; font-weight: 700; font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: #050A24; border-left: 4px solid #FFDE59; padding-left: 10px; margin-bottom: 18px;
+  }
+
+  #oblicz-app .coeff-wrap { overflow-x: auto; padding-bottom: 6px; }
+  #oblicz-app .coeff-horizontal {
+    display: flex; gap: 0; align-items: flex-end;
+    min-width: min-content; margin-bottom: 20px;
+  }
+  #oblicz-app .coeff-cell {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; min-width: 70px; padding: 0 6px;
+  }
+  #oblicz-app .coeff-letter {
+    display: flex; flex-direction: column; align-items: center;
+    line-height: 1.15; gap: 1px;
+  }
+  #oblicz-app .letter-main {
+    font-style: normal; font-family: 'Josefin Sans', sans-serif;
+    color: #050A24; font-size: 1.1rem; font-weight: 700; letter-spacing: .04em;
+  }
+  #oblicz-app .letter-power { font-size: .65rem; color: #888; white-space: nowrap; }
+
+  #oblicz-app .coeff-input {
+    border: 2px solid #c8cde8; border-radius: 6px;
+    padding: 8px 6px; font-size: 1rem;
+    font-family: 'Montserrat', sans-serif; width: 100%;
+    text-align: center; color: #050A24; font-weight: 600;
+    background: #fff; transition: border-color .15s, box-shadow .15s;
+    min-width: 58px;
+  }
+  #oblicz-app .coeff-input:focus {
+    outline: none; border-color: #3FCECF; background: #fff;
+    box-shadow: 0 0 0 3px rgba(63,206,207,.2);
+  }
+  #oblicz-app .coeff-sep {
+    font-size: 1.4rem; color: #bbb; padding: 0 2px 8px;
+    align-self: flex-end; line-height: 1;
+    min-width: 18px; text-align: center; flex-shrink: 0;
+  }
+
+  #oblicz-app .equation-display {
+    background: #050A24; border: 2px solid #FFDE59; border-radius: 8px;
+    padding: 14px 20px; font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.2rem; color: #FFDE59;
+    min-height: 60px; display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 18px;
+    box-shadow: 0 0 20px rgba(255,222,89,.12);
+  }
+  #oblicz-app .eq-zero {
+    color: #7a8ab0; font-style: italic; font-size: .9rem;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  #oblicz-app .mode-toggle {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+    background: #fff; border: 1px solid #c8cde8;
+    border-radius: 8px; padding: 10px 16px; flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(63,206,207,.08);
+  }
+  #oblicz-app .mode-toggle label { font-size: .88rem; font-weight: 700; color: #050A24; }
+  #oblicz-app .toggle-btns {
+    display: flex; border: 2px solid #050A24;
+    border-radius: 6px; overflow: hidden;
+  }
+  #oblicz-app .toggle-btn {
+    padding: 7px 20px; font-size: .85rem; font-weight: 600; cursor: pointer;
+    border: none; font-family: 'Montserrat', sans-serif;
+    background: #fff; color: #050A24; transition: background .15s, color .15s;
+  }
+  #oblicz-app .toggle-btn.active { background: #050A24; color: #FFDE59; }
+  #oblicz-app .toggle-btn:hover:not(.active) { background: #EBEEFF; }
+  #oblicz-app .toggle-sep-v { width: 2px; background: #050A24; }
+  #oblicz-app .mode-hint { font-size: .8rem; color: #7a8ab0; }
+
+  #oblicz-app .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  #oblicz-app .btn-solve {
+    background: #FFDE59; color: #050A24; border: none;
+    padding: 12px 32px; border-radius: 8px;
+    font-family: 'Montserrat', sans-serif; font-size: 1rem;
+    font-weight: 800; letter-spacing: .04em; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: background .15s, transform .08s, box-shadow .15s;
+    box-shadow: 0 4px 12px rgba(255,222,89,.35);
+  }
+  #oblicz-app .btn-solve:hover { background: #f5d040; box-shadow: 0 6px 18px rgba(255,222,89,.5); }
+  #oblicz-app .btn-solve:active { transform: scale(.97); }
+  #oblicz-app .btn-clear {
+    background: #fff; color: #7a8ab0; border: 2px solid #c8cde8;
+    padding: 12px 22px; border-radius: 8px;
+    font-family: 'Montserrat', sans-serif; font-size: 1rem;
+    font-weight: 600; cursor: pointer; transition: border-color .15s;
+  }
+  #oblicz-app .btn-clear:hover { border-color: #3FCECF; color: #050A24; }
+
+  #oblicz-app .results-panel {
+    background: #EBEEFF; border: 1px solid #c8cde8; border-radius: 8px;
+    padding: 24px; box-shadow: 0 4px 16px rgba(63,206,207,.08);
+    margin-bottom: 22px; display: none;
+  }
+  #oblicz-app .results-panel.visible { display: block; }
+  #oblicz-app .result-header {
+    font-family: 'Josefin Sans', sans-serif; font-size: 1.05rem; color: #050A24;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    font-weight: 700; letter-spacing: .04em;
+  }
+  #oblicz-app .result-header::before {
+    content: ''; display: inline-block; width: 13px; height: 13px;
+    background: #2ECC71; border-radius: 50%; flex-shrink: 0;
+  }
+
+  #oblicz-app .roots-list { list-style: none; display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; padding: 0; }
+  #oblicz-app .root-item {
+    background: #fff; border: 2px solid #2ECC71; border-radius: 8px;
+    padding: 10px 16px; font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.05rem; color: #050A24;
+    display: flex; align-items: center; gap: 10px; font-weight: 600;
+  }
+  #oblicz-app .root-item .root-idx {
+    font-family: 'Montserrat', sans-serif; font-size: .78rem; font-weight: 800;
+    color: #fff; background: #2ECC71; border-radius: 4px; padding: 3px 9px;
+    min-width: 28px; text-align: center;
+  }
+  #oblicz-app .root-item.complex { background: #fff; border-color: #3FCECF; }
+  #oblicz-app .root-item.complex .root-idx { background: #3FCECF; color: #fff; }
+
+  #oblicz-app .no-real-roots {
+    background: #fff0ef; border: 2px solid #E74C3C; border-radius: 8px;
+    padding: 12px 16px; color: #E74C3C; font-size: .95rem; font-weight: 700;
+  }
+
+  #oblicz-app .steps-box {
+    background: #f0f2ff; border: 1px solid #c8cde8; border-radius: 5px;
+    padding: 13px 18px; font-size: .87rem; color: #444; line-height: 1.7; margin-top: 14px;
+  }
+
+  #oblicz-app .error-msg {
+    background: #fff0ef; border: 2px solid #E74C3C; border-radius: 8px;
+    padding: 12px 16px; color: #E74C3C; font-size: .92rem;
+    margin-top: 10px; display: none; font-weight: 600;
+  }
+  #oblicz-app .error-msg.visible { display: block; }
+
+  #oblicz-app .deg-pick {
+    background: #EBEEFF; border: 2px solid #c8cde8; border-radius: 6px;
+    padding: 8px 18px; font-size: 1rem; font-weight: 800; color: #050A24;
+    cursor: pointer; font-family: 'Montserrat', sans-serif;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  #oblicz-app .deg-pick.active { background: #050A24; color: #FFDE59; border-color: #050A24; }
+  #oblicz-app .deg-pick:hover:not(.active) { background: #3FCECF; color: #fff; border-color: #3FCECF; }
+
+  #oblicz-app .spinner {
+    display: none; width: 15px; height: 15px;
+    border: 2px solid rgba(255,255,255,.35); border-top-color: #fff;
+    border-radius: 50%; animation: oblicz-spin .6s linear infinite;
+  }
+  @keyframes oblicz-spin { to { transform: rotate(360deg); } }
+
+  /* UŁAMEK */
+  #oblicz-app .mfrac { display: inline-flex; align-items: center; gap: 1px; vertical-align: middle; }
+  #oblicz-app .mfrac-neg { color: #fff; margin-right: 2px; line-height: 1; align-self: center; }
+  #oblicz-app .mfrac-inner { display: inline-flex; flex-direction: column; align-items: center; font-size: .75em; line-height: 1.15; gap: 0; }
+  #oblicz-app .mfrac-num { color: #FFDE59; font-weight: 700; line-height: 1.2; }
+  #oblicz-app .mfrac-bar { width: 100%; height: 1.5px; background: #FFDE59; display: block; min-width: 12px; margin: 1px 0; }
+  #oblicz-app .mfrac-den { color: #FFDE59; font-weight: 700; line-height: 1.2; }
+
+  /* MATH */
+  #oblicz-app .math-display {
+    display: inline-flex; align-items: center;
+    font-family: 'Josefin Sans', sans-serif; letter-spacing: .01em;
+    font-size: 1.22rem; color: #FFDE59;
+    flex-wrap: wrap; gap: 0; line-height: 1.6;
+  }
+  #oblicz-app .math-display .mvar { font-style: italic; color: #3FCECF; }
+  #oblicz-app .math-display .mnum { font-style: normal; color: #FFDE59; }
+  #oblicz-app .math-display .mop { font-style: normal; padding: 0 6px; color: #fff; }
+  #oblicz-app .math-display .meq { font-style: normal; padding: 0 8px; color: #FFDE59; font-weight: 700; }
+  #oblicz-app .math-display .mterm { display: inline-flex; align-items: center; position: relative; vertical-align: middle; }
+  #oblicz-app .math-display .msup {
+    font-size: .58em; line-height: 1; vertical-align: super;
+    font-style: normal; margin-left: 1px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; color: #3FCECF;
+    position: relative; top: -.3em;
+  }
+
+  /* HORNER / SOLVE */
+  #oblicz-app .solve-intro { font-size: .9rem; color: #050A24; margin-bottom: 16px; font-weight: 500; }
+  #oblicz-app .step-block {
+    background: #fff; border: 1px solid #c8cde8; border-radius: 8px;
+    padding: 16px 18px; margin-bottom: 14px; border-left: 4px solid #3FCECF;
+  }
+  #oblicz-app .step-block.results-final { background: #0d3b1e; border-color: #2ECC71; border-left-color: #2ECC71; }
+  #oblicz-app .step-block.results-final .step-title { color: #2ECC71; }
+  #oblicz-app .step-title {
+    font-size: .78rem; font-weight: 700; font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase; letter-spacing: .12em; color: #050A24; margin-bottom: 10px;
+  }
+  #oblicz-app .step-text { font-size: .88rem; color: #050A24; margin-bottom: 6px; line-height: 1.6; }
+  #oblicz-app .step-text em { color: #3FCECF; font-weight: 700; }
+
+  #oblicz-app .cand {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #FFDE59; color: #050A24; font-weight: 800;
+    border-radius: 4px; padding: 3px 10px; margin: 2px;
+    font-size: .88rem; min-height: 28px; vertical-align: middle;
+  }
+  #oblicz-app .cand-frac { padding: 3px 8px; }
+  #oblicz-app .cf-neg { margin-right: 2px; font-weight: 900; }
+  #oblicz-app .cf-inner { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.1; gap: 1px; }
+  #oblicz-app .cf-num { font-size: .8em; font-weight: 900; }
+  #oblicz-app .cf-bar { width: 100%; min-width: 12px; height: 1.5px; background: #050A24; display: block; }
+  #oblicz-app .cf-den { font-size: .8em; font-weight: 900; }
+
+  #oblicz-app .check-table { width: 100%; border-collapse: collapse; font-size: .86rem; margin-top: 6px; border-radius: 6px; overflow: hidden; }
+  #oblicz-app .check-table td { padding: 7px 12px; border-bottom: 1px solid #c8cde8; }
+  #oblicz-app .check-table tr:last-child td { border-bottom: none; }
+  #oblicz-app .check-yes td { background: rgba(46,204,113,.12); color: #2ECC71; font-weight: 700; }
+  #oblicz-app .check-no td { color: #050A24; opacity: .5; }
+  #oblicz-app .check-table td:first-child { font-family: 'Josefin Sans', sans-serif; font-style: italic; min-width: 90px; }
+  #oblicz-app .check-table td:last-child { text-align: center; min-width: 60px; }
+
+  #oblicz-app .horner-label { font-size: .86rem; color: #050A24; margin-bottom: 8px; font-weight: 600; }
+  #oblicz-app .horner-wrap { overflow-x: auto; margin-bottom: 8px; }
+  #oblicz-app .horner-table {
+    border-collapse: collapse; font-size: .9rem;
+    font-family: 'Josefin Sans', sans-serif;
+    border-radius: 8px; overflow: hidden;
+  }
+  #oblicz-app .horner-table td {
+    border: 1px solid #c8cde8; padding: 8px 16px; text-align: center; min-width: 50px;
+  }
+  #oblicz-app .hn-coeff td { background: #050A24; font-weight: 700; color: #FFDE59; font-size: 1rem; }
+  #oblicz-app .hn-mul td { background: #f5f6ff; color: #3FCECF; font-style: italic; font-weight: 600; }
+  #oblicz-app .hn-result td { background: #EBEEFF; font-weight: 700; color: #050A24; }
+  #oblicz-app .hn-rem { background: #2ECC71 !important; color: #fff !important; font-weight: 800 !important; }
+  #oblicz-app .hn-r { background: #FFDE59 !important; color: #050A24 !important; font-weight: 800; }
+  #oblicz-app .hn-r-empty { background: transparent !important; border: none !important; }
+
+  #oblicz-app .horner-note { font-size: .84rem; color: #050A24; margin-top: 4px; font-weight: 500; }
+  #oblicz-app .math-inline { font-family: 'Josefin Sans', sans-serif; font-style: italic; color: #050A24; font-weight: 600; }
+
+  #oblicz-app .root-type {
+    font-size: .7rem; font-weight: 800;
+    background: #EBEEFF; color: #050A24; border-radius: 4px;
+    padding: 3px 8px; margin-left: 6px;
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase; letter-spacing: .08em;
+    border: 1px solid #c8cde8;
+  }
+  #oblicz-app .quad-choice-block { background: #EBEEFF; border-color: #3FCECF; border-left-color: #FFDE59; }
+</style>
+
+<style>
+  /* === STYLE DLA OPRAWY ASTRO STRONY === */
+  .kalk-breadcrumb {
+    padding: 14px 0;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .kalk-breadcrumb a { color: inherit; text-decoration: none; }
+  .kalk-breadcrumb a:hover { color: #FFDE59; }
+  .kalk-breadcrumb span { color: #FFDE59; }
+
+  .kalk-hero {
+    padding: 36px 0 24px;
+  }
+  .kalk-title {
+    font-size: 44px;
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -1.5px;
+    margin: 12px 0 14px;
+  }
+  .text-yellow { color: #FFDE59; }
+  .kalk-desc {
+    font-size: 15px;
+    color: rgba(235, 238, 255, 0.7);
+    line-height: 1.6;
+    max-width: 720px;
+    margin: 0;
+  }
+  .kalk-desc strong { color: #EBEEFF; }
+  .kalk-desc sup { font-size: 11px; vertical-align: super; }
+
+  .kalk-section {
+    padding: 20px 0 40px;
+  }
+  .kalk-app-wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .kalk-related {
+    padding: 40px 0 70px;
+    background: rgba(63, 206, 207, 0.04);
+    border-top: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .related-title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin: 8px 0 24px;
+  }
+  .related-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .related-card {
+    display: block;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.15s ease;
+  }
+  .related-card:hover {
+    border-color: rgba(255, 222, 89, 0.4);
+    background: rgba(255, 222, 89, 0.06);
+    transform: translateY(-2px);
+  }
+  .related-card-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #3FCECF;
+    background: rgba(63, 206, 207, 0.15);
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .related-card-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #EBEEFF;
+    margin-bottom: 6px;
+  }
+  .related-card-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .kalk-title { font-size: 32px; }
+    .related-title { font-size: 22px; }
+  }
+</style>
+
+<!-- =============== LOGIKA KALKULATORA (1:1 z oryginału) =============== -->
+<script is:inline>
+const ALPHA = ['a','b','c','d','e','f','g','h','i','j','k'];
+
+let degree = 4;
+let rootMode = 'real';
+let solveMethod = 'horner';
+let useNWW = false;
+
+let _pendingQuadCoeffs = null;
+let _pendingFoundRoots = null;
+let _pendingHtmlBefore = '';
+
+function setMode(m) {
+  rootMode = m;
+  document.getElementById('btn-real').classList.toggle('active', m==='real');
+  document.getElementById('btn-complex').classList.toggle('active', m==='complex');
+  document.getElementById('mode-hint').textContent =
+    m==='real' ? 'Tylko pierwiastki rzeczywiste' : 'Wszystkie pierwiastki (łącznie z zespolonymi)';
+  clearResults();
+}
+
+function setNWW(val) {
+  useNWW = val;
+  document.getElementById('btn-nww-yes').classList.toggle('active', val);
+  document.getElementById('btn-nww-no').classList.toggle('active', !val);
+  document.getElementById('nww-hint').textContent = val
+    ? 'Kandydaci wyznaczani z wielomianu o współczynnikach całkowitych'
+    : 'Szukaj pierwiastków bez zamiany na liczby całkowite';
+  clearResults();
+}
+
+function setMethod(m) {
+  solveMethod = m;
+  document.getElementById('btn-delta').classList.toggle('active', m==='delta');
+  document.getElementById('btn-horner').classList.toggle('active', m==='horner');
+  document.getElementById('method-hint').textContent =
+    m==='delta' ? 'Wyróżnik (delta) + wzory kwadratowe' : 'Metoda Hornera';
+  clearResults();
+}
+
+function updateMethodToggle() {
+  const tog = document.getElementById('method-toggle');
+  tog.style.display = degree === 2 ? 'flex' : 'none';
+}
+
+function setDegreeN(btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('n-degree-panel').style.display = 'block';
+  const picks = document.querySelectorAll('.deg-pick');
+  const anyActive = Array.from(picks).some(p => p.classList.contains('active'));
+  if (!anyActive) pickN(6);
+  updateMethodToggle();
+}
+
+function pickN(n) {
+  document.querySelectorAll('.deg-pick').forEach(b => b.classList.remove('active'));
+  const btn = Array.from(document.querySelectorAll('.deg-pick')).find(b => b.textContent == n);
+  if (btn) btn.classList.add('active');
+  degree = n;
+  buildGrid();
+  clearResults();
+  updateMethodToggle();
+}
+
+function setDegree(n, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('n-degree-panel').style.display = 'none';
+  document.querySelectorAll('.deg-pick').forEach(b => b.classList.remove('active'));
+  degree = n;
+  buildGrid();
+  clearResults();
+  updateMethodToggle();
+}
+
+function buildGrid() {
+  const grid = document.getElementById('coeff-grid');
+  grid.innerHTML = '';
+  const total = degree + 1;
+
+  for (let i = 0; i < total; i++) {
+    const power = degree - i;
+    const letter = ALPHA[i] || ('a' + i);
+
+    let powerLabel;
+    if (power === 0) powerLabel = '(wyraz wolny)';
+    else if (power === 1) powerLabel = '· x';
+    else powerLabel = '· x' + toSup(power);
+
+    const cell = document.createElement('div');
+    cell.className = 'coeff-cell';
+    const examples = ['3','−2','1/2','−3/4','5','−1/3','2/5','7','−4','1/5','−2/3'];
+    const examplePh = examples[i % examples.length];
+    cell.innerHTML = `
+      <div class="coeff-letter">
+        <span class="letter-main">${letter}</span>
+        <span class="letter-power">${powerLabel}</span>
+      </div>
+      <input type="text" class="coeff-input" id="coeff_${power}" placeholder="${examplePh}">
+    `;
+    grid.appendChild(cell);
+
+    if (i < total - 1) {
+      const sep = document.createElement('div');
+      sep.className = 'coeff-sep';
+      sep.id = 'sep_' + i;
+      sep.textContent = '+';
+      grid.appendChild(sep);
+    }
+
+    cell.querySelector('input').addEventListener('input', (e) => {
+      validateCoeffInput(e.target);
+      updateSeps();
+      updateEquation();
+    });
+  }
+
+  const eqSep = document.createElement('div');
+  eqSep.className = 'coeff-sep';
+  eqSep.style.cssText = 'font-size:1.3rem;color:#050A24;font-weight:700;padding-bottom:8px;min-width:26px;text-align:center;';
+  eqSep.textContent = '=';
+  grid.appendChild(eqSep);
+
+  const rhsCell = document.createElement('div');
+  rhsCell.className = 'coeff-cell';
+  rhsCell.innerHTML = `
+    <div class="coeff-letter">
+      <span class="letter-main" style="font-style:normal;color:#050A24;">?</span>
+      <span class="letter-power">(prawa strona)</span>
+    </div>
+    <input type="text" class="coeff-input" id="coeff_rhs" placeholder="np. 17/5">
+  `;
+  grid.appendChild(rhsCell);
+  rhsCell.querySelector('input').addEventListener('input', updateEquation);
+
+  updateEquation();
+  updateMethodToggle();
+}
+
+function toSup(n) {
+  const m = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+  return String(n).split('').map(c => m[c] || c).join('');
+}
+
+function updateSeps() {
+  const total = degree + 1;
+  for (let i = 0; i < total - 1; i++) {
+    const nextPower = degree - (i + 1);
+    const inp = document.getElementById('coeff_' + nextPower);
+    const sep = document.getElementById('sep_' + i);
+    if (!sep || !inp) continue;
+    const v = parseFloat(inp.value) || 0;
+    sep.textContent = v < 0 ? '−' : '+';
+    sep.style.color = v < 0 ? '#c0392b' : '#bbb';
+  }
+}
+
+function getRHS() {
+  const el = document.getElementById('coeff_rhs');
+  return el ? parseFrac(el.value) : 0;
+}
+
+function validateCoeffInput(inp) {
+  const val = inp.value.trim();
+  if (!val || val === '-') { inp.style.borderColor = ''; return; }
+  const parsed = parseFrac(val);
+  if (isNaN(parsed)) {
+    inp.style.borderColor = '#E74C3C';
+    inp.title = 'Niepoprawny format. Wpisz liczbę lub ułamek np. 17/5';
+  } else {
+    inp.style.borderColor = '#2ECC71';
+    inp.title = '';
+  }
+}
+
+function parseFrac(str) {
+  if (!str || str.trim() === '') return 0;
+  str = str.trim().replace(',', '.');
+  if (str.includes('/')) {
+    const parts = str.split('/');
+    if (parts.length === 2) {
+      const num = parseFloat(parts[0]);
+      const den = parseFloat(parts[1]);
+      if (!isNaN(num) && !isNaN(den) && den !== 0) return num / den;
+    }
+    return 0;
+  }
+  return parseFloat(str) || 0;
+}
+
+function getCoeffs() {
+  return Array.from({length: degree+1}, (_,i) => {
+    const el = document.getElementById('coeff_' + (degree-i));
+    return el ? parseFrac(el.value) : 0;
+  });
+}
+
+function getCoeffsForSolve() {
+  const c = getCoeffs();
+  const rhs = getRHS();
+  const result = [...c];
+  result[result.length - 1] -= rhs;
+  return result;
+}
+
+function fmtN(v) {
+  if (Number.isInteger(v)) return String(v);
+  return parseFloat(v.toFixed(8)).toString();
+}
+
+function toFrac(v, maxDen=1000) {
+  if (v === 0) return '0';
+  const neg = v < 0;
+  v = Math.abs(v);
+  if (Number.isInteger(v) || Math.abs(v - Math.round(v)) < 1e-9) {
+    return (neg ? '-' : '') + Math.round(v);
+  }
+  let bestP = 1, bestQ = 1, bestErr = Infinity;
+  for (let q = 2; q <= maxDen; q++) {
+    const p = Math.round(v * q);
+    const err = Math.abs(v - p/q);
+    if (err < bestErr && err < 1e-9) {
+      bestErr = err; bestP = p; bestQ = q;
+    }
+    if (err < 1e-9) break;
+  }
+  if (bestErr < 1e-9 && bestQ > 1) {
+    const g = gcdFrac(bestP, bestQ);
+    return (neg ? '-' : '') + (bestP/g) + '/' + (bestQ/g);
+  }
+  if (Number.isInteger(v)) return (neg?'-':'') + v;
+  return (neg?'-':'') + parseFloat(v.toFixed(6)).toString();
+}
+
+function gcdFrac(a, b) { a=Math.abs(a); b=Math.abs(b); while(b){[a,b]=[b,a%b];} return a||1; }
+
+function fracHtml(v) {
+  if (v === 0) return '<span class="mnum">0</span>';
+  const neg = v < 0;
+  const abs = Math.abs(v);
+  if (Number.isInteger(abs) || Math.abs(abs - Math.round(abs)) < 1e-9) {
+    return `<span class="mnum">${Math.round(abs)}</span>`;
+  }
+  let bestP = 1, bestQ = 1, bestErr = Infinity;
+  for (let q = 2; q <= 1000; q++) {
+    const p = Math.round(abs * q);
+    const err = Math.abs(abs - p/q);
+    if (err < bestErr && err < 1e-9) { bestErr = err; bestP = p; bestQ = q; }
+    if (err < 1e-9) break;
+  }
+  if (bestErr < 1e-9 && bestQ > 1) {
+    const g = gcdFrac(bestP, bestQ);
+    const p = bestP/g, q = bestQ/g;
+    return `<span class="mfrac">${neg?'<span class="mfrac-neg">&minus;</span>':''}<span class="mfrac-inner"><span class="mfrac-num">${p}</span><span class="mfrac-bar"></span><span class="mfrac-den">${q}</span></span></span>`;
+  }
+  return `<span class="mnum">${(neg?'-':'') + parseFloat(abs.toFixed(6))}</span>`;
+}
+
+function renderMath(coeffs, rhs) {
+  let html = '<span class="math-display">';
+  let first = true;
+  for (let i = 0; i <= degree; i++) {
+    const power = degree - i;
+    const v = coeffs[i];
+    if (v === 0) continue;
+    const absV = Math.abs(v);
+    const isInt = Number.isInteger(absV) || Math.abs(absV - Math.round(absV)) < 1e-9;
+    if (!first) {
+      html += `<span class="mop">${v < 0 ? '&minus;' : '+'}</span>`;
+    } else if (v < 0) {
+      html += `<span class="mop" style="padding-right:3px">&minus;</span>`;
+    }
+    html += '<span class="mterm">';
+    if (power === 0) {
+      html += fracHtml(absV);
+    } else {
+      const skip = isInt && Math.round(absV) === 1;
+      if (!skip) {
+        html += `<span style="display:inline-flex;align-items:center;vertical-align:middle;">${fracHtml(absV)}</span>`;
+      }
+      if (power > 1) {
+        html += `<span style="display:inline-flex;align-items:flex-start;vertical-align:middle;"><span class="mvar">x</span><span class="msup">${power}</span></span>`;
+      } else {
+        html += '<span class="mvar">x</span>';
+      }
+    }
+    html += '</span>';
+    first = false;
+  }
+  html += `<span class="meq">=</span>${fracHtml(rhs)}`;
+  html += '</span>';
+  return html;
+}
+
+function updateEquation() {
+  updateSeps();
+  const disp = document.getElementById('eq-display');
+  const coeffs = getCoeffs();
+  const rhs = getRHS();
+  const allZero = coeffs.every(v => v === 0);
+  if (allZero) {
+    disp.innerHTML = '<span class="eq-zero">Równanie pojawi się tutaj...</span>';
+    return;
+  }
+  disp.innerHTML = renderMath(coeffs, rhs);
+
+  const hasNonInt = coeffs.some(v => v !== 0 && !(Number.isInteger(v) || Math.abs(v - Math.round(v)) < 1e-9))
+                  || (rhs !== 0 && !(Number.isInteger(rhs) || Math.abs(rhs - Math.round(rhs)) < 1e-9));
+  const nwwToggle = document.getElementById('nww-toggle');
+  if (nwwToggle) nwwToggle.style.display = hasNonInt ? 'flex' : 'none';
+}
+
+function cadd(a,b){return[a[0]+b[0],a[1]+b[1]];}
+function csub(a,b){return[a[0]-b[0],a[1]-b[1]];}
+function cmul(a,b){return[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];}
+function cdiv(a,b){const d=b[0]*b[0]+b[1]*b[1];return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d];}
+function cabs(a){return Math.sqrt(a[0]*a[0]+a[1]*a[1]);}
+function ceval(c,z){let r=[0,0];for(let v of c)r=cadd(cmul(r,z),[v,0]);return r;}
+function cderiv(c,z){const n=c.length-1;let r=[0,0];for(let i=0;i<n;i++)r=cadd(cmul(r,z),[c[i]*(n-i),0]);return r;}
+
+function aberth(coeffs,n){
+  const R=1+Math.max(...coeffs.slice(0,n).map((c,i)=>i>0?Math.pow(Math.abs(c/coeffs[0]),1/i):0).filter(isFinite));
+  let z=Array.from({length:n},(_,k)=>{const a=2*Math.PI*k/n+0.3;return[R*Math.cos(a),R*Math.sin(a)];});
+  for(let it=0;it<200;it++){
+    let mx=0;
+    z=z.map((zk,k)=>{
+      const fz=ceval(coeffs,zk),dfz=cderiv(coeffs,zk);
+      let sum=[0,0];
+      for(let j=0;j<n;j++)if(j!==k)sum=cadd(sum,cdiv([1,0],csub(zk,z[j])));
+      const delta=cdiv(fz,csub(dfz,cmul(fz,sum)));
+      mx=Math.max(mx,cabs(delta));
+      return csub(zk,delta);
+    });
+    if(mx<1e-13)break;
+  }
+  return z;
+}
+
+function solve() {
+  clearResults();
+  let coeffs = getCoeffsForSolve();
+  while (coeffs.length > 1 && coeffs[0] === 0) coeffs.shift();
+  const n = coeffs.length - 1;
+  if (n === 0) { showError(coeffs[0]===0?'Każda liczba jest rozwiązaniem.':'Brak rozwiązań.'); return; }
+  document.getElementById('spinner').style.display='inline-block';
+  setTimeout(()=>{
+    document.getElementById('spinner').style.display='none';
+    if (n === 2 && solveMethod === 'delta') {
+      solveDelta(coeffs);
+    } else {
+      solveHorner(coeffs, n);
+    }
+  }, 100);
+}
+
+function r8(v){return Math.round(v*1e8)/1e8;}
+
+function renderQuadraticChoice(quadCoeffs, foundRootsSoFar, htmlBefore) {
+  _pendingQuadCoeffs = quadCoeffs;
+  _pendingFoundRoots = [...foundRootsSoFar];
+  _pendingHtmlBefore = htmlBefore;
+  return `
+  <div class="step-block quad-choice-block">
+    <div class="step-title">Pozostał wielomian kwadratowy</div>
+    <p class="step-text">Po zredukowaniu wielomianu metodą Hornera pozostał wielomian stopnia 2:</p>
+    <p class="step-text" style="font-family:'Josefin Sans',sans-serif;font-size:1.1rem;color:#050A24;margin:8px 0 14px;">
+      <span class="math-inline">${polyToMath(quadCoeffs)}</span>
+    </p>
+    <p class="step-text"><strong>Wybierz metodę rozwiązania:</strong></p>
+    <div style="display:flex;gap:10px;margin-top:10px;">
+      <button class="btn-solve" style="font-size:.9rem;padding:9px 22px;" onclick="continueWithQuadMethod('delta')">Δ Delta</button>
+      <button class="btn-clear" style="font-size:.9rem;padding:9px 22px;" onclick="continueWithQuadMethod('horner')">Horner</button>
+    </div>
+  </div>`;
+}
+
+function continueWithQuadMethod(method) {
+  const quadCoeffs = _pendingQuadCoeffs;
+  const foundRoots = _pendingFoundRoots;
+  let html = _pendingHtmlBefore;
+  const stepNum = foundRoots.length > 0 ? 'Krok ' + (foundRoots.length + 3) : 'Krok 3';
+
+  if (method === 'delta') {
+    const [a,b,c] = quadCoeffs;
+    const delta = b*b - 4*a*c;
+    const d8v = r8(delta);
+    html += `<div class="step-block">`;
+    html += `<div class="step-title">${stepNum} — Rozwiązanie metodą Δ (delta) dla: <span class="math-inline">${polyToMath(quadCoeffs)}</span></div>`;
+    html += `<p class="step-text">Współczynniki: <strong>a = ${fmtR(a)}</strong>, <strong>b = ${fmtR(b)}</strong>, <strong>c = ${fmtR(c)}</strong></p>`;
+    html += `<p class="step-text"><span class="math-inline">Δ = b² − 4ac = (${fmtR(b)})² − 4·${fmtR(a)}·${fmtR(c)} = ${fmtR(b*b)} − ${fmtR(4*a*c)} = <strong>${fmtR(d8v)}</strong></span></p>`;
+    let quadRoots = [];
+    if (d8v > 0) {
+      const sqrtD = Math.sqrt(delta);
+      const x1 = r8((-b+sqrtD)/(2*a)), x2 = r8((-b-sqrtD)/(2*a));
+      html += `<p class="step-text"><strong>Δ > 0</strong> → dwa różne pierwiastki rzeczywiste</p>`;
+      html += `<p class="step-text"><span class="math-inline">x = (−b ± √Δ) / (2a)</span></p>`;
+      html += `<p class="step-text"><span class="math-inline">x₁ = (${fmtR(-b)} + ${fmtR(r8(sqrtD))}) / ${fmtR(2*a)} = <strong>${fmtR(x1)}</strong></span></p>`;
+      html += `<p class="step-text"><span class="math-inline">x₂ = (${fmtR(-b)} − ${fmtR(r8(sqrtD))}) / ${fmtR(2*a)} = <strong>${fmtR(x2)}</strong></span></p>`;
+      quadRoots = [{value:x1,label:fmtR(x1),type:'int'},{value:x2,label:fmtR(x2),type:'int'}];
+    } else if (d8v === 0) {
+      const x0 = r8(-b/(2*a));
+      html += `<p class="step-text"><strong>Δ = 0</strong> → jeden pierwiastek podwójny: <span class="math-inline">x = ${fmtR(x0)}</span></p>`;
+      quadRoots = [{value:x0,label:fmtR(x0),type:'int'},{value:x0,label:fmtR(x0),type:'int'}];
+    } else {
+      html += `<p class="step-text"><strong>Δ < 0</strong> → brak pierwiastków rzeczywistych</p>`;
+      if (rootMode === 'complex') {
+        const sqrtAbsD = Math.sqrt(-delta);
+        const re = r8(-b/(2*a)), im = r8(sqrtAbsD/(2*a));
+        html += `<p class="step-text"><span class="math-inline">x₁ = ${fmtR(re)} + ${fmtR(im)}i, &nbsp; x₂ = ${fmtR(re)} − ${fmtR(im)}i</span></p>`;
+      }
+    }
+    html += `</div>`;
+    renderFinalResults(html, foundRoots, quadRoots, delta < 0 && rootMode==='complex' ? [[-r8(b/(2*a*-1)), Math.sqrt(-delta)/(2*Math.abs(quadCoeffs[0]))]] : []);
+  } else {
+    const intCands2 = [];
+    const p2 = Math.abs(Math.round(quadCoeffs[quadCoeffs.length-1]));
+    divisors(p2||1).forEach(d=>{intCands2.push(d);if(d)intCands2.push(-d);});
+    const cands2 = [...new Set(intCands2)].sort((a,b)=>a-b);
+    html += `<div class="step-block">`;
+    html += `<div class="step-title">${stepNum} — Horner dla: <span class="math-inline">${polyToMath(quadCoeffs)}</span></div>`;
+    let checkRows = '', quadRoots = [], remQ = [...quadCoeffs];
+    for (const cand of cands2) {
+      const val = evalPolyAt(remQ, cand);
+      const isRoot = isNearZero(val);
+      checkRows += `<tr class="${isRoot?'check-yes':'check-no'}"><td>x = ${cand}</td><td>W(${cand}) = ${fmtR(val)}</td><td>${isRoot?'✓ pierwiastek':'✗'}</td></tr>`;
+      if (isRoot && quadRoots.length < 2) {
+        quadRoots.push({value:cand,label:String(cand),type:'int'});
+        const {html:hHtml, quotient} = renderHornerTable(remQ, cand, String(cand));
+        html += `</div><div class="step-block"><div class="step-title">Schemat Hornera — x = ${cand}</div>${hHtml}</div><div class="step-block"><div class="step-title">Kontynuacja sprawdzania</div>`;
+        remQ = quotient.map(v=>Math.round(v*1e9)/1e9);
+      }
+    }
+    html += `<table class="check-table"><tbody>${checkRows}</tbody></table></div>`;
+    renderFinalResults(html, foundRoots, quadRoots, []);
+  }
+}
+
+function renderFinalResults(html, foundRoots, quadRoots, complexExtra) {
+  const allReal = [...foundRoots, ...quadRoots];
+  html += `<div class="step-block results-final"><div class="step-title">Wyniki</div>`;
+  if (rootMode === 'real') {
+    if (allReal.length === 0) {
+      html += `<div class="no-real-roots">Brak pierwiastków rzeczywistych.</div>`;
+    } else {
+      html += `<ul class="roots-list">`;
+      allReal.forEach((r,i)=>{
+        const badge = r.type==='int'?'całkowity':r.type==='rat'?'wymierny':'numeryczny';
+        html += `<li class="root-item"><span class="root-idx">x<sub>${i+1}</sub></span> = ${r.label} <span class="root-type">${badge}</span></li>`;
+      });
+      html += `</ul>`;
+    }
+  } else {
+    if (allReal.length > 0) {
+      html += `<ul class="roots-list">`;
+      allReal.forEach((r,i)=>{
+        const badge = r.type==='int'?'całkowity':r.type==='rat'?'wymierny':'numeryczny';
+        html += `<li class="root-item"><span class="root-idx">x<sub>${i+1}</sub></span> = ${r.label} <span class="root-type">${badge}</span></li>`;
+      });
+      html += `</ul>`;
+    }
+    if (complexExtra.length > 0) {
+      html += `<ul class="roots-list">`;
+      let ci = allReal.length + 1;
+      complexExtra.forEach(r=>{
+        const re = r8(r[0]), im = r8(Math.abs(r[1]));
+        html += `<li class="root-item complex"><span class="root-idx">x<sub>${ci++}</sub></span> = ${fmtR(re)} + ${fmtR(im)}i <span class="root-type">zespolony</span></li>`;
+        html += `<li class="root-item complex"><span class="root-idx">x<sub>${ci++}</sub></span> = ${fmtR(re)} − ${fmtR(im)}i <span class="root-type">zespolony</span></li>`;
+      });
+      html += `</ul>`;
+    }
+  }
+  html += `</div>`;
+  document.getElementById('results-content').innerHTML = html;
+}
+
+function solveDelta(coeffs) {
+  const panel = document.getElementById('results-panel');
+  panel.classList.add('visible');
+  const [a, b, c] = coeffs;
+  const delta = b*b - 4*a*c;
+  const d8 = r8(delta);
+  let html = '';
+  html += `<p class="solve-intro">Rozwiązanie równania kwadratowego <span class="math-inline">${polyToMath(coeffs)}</span> metodą wyróżnika (delta):</p>`;
+  html += `<div class="step-block">`;
+  html += `<div class="step-title">Krok 1 — Postać ogólna i identyfikacja współczynników</div>`;
+  html += `<p class="step-text">Równanie kwadratowe: <span class="math-inline">ax² + bx + c = 0</span></p>`;
+  html += `<p class="step-text">Odczytujemy współczynniki:<br>&emsp;<strong>a = ${fmtR(a)}</strong> &emsp; <strong>b = ${fmtR(b)}</strong> &emsp; <strong>c = ${fmtR(c)}</strong></p>`;
+  html += `</div>`;
+  html += `<div class="step-block">`;
+  html += `<div class="step-title">Krok 2 — Obliczanie wyróżnika Δ (delta)</div>`;
+  html += `<p class="step-text"><span class="math-inline">Δ = b² − 4ac</span></p>`;
+  html += `<p class="step-text"><span class="math-inline">Δ = (${fmtR(b)})² − 4 · (${fmtR(a)}) · (${fmtR(c)})</span></p>`;
+  html += `<p class="step-text"><span class="math-inline">Δ = ${fmtR(b*b)} − ${fmtR(4*a*c)}</span></p>`;
+  html += `<p class="step-text"><strong><span class="math-inline">Δ = ${fmtR(d8)}</span></strong></p>`;
+  html += `</div>`;
+  html += `<div class="step-block">`;
+  html += `<div class="step-title">Krok 3 — Interpretacja wyróżnika</div>`;
+  if (d8 > 0) {
+    html += `<p class="step-text"><strong>Δ > 0</strong> → równanie ma <strong>dwa różne pierwiastki rzeczywiste</strong></p>`;
+    html += `<p class="step-text"><span class="math-inline">x = (−b ± √Δ) / (2a)</span></p>`;
+  } else if (d8 === 0) {
+    html += `<p class="step-text"><strong>Δ = 0</strong> → równanie ma <strong>jeden pierwiastek rzeczywisty (podwójny)</strong></p>`;
+    html += `<p class="step-text"><span class="math-inline">x = −b / (2a)</span></p>`;
+  } else {
+    html += `<p class="step-text"><strong>Δ < 0</strong> → równanie <strong>nie ma pierwiastków rzeczywistych</strong></p>`;
+    if (rootMode === 'complex') {
+      html += `<p class="step-text">Pierwiastki zespolone: <span class="math-inline">x = (−b ± i√|Δ|) / (2a)</span></p>`;
+    }
+  }
+  html += `</div>`;
+  html += `<div class="step-block">`;
+  html += `<div class="step-title">Krok 4 — Obliczenie pierwiastków</div>`;
+  if (d8 > 0) {
+    const sqrtD = Math.sqrt(delta);
+    const x1 = r8((-b + sqrtD)/(2*a));
+    const x2 = r8((-b - sqrtD)/(2*a));
+    html += `<p class="step-text"><span class="math-inline">√Δ = √${fmtR(d8)} ≈ ${fmtR(r8(sqrtD))}</span></p>`;
+    html += `<p class="step-text"><span class="math-inline">x₁ = (−(${fmtR(b)}) + ${fmtR(r8(sqrtD))}) / (2 · ${fmtR(a)}) = ${fmtR((-b+sqrtD))} / ${fmtR(2*a)} = <strong>${fmtR(x1)}</strong></span></p>`;
+    html += `<p class="step-text"><span class="math-inline">x₂ = (−(${fmtR(b)}) − ${fmtR(r8(sqrtD))}) / (2 · ${fmtR(a)}) = ${fmtR((-b-sqrtD))} / ${fmtR(2*a)} = <strong>${fmtR(x2)}</strong></span></p>`;
+    html += `</div>`;
+    html += `<div class="step-block results-final"><div class="step-title">Wyniki</div>`;
+    html += `<ul class="roots-list">`;
+    html += `<li class="root-item"><span class="root-idx">x<sub>1</sub></span> = ${fmtR(x1)} <span class="root-type">rzeczywisty</span></li>`;
+    html += `<li class="root-item"><span class="root-idx">x<sub>2</sub></span> = ${fmtR(x2)} <span class="root-type">rzeczywisty</span></li>`;
+    html += `</ul></div>`;
+  } else if (d8 === 0) {
+    const x0 = r8(-b/(2*a));
+    html += `<p class="step-text"><span class="math-inline">x = −b / (2a) = −(${fmtR(b)}) / (2 · ${fmtR(a)}) = ${fmtR(-b)} / ${fmtR(2*a)} = <strong>${fmtR(x0)}</strong></span></p>`;
+    html += `</div>`;
+    html += `<div class="step-block results-final"><div class="step-title">Wynik</div>`;
+    html += `<ul class="roots-list">`;
+    html += `<li class="root-item"><span class="root-idx">x<sub>1,2</sub></span> = ${fmtR(x0)} <span class="root-type">podwójny</span></li>`;
+    html += `</ul></div>`;
+  } else {
+    html += `<p class="step-text">Brak pierwiastków rzeczywistych (Δ < 0).</p>`;
+    if (rootMode === 'complex') {
+      const sqrtAbsD = Math.sqrt(-delta);
+      const re = r8(-b/(2*a));
+      const im = r8(sqrtAbsD/(2*a));
+      html += `<p class="step-text"><span class="math-inline">√|Δ| = √${fmtR(r8(-delta))} ≈ ${fmtR(r8(sqrtAbsD))}</span></p>`;
+      html += `<p class="step-text"><span class="math-inline">x₁ = ${fmtR(re)} + ${fmtR(im)}i</span></p>`;
+      html += `<p class="step-text"><span class="math-inline">x₂ = ${fmtR(re)} − ${fmtR(im)}i</span></p>`;
+      html += `</div>`;
+      html += `<div class="step-block results-final"><div class="step-title">Wyniki (zespolone)</div>`;
+      html += `<ul class="roots-list">`;
+      html += `<li class="root-item complex"><span class="root-idx">x<sub>1</sub></span> = ${fmtR(re)} + ${fmtR(im)}i <span class="root-type">zespolony</span></li>`;
+      html += `<li class="root-item complex"><span class="root-idx">x<sub>2</sub></span> = ${fmtR(re)} − ${fmtR(im)}i <span class="root-type">zespolony</span></li>`;
+      html += `</ul></div>`;
+    } else {
+      html += `</div>`;
+      html += `<div class="step-block results-final"><div class="step-title">Wynik</div>`;
+      html += `<div class="no-real-roots">Brak pierwiastków rzeczywistych (Δ < 0). Przełącz na <em>Zespolone</em>, aby zobaczyć pierwiastki zespolone.</div>`;
+      html += `</div>`;
+    }
+  }
+  document.getElementById('results-content').innerHTML = html;
+}
+
+function evalPolyAt(c, x) {
+  let r = 0;
+  for (let v of c) r = r * x + v;
+  return r;
+}
+
+function hornerScheme(coeffs, r) {
+  const steps = [coeffs[0]];
+  let cur = coeffs[0];
+  for (let i = 1; i < coeffs.length; i++) {
+    cur = cur * r + coeffs[i];
+    steps.push(cur);
+  }
+  return { remainder: steps[steps.length-1], quotient: steps.slice(0,-1), steps };
+}
+
+function gcd(a, b) { a=Math.abs(a); b=Math.abs(b); while(b){[a,b]=[b,a%b];} return a; }
+
+function divisors(n) {
+  n = Math.abs(Math.round(n));
+  if (n === 0) return [];
+  const d = [];
+  for (let i = 1; i <= n; i++) if (n % i === 0) d.push(i);
+  return d;
+}
+
+function isNearInt(v, eps=1e-9) { return Math.abs(v - Math.round(v)) < eps; }
+function isNearZero(v, eps=1e-7) { return Math.abs(v) < eps; }
+
+function renderHornerTable(coeffs, root, rootLabel) {
+  const h = hornerScheme(coeffs, root);
+  const n = coeffs.length - 1;
+  const muls = [''];
+  for (let i = 0; i < n; i++) muls.push(fmtR(h.steps[i] * root));
+  let html = `
+  <div class="horner-label">Schemat Hornera dla <strong>x = ${rootLabel}</strong>:</div>
+  <div class="horner-wrap">
+  <table class="horner-table">
+    <tr class="hn-coeff">
+      <td class="hn-r-empty"></td>
+      ${coeffs.map(c=>`<td>${fmtR(c)}</td>`).join('')}
+    </tr>
+    <tr class="hn-mul">
+      <td class="hn-r">${rootLabel}</td>
+      ${muls.map(m=>`<td>${m}</td>`).join('')}
+    </tr>
+    <tr class="hn-result">
+      <td></td>
+      ${h.steps.map((s,i)=>`<td class="${i===h.steps.length-1?'hn-rem':''}">${fmtR(s)}</td>`).join('')}
+    </tr>
+  </table>
+  </div>
+  <p class="horner-note">Reszta = <strong>${fmtR(h.remainder)}</strong> ${isNearZero(h.remainder)?'✓ (x = '+rootLabel+' jest pierwiastkiem)':''}</p>
+  <p class="horner-note">Wielomian po podzieleniu: <span class="math-inline">${polyToMath(h.quotient)}</span></p>
+  `;
+  return { html, quotient: h.quotient };
+}
+
+function fmtR(v) {
+  if (isNearInt(v)) return String(Math.round(v));
+  const f = toFrac(v);
+  if (f && f.includes('/')) return f;
+  return parseFloat(v.toFixed(4)).toString();
+}
+
+function polyToMath(c) {
+  const n = c.length - 1;
+  let s = '', first = true;
+  for (let i = 0; i <= n; i++) {
+    const p = n - i, v = c[i];
+    if (isNearZero(v, 1e-9)) continue;
+    const absV = Math.abs(v);
+    const isOne = (isNearInt(absV) && Math.round(absV)===1);
+    const sign = v < 0 ? (first?'&minus;':' &minus; ') : (first?'':' + ');
+    const numStr = isOne && p>0 ? '' : toFrac(absV);
+    let vp;
+    if (p === 0) vp = toFrac(absV);
+    else if (p === 1) vp = numStr+'<i>x</i>';
+    else vp = numStr+'<i>x</i><sup>'+p+'</sup>';
+    s += sign + vp;
+    first = false;
+  }
+  return s || '0';
+}
+
+function candHtml(v) {
+  const neg = v < 0;
+  const abs = Math.abs(v);
+  let bestP = 1, bestQ = 1, bestErr = Infinity;
+  for (let q = 2; q <= 1000; q++) {
+    const p = Math.round(abs * q);
+    const err = Math.abs(abs - p/q);
+    if (err < 1e-9) { bestP = p; bestQ = q; break; }
+  }
+  const g = gcdFrac(bestP, bestQ);
+  const p = bestP/g, q = bestQ/g;
+  if (q === 1) return `<span class="cand">${neg?'-':''}${p}</span>`;
+  return `<span class="cand cand-frac">${neg?'<span class="cf-neg">&minus;</span>':''}<span class="cf-inner"><span class="cf-num">${p}</span><span class="cf-bar"></span><span class="cf-den">${q}</span></span></span>`;
+}
+
+function getFracPQ(v) {
+  const neg = v < 0;
+  const abs = Math.abs(v);
+  if (Number.isInteger(abs) || Math.abs(abs-Math.round(abs)) < 1e-9) {
+    return { p: Math.abs(Math.round(v)), q: 1 };
+  }
+  for (let q = 2; q <= 10000; q++) {
+    const p = Math.round(abs * q);
+    if (Math.abs(abs - p/q) < 1e-9) {
+      const g = gcdFrac(p, q);
+      return { p: p/g, q: q/g };
+    }
+  }
+  return { p: Math.round(abs * 100), q: 100 };
+}
+
+function solveHorner(origCoeffs, origN) {
+  const panel = document.getElementById('results-panel');
+  panel.classList.add('visible');
+  let html = '';
+  let foundRoots = [];
+  let remainingCoeffs = [...origCoeffs];
+  let hornerSections = '';
+  html += `<p class="solve-intro">Rozwiązanie równania wielomianowego stopnia <strong>${origN}</strong> metodą Hornera:</p>`;
+
+  const hasNonIntCoeffs = origCoeffs.some(c => !(Number.isInteger(c) || Math.abs(c-Math.round(c)) < 1e-9));
+  const lcmCoeffs = (useNWW && hasNonIntCoeffs) ? toIntCoeffs(origCoeffs) : origCoeffs.map(c => Math.round(c*1e9)/1e9);
+  let leadInt, constInt, divP, divQ;
+  if (!useNWW && hasNonIntCoeffs) {
+    const a0 = origCoeffs[origCoeffs.length-1];
+    const an = origCoeffs[0];
+    const fracA0 = getFracPQ(a0);
+    const fracAn = getFracPQ(an);
+    constInt = fracA0.p;
+    leadInt = fracAn.p;
+    divP = divisors(constInt || 1);
+    divQ = divisors(leadInt || 1);
+  } else {
+    constInt = Math.abs(Math.round(lcmCoeffs[lcmCoeffs.length - 1]));
+    leadInt = Math.abs(Math.round(lcmCoeffs[0]));
+    divP = divisors(constInt || 1);
+    divQ = divisors(leadInt || 1);
+  }
+
+  const allCands = [];
+  divP.forEach(p2 => divQ.forEach(q2 => {
+    const v = p2/q2;
+    allCands.push(v);
+    if (v !== 0) allCands.push(-v);
+  }));
+  const candMap = new Map();
+  allCands.forEach(v => { const k = Math.round(v*1e9); if (!candMap.has(k)) candMap.set(k,v); });
+  const allCandsSorted = [...candMap.values()].sort((a,b)=>a-b);
+  const intCandsSorted = allCandsSorted.filter(v => Number.isInteger(v) || Math.abs(v-Math.round(v))<1e-9);
+  const ratKrok1 = allCandsSorted.filter(v => !(Number.isInteger(v) || Math.abs(v-Math.round(v))<1e-9));
+
+  html += `<div class="step-block">`;
+  html += `<div class="step-title">Krok 1 — Kandydaci na pierwiastki wymierne (±p/q)</div>`;
+  if (constInt === 0) {
+    html += `<p class="step-text">Wyraz wolny = 0, więc <strong>x = 0</strong> jest pierwiastkiem.</p>`;
+  } else {
+    html += `<p class="step-text">Pierwiastki wymierne wielomianu mogą być tylko w postaci <strong>±p/q</strong>, gdzie <em>p</em> | a₀ (wyraz wolny) i <em>q</em> | aₙ (wsp. wiodący).</p>`;
+    if (hasNonIntCoeffs) {
+      if (useNWW) {
+        html += `<p class="step-text">Współczynniki są ułamkowe — mnożymy przez NWW mianowników (×${Math.round(lcmCoeffs[0]/origCoeffs[0])}), uzyskując wielomian o współczynnikach całkowitych: <span class="math-inline">${polyToMath(lcmCoeffs)}</span></p>`;
+        html += `<p class="step-text" style="font-size:.8rem;color:#7a8ab0;">Mnożenie przez stałą nie zmienia pierwiastków.</p>`;
+      } else {
+        html += `<p class="step-text">Współczynniki są ułamkowe. Wyznaczamy kandydatów bezpośrednio z ułamkowej postaci: <strong>a₀ = ${toFrac(origCoeffs[origCoeffs.length-1])}</strong>, <strong>aₙ = ${toFrac(origCoeffs[0])}</strong>.</p>`;
+      }
+    }
+    html += `<p class="step-text">Wyraz wolny a₀ = <strong>${constInt}</strong>, dzielniki: <em>${divP.join(', ')}</em></p>`;
+    html += `<p class="step-text">Wsp. wiodący aₙ = <strong>${leadInt}</strong>, dzielniki: <em>${divQ.join(', ')}</em></p>`;
+    html += `<p class="step-text"><strong>Kandydaci całkowici (q=1):</strong> ${intCandsSorted.map(c=>`<span class="cand">${Math.round(c)}</span>`).join(' ')}</p>`;
+    if (ratKrok1.length > 0) {
+      html += `<p class="step-text"><strong>Kandydaci wymierni (q>1):</strong> ${ratKrok1.map(v=>candHtml(v)).join(' ')}</p>`;
+    }
+  }
+  html += `</div>`;
+
+  html += `<div class="step-block">`;
+  html += `<div class="step-title">Krok 2 — Sprawdzenie kandydatów całkowitych</div>`;
+  let checkRows = '';
+  for (const cand of intCandsSorted) {
+    if (remainingCoeffs.length <= 1) break;
+    const val = evalPolyAt(remainingCoeffs, cand);
+    const isRoot = isNearZero(val);
+    const candLabel2 = (Number.isInteger(cand) || Math.abs(cand-Math.round(cand))<1e-9) ? String(Math.round(cand)) : toFrac(cand);
+    checkRows += `<tr class="${isRoot?'check-yes':'check-no'}">
+      <td>x = ${candLabel2}</td>
+      <td>W(${candLabel2}) = ${fmtR(r8(val))}</td>
+      <td>${isRoot ? '✓ pierwiastek' : '✗'}</td>
+    </tr>`;
+    if (isRoot) {
+      foundRoots.push({value: cand, label: candLabel2, type: (Number.isInteger(cand)||Math.abs(cand-Math.round(cand))<1e-9)?'int':'rat'});
+      const { html: hHtml, quotient } = renderHornerTable(remainingCoeffs, cand, String(cand));
+      hornerSections += `<div class="step-block"><div class="step-title">Schemat Hornera — x = ${cand}</div>${hHtml}</div>`;
+      remainingCoeffs = quotient.map(v => Math.round(v*1e9)/1e9);
+      while (remainingCoeffs.length > 1 && isNearZero(evalPolyAt(remainingCoeffs, cand))) {
+        foundRoots.push({value: cand, label: String(cand), type:'int'});
+        const { html: hHtml2, quotient: q2 } = renderHornerTable(remainingCoeffs, cand, String(cand));
+        hornerSections += `<div class="step-block"><div class="step-title">Schemat Hornera — x = ${cand} (wielokrotny)</div>${hHtml2}</div>`;
+        remainingCoeffs = q2.map(v => Math.round(v*1e9)/1e9);
+      }
+    }
+  }
+  html += `<table class="check-table"><tbody>${checkRows}</tbody></table>`;
+  html += `</div>`;
+  html += hornerSections;
+  hornerSections = '';
+
+  if (remainingCoeffs.length > 2) {
+    const remLcm = toIntCoeffs(remainingCoeffs);
+    const remLead = Math.abs(Math.round(remLcm[0]));
+    const remConst = Math.abs(Math.round(remLcm[remLcm.length-1]));
+    const divP2 = divisors(remConst || 1);
+    const divQ2 = divisors(remLead || 1);
+    const ratSet = new Map();
+    divP2.forEach(p2 => divQ2.forEach(q2 => {
+      if (q2 === 1) return;
+      const v = p2/q2;
+      const key1 = Math.round(v*1e8);
+      const key2 = Math.round(-v*1e8);
+      if (!ratSet.has(key1)) ratSet.set(key1, v);
+      if (!ratSet.has(key2)) ratSet.set(key2, -v);
+    }));
+    const foundVals = new Set(foundRoots.map(r=>Math.round(r.value*1e8)));
+    const ratCands = [...ratSet.values()].filter(v => !foundVals.has(Math.round(v*1e8))).sort((a,b)=>a-b);
+
+    if (ratCands.length > 0) {
+      html += `<div class="step-block">`;
+      html += `<div class="step-title">Krok 3 — Kandydaci na pierwiastki wymierne</div>`;
+      html += `<p class="step-text">Wśród liczb całkowitych nie znaleziono wszystkich pierwiastków. Sprawdzamy ułamki <strong>±p/q</strong>:</p>`;
+      html += `<p class="step-text"><strong>Kandydaci wymierni:</strong> ${ratCands.map(v => candHtml(v)).join(' ')}</p>`;
+      html += `</div>`;
+      html += `<div class="step-block">`;
+      html += `<div class="step-title">Krok 4 — Sprawdzenie kandydatów wymiernych</div>`;
+      let checkRows2 = '';
+      for (const cand of ratCands) {
+        if (remainingCoeffs.length <= 1) break;
+        const val = evalPolyAt(remainingCoeffs, cand);
+        const isRoot = isNearZero(val);
+        const g = gcd(Math.round(Math.abs(cand)*10000), 10000);
+        const num = Math.round(cand*10000/g);
+        const den = Math.round(10000/g);
+        const candStr = den===1 ? String(num) : num+'/'+den;
+        checkRows2 += `<tr class="${isRoot?'check-yes':'check-no'}">
+          <td>x = ${candStr}</td>
+          <td>W(${candStr}) ≈ ${fmtR(r8(val))}</td>
+          <td>${isRoot ? '✓ pierwiastek' : '✗'}</td>
+        </tr>`;
+        if (isRoot) {
+          foundRoots.push({value: cand, label: candStr, type:'rat'});
+          const {html: hHtml, quotient} = renderHornerTable(remainingCoeffs, cand, candStr);
+          hornerSections += `<div class="step-block"><div class="step-title">Schemat Hornera — x = ${candStr}</div>${hHtml}</div>`;
+          remainingCoeffs = quotient.map(v=>Math.round(v*1e9)/1e9);
+        }
+      }
+      html += `<table class="check-table"><tbody>${checkRows2}</tbody></table>`;
+      html += `</div>`;
+      html += hornerSections;
+      hornerSections = '';
+    } else if (foundRoots.length === 0) {
+      html += `<div class="step-block">`;
+      html += `<div class="step-title">Krok 3 — Kandydaci wymierni</div>`;
+      html += `<p class="step-text">Brak kandydatów wymiernych (poza całkowitymi).</p>`;
+      html += `</div>`;
+    }
+  }
+
+  if (remainingCoeffs.length === 3 && foundRoots.length > 0) {
+    html += renderQuadraticChoice(remainingCoeffs, foundRoots, html);
+    document.getElementById('results-content').innerHTML = html;
+    return;
+  }
+
+  let numRoots = [];
+  const stepN = foundRoots.length > 0 ? 5 : 3;
+
+  if (remainingCoeffs.length > 1) {
+    const remN = remainingCoeffs.length - 1;
+    if (remN === 1) {
+      const [a, b] = remainingCoeffs;
+      const x0 = -b / a;
+      foundRoots.push({value: x0, label: (Number.isInteger(x0)||Math.abs(x0-Math.round(x0))<1e-9) ? fmtR(x0) : toFrac(x0), type: 'rat'});
+      numRoots = [];
+      html += `<div class="step-block">`;
+      html += `<div class="step-title">Krok ${stepN} — Równanie liniowe</div>`;
+      html += `<p class="step-text">Pozostało równanie liniowe: <span class="math-inline">${polyToMath(remainingCoeffs)} = 0</span></p>`;
+      html += `<p class="step-text"><span class="math-inline">${toFrac(a)} · x = ${toFrac(-b)}</span></p>`;
+      html += `<p class="step-text">x = <span style="display:inline-flex;align-items:center;gap:3px;vertical-align:middle;">${fracHtml(-b)}<span style="margin:0 3px;">÷</span>${fracHtml(a)}</span> = <strong style="font-size:1.05em;">${x0 < 0 ? '&minus;' : ''}${fracHtml(Math.abs(x0)).replace('class="mnum"','class="mnum" style="font-size:1em;"')}</strong></p>`;
+      html += `</div>`;
+    } else if (remN === 2) {
+      const [a,b,c] = remainingCoeffs;
+      const disc = b*b - 4*a*c;
+      if (disc >= 0) numRoots = [[(-b+Math.sqrt(disc))/(2*a),0],[(-b-Math.sqrt(disc))/(2*a),0]];
+      else numRoots = [[-b/(2*a),Math.sqrt(-disc)/(2*a)],[-b/(2*a),-Math.sqrt(-disc)/(2*a)]];
+    } else {
+      numRoots = aberth(remainingCoeffs, remN);
+      html += `<div class="step-block">`;
+      html += `<div class="step-title">Krok ${stepN} — Metoda numeryczna (dla pozostałego wielomianu)</div>`;
+      html += `<p class="step-text">Pozostały wielomian: <span class="math-inline">${polyToMath(remainingCoeffs)}</span> — brak wymiernych pierwiastków. Wyznaczam numerycznie (metoda Abertha–Weierstrassena):</p>`;
+      html += `</div>`;
+    }
+  }
+
+  const eps = 1e-6;
+  const numReal = numRoots.filter(r=>Math.abs(r[1])<eps).map(r=>r[0]);
+  const numCplx = numRoots.filter(r=>Math.abs(r[1])>=eps);
+
+  const allReal = [
+    ...foundRoots,
+    ...numReal.map(r=>({label:fmtR(r8(r)), value:r, type:'num'}))
+  ];
+
+  renderFinalResults(html, allReal, [], numCplx);
+}
+
+function toIntCoeffs(coeffs) {
+  let lcmDen = 1;
+  for (const c of coeffs) {
+    const str = String(Math.abs(c));
+    const dot = str.indexOf('.');
+    const decimals = dot >= 0 ? str.length - dot - 1 : 0;
+    const den = Math.round(Math.pow(10, decimals));
+    lcmDen = lcmVal(lcmDen, den);
+  }
+  return coeffs.map(c => Math.round(c * lcmDen));
+}
+
+function lcmVal(a, b) { return Math.abs(a * b) / gcd(a, b); }
+
+function clearResults() {
+  document.getElementById('results-panel').classList.remove('visible');
+  document.getElementById('results-content').innerHTML = '';
+  document.getElementById('error-msg').classList.remove('visible');
+}
+
+function clearAll() {
+  document.querySelectorAll('.coeff-input').forEach(i => i.value = '');
+  updateEquation();
+  clearResults();
+}
+
+function showError(msg) {
+  const e = document.getElementById('error-msg');
+  e.textContent = msg;
+  e.classList.add('visible');
+}
+
+// INIT
+document.addEventListener('DOMContentLoaded', () => {
+  buildGrid();
+});
+</script>

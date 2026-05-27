@@ -1,0 +1,915 @@
+---
+// =====================================================
+// STRONA ARKUSZE CKE
+// =====================================================
+import Layout from '../layouts/Layout.astro';
+import ArkuszMaterialy from '../components/ArkuszMaterialy.astro';
+import { arkuszePodst, arkuszeRozsz, arkusze8, informatory, zbioryZadan, getMaterialy } from '../data/arkusze.js';
+
+// Lista jest już posortowana w arkusze.js (najnowsze pierwsze)
+// Pierwsze 4 = NAJNOWSZE (preview na stronie), reszta ukryta pod "Pokaż wszystkie"
+const arkuszePodstTop = arkuszePodst.slice(0, 4);
+const arkuszePodstReszta = arkuszePodst.slice(4);
+const arkuszeRozszTop = arkuszeRozsz.slice(0, 4);
+const arkuszeRozszReszta = arkuszeRozsz.slice(4);
+---
+
+<Layout
+  title="Arkusze CKE — całe archiwum"
+  description="Wszystkie arkusze CKE z matury podstawowej, rozszerzonej i egzaminu ósmoklasisty — z odpowiedziami i rozwiązaniami wideo. Podział wg podstawy programowej. Za darmo."
+>
+  <div class="breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> / <span>Arkusze CKE</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="arkusze-hero">
+    <div class="container-content arkusze-hero-inner">
+      <span class="tag-teal">📄 darmowe · CKE · 2010-2026</span>
+      <h1 class="arkusze-title">
+        Arkusze CKE — <span class="text-yellow">całe archiwum</span>
+      </h1>
+      <p class="arkusze-desc">
+        Wszystkie arkusze matury i ósmoklasisty — podzielone podstawą programową,
+        z odpowiedziami i moimi rozwiązaniami wideo. Za darmo.
+      </p>
+
+      <div class="arkusze-jump">
+        <a href="#podst" class="jump-chip jump-yellow">↓ Matura podstawowa</a>
+        <a href="#rozsz" class="jump-chip jump-teal">↓ Matura rozszerzona</a>
+        <a href="#osmo" class="jump-chip jump-lav">↓ Ósmoklasista</a>
+        <a href="#tablice" class="jump-chip jump-soft">↓ Tablice CKE</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATY -->
+  <section class="arkusze-staty">
+    <div class="container-content staty-grid">
+      <div class="staty-item">
+        <div class="staty-num">{arkuszePodst.length + arkuszeRozsz.length + arkusze8.length}</div>
+        <div class="staty-label">arkuszy CKE</div>
+      </div>
+      <div class="staty-item">
+        <div class="staty-num">23 lata</div>
+        <div class="staty-label">archiwum (2003-2026)</div>
+      </div>
+      <div class="staty-item">
+        <div class="staty-num teal">{informatory.length}</div>
+        <div class="staty-label">informatorów CKE</div>
+      </div>
+      <div class="staty-item">
+        <div class="staty-num teal">FREE</div>
+        <div class="staty-label">wszystko gratis</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFO O PODSTAWIE -->
+  <section class="podstawa-info">
+    <div class="container-content podstawa-inner">
+      <div class="podstawa-icon"><i class="ti ti-info-circle"></i></div>
+      <div>
+        <div class="podstawa-title">Podział wg podstawy programowej</div>
+        <p class="podstawa-text">
+          Arkusze pogrupowałem wg lat obowiązywania podstawy programowej. Ważne, bo CKE zmieniał wymagania w 2015 i 2023. Filtruj po dacie, żeby trafić na właściwy zakres.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATURA PODSTAWOWA -->
+  <section id="podst" class="section-arkusze">
+    <div class="container-content">
+      <div class="section-header">
+        <div>
+          <div class="section-label yellow">§ 01 · MATURA PODSTAWOWA</div>
+          <h2 class="ark-title">Poziom <span class="text-yellow">podstawowy</span></h2>
+        </div>
+        <div class="filtry">
+          <span class="filtr-label">podstawa:</span>
+          <button class="filtr filtr-active" data-filtr="all" onclick="filtrujArkusze(this, 'all')">wszystkie</button>
+          <button class="filtr" data-filtr="2023+" onclick="filtrujArkusze(this, '2023+')">2023+</button>
+          <button class="filtr" data-filtr="2015-2022" onclick="filtrujArkusze(this, '2015-2022')">2015-2022</button>
+          <button class="filtr" data-filtr="do 2014" onclick="filtrujArkusze(this, 'do 2014')">do 2014</button>
+        </div>
+      </div>
+
+      <!-- Najnowsze 4 arkusze - widoczne od razu -->
+      <div class="arkusze-grid" id="arkusze-grid-top">
+        {arkuszePodstTop.map((a) => (
+          <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-new' : ''}`} data-podstawa={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
+            {a.badge && <span class="ark-badge">{a.badge}</span>}
+            <div class={`ark-date ${a.badge ? 'yellow' : ''}`}>{a.monthLabel}</div>
+            <div class="ark-name">{a.name}</div>
+            <div class="ark-meta">{a.meta}</div>
+            <ArkuszMaterialy arkusz={a} poziom="podst" />
+          </article>
+        ))}
+      </div>
+
+      <!-- Pełna lista pozostałych arkuszy - rozwijana -->
+      <div class="arkusze-grid arkusze-grid-hidden" id="arkusze-grid-reszta">
+        {arkuszePodstReszta.map((a) => (
+          <article class="arkusz-tile" data-podstawa={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
+            <div class="ark-date">{a.monthLabel}</div>
+            <div class="ark-name">{a.name}</div>
+            <div class="ark-meta">{a.meta}</div>
+            <ArkuszMaterialy arkusz={a} poziom="podst" />
+          </article>
+        ))}
+      </div>
+
+      <div class="ark-more-wrap">
+        <button type="button" class="ark-more" id="ark-more-toggle" onclick="toggleWszystkieArkusze(this)">
+          Pokaż wszystkie {arkuszePodst.length} arkuszy podstawowych →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATURA ROZSZERZONA -->
+  <section id="rozsz" class="section-arkusze section-arkusze-teal">
+    <div class="container-content">
+      <div class="section-header">
+        <div>
+          <div class="section-label">§ 02 · MATURA ROZSZERZONA</div>
+          <h2 class="ark-title">Poziom <span class="text-teal">rozszerzony</span></h2>
+        </div>
+        <div class="filtry-info">filtry: podstawa programowa →</div>
+      </div>
+
+      {arkuszeRozsz.length === 0 ? (
+        <div class="ark-empty">
+          <div class="ark-empty-icon">📋</div>
+          <div class="ark-empty-title">Arkusze rozszerzone — wkrótce</div>
+          <div class="ark-empty-desc">Pracuję nad uzupełnieniem archiwum poziomu rozszerzonego.</div>
+        </div>
+      ) : (
+        <>
+          <div class="filtry filtry-rozsz">
+            <span class="filtr-label">podstawa:</span>
+            <button class="filtr filtr-active" data-filtr-r="all" onclick="filtrujArkuszeRozsz(this, 'all')">wszystkie</button>
+            <button class="filtr" data-filtr-r="2023+" onclick="filtrujArkuszeRozsz(this, '2023+')">2023+</button>
+            <button class="filtr" data-filtr-r="2015-2022" onclick="filtrujArkuszeRozsz(this, '2015-2022')">2015-2022</button>
+          </div>
+
+          <!-- Najnowsze 4 rozszerzone - widoczne od razu -->
+          <div class="arkusze-grid" id="arkusze-grid-rozsz-top">
+            {arkuszeRozszTop.map((a) => (
+              <article class={`arkusz-tile ${a.badge ? 'arkusz-tile-teal-new' : ''}`} data-podstawa-r={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
+                {a.badge && <span class="ark-badge teal">{a.badge}</span>}
+                <div class={`ark-date ${a.badge ? 'teal' : ''}`}>{a.monthLabel}</div>
+                <div class="ark-name">{a.name}</div>
+                <div class="ark-meta">{a.meta}</div>
+                <ArkuszMaterialy arkusz={a} poziom="rozsz" />
+              </article>
+            ))}
+          </div>
+
+          <!-- Pełna lista pozostałych arkuszy rozszerzonych - rozwijana -->
+          <div class="arkusze-grid arkusze-grid-hidden" id="arkusze-grid-rozsz-reszta">
+            {arkuszeRozszReszta.map((a) => (
+              <article class="arkusz-tile" data-podstawa-r={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
+                <div class="ark-date">{a.monthLabel}</div>
+                <div class="ark-name">{a.name}</div>
+                <div class="ark-meta">{a.meta}</div>
+                <ArkuszMaterialy arkusz={a} poziom="rozsz" />
+              </article>
+            ))}
+          </div>
+
+          <div class="ark-more-wrap">
+            <button type="button" class="ark-more ark-more-teal" id="ark-more-toggle-rozsz" onclick="toggleWszystkieArkuszeRozsz(this)">
+              Pokaż wszystkie {arkuszeRozsz.length} arkuszy rozszerzonych →
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  <!-- 8 KLASA + MATERIAŁY CKE -->
+  <section id="osmo" class="section-osmo-tablice">
+    <div class="container-content osmo-grid">
+      <div>
+        <div class="section-label lavender">§ 03 · ÓSMOKLASISTA</div>
+        <h2 class="ark-title">Egzamin po klasie 8</h2>
+        <div class="ark-rows">
+          {arkusze8.map((a) => (
+            <div class="ark-row">
+              <div>
+                <strong>{a.monthLabel} — {a.name}</strong>
+                <div class="ark-row-meta">{a.meta}</div>
+              </div>
+              <a href={a.pdf} class="btn-primary ark-pdf-sm" target="_blank" rel="noopener">PDF ↓</a>
+            </div>
+          ))}
+          <div style="text-align:center;margin-top:8px;color:rgba(235,238,255,0.5);font-size:11px;">
+            Więcej arkuszy ósmoklasisty — wkrótce
+          </div>
+        </div>
+      </div>
+
+      <div id="tablice">
+        <div class="section-label lavender">§ 04 · INFORMATORY CKE</div>
+        <h2 class="ark-title">Materiały <span class="lavender">CKE</span></h2>
+        <div class="ark-rows">
+          {informatory.map((m) => (
+            <div class="ark-row">
+              <div class="ark-row-icon-grp">
+                <i class={`ti ti-file-text ark-row-icon ${m.color}`}></i>
+                <div>
+                  <strong>{m.name}</strong>
+                  <div class="ark-row-meta">{m.meta}</div>
+                </div>
+              </div>
+              <a href={m.pdf} class="btn-primary ark-pdf-sm" target="_blank" rel="noopener">PDF ↓</a>
+            </div>
+          ))}
+          {zbioryZadan.map((m) => (
+            <div class="ark-row">
+              <div class="ark-row-icon-grp">
+                <i class={`ti ti-book ark-row-icon ${m.color}`}></i>
+                <div>
+                  <strong>{m.name}</strong>
+                  <div class="ark-row-meta">{m.meta}</div>
+                </div>
+              </div>
+              <a href={m.pdf} class="btn-primary ark-pdf-sm" target="_blank" rel="noopener">PDF ↓</a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPSELL: cała matura wideo -->
+  <section class="upsell-bar">
+    <div class="container-content upsell-inner">
+      <div class="upsell-info">
+        <div class="upsell-icon"><i class="ti ti-video"></i></div>
+        <div>
+          <div class="upsell-name">Cała matura rozwiązana krok po kroku</div>
+          <div class="upsell-desc">Wideo z rozwiązaniem każdego zadania z wybranej matury — w jednym miejscu.</div>
+        </div>
+      </div>
+      <a href="#" class="btn-primary upsell-cta">Zobacz wideo-rozwiązania →</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-cta-arkusze">
+    <div class="container-content cta-inner">
+      <div>
+        <h3 class="cta-title">Robisz arkusz i utknąłeś?</h3>
+        <p class="cta-desc">Obejrzyj rozwiązania wideo albo weź kurs maturalny.</p>
+      </div>
+      <div class="cta-buttons">
+        <a href="https://www.youtube.com/@olafpieprzak9987" target="_blank" rel="noopener noreferrer" class="cta-button">▶ Rozwiązania na YT</a>
+        <a href="/kursy" class="cta-button-out">Kurs maturalny</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  // Filtrowanie arkuszy podstawowych po podstawie programowej
+  function filtrujArkusze(btn, filtr) {
+    // Aktywny przycisk
+    document.querySelectorAll('.filtr').forEach(b => b.classList.remove('filtr-active'));
+    btn.classList.add('filtr-active');
+
+    // Pokaż/ukryj kafelki
+    var kafelki = document.querySelectorAll('.arkusz-tile[data-podstawa]');
+    kafelki.forEach(function(k) {
+      var p = k.getAttribute('data-podstawa');
+      if (filtr === 'all' || p === filtr) {
+        k.style.display = '';
+      } else {
+        k.style.display = 'none';
+      }
+    });
+
+    // Jeśli filtrujemy, automatycznie rozwijamy pełną listę (bo top może zawierać 0 wyników)
+    var reszta = document.getElementById('arkusze-grid-reszta');
+    var toggleBtn = document.getElementById('ark-more-toggle');
+    if (filtr !== 'all' && reszta && reszta.classList.contains('arkusze-grid-hidden')) {
+      reszta.classList.remove('arkusze-grid-hidden');
+      if (toggleBtn) toggleBtn.textContent = 'Zwiń listę ←';
+    }
+  }
+
+  // Rozwijanie pełnej listy arkuszy
+  function toggleWszystkieArkusze(btn) {
+    var reszta = document.getElementById('arkusze-grid-reszta');
+    if (!reszta) return;
+    var hidden = reszta.classList.toggle('arkusze-grid-hidden');
+    btn.textContent = hidden
+      ? 'Pokaż wszystkie ' + (document.querySelectorAll('.arkusz-tile[data-podstawa]').length) + ' arkuszy podstawowych →'
+      : 'Zwiń listę ←';
+  }
+
+  // ============ ROZSZERZONA - filtry i toggle ============
+  function filtrujArkuszeRozsz(btn, filtr) {
+    document.querySelectorAll('.filtry-rozsz .filtr').forEach(b => b.classList.remove('filtr-active'));
+    btn.classList.add('filtr-active');
+
+    var kafelki = document.querySelectorAll('.arkusz-tile[data-podstawa-r]');
+    kafelki.forEach(function(k) {
+      var p = k.getAttribute('data-podstawa-r');
+      if (filtr === 'all' || p === filtr) {
+        k.style.display = '';
+      } else {
+        k.style.display = 'none';
+      }
+    });
+
+    var reszta = document.getElementById('arkusze-grid-rozsz-reszta');
+    var toggleBtn = document.getElementById('ark-more-toggle-rozsz');
+    if (filtr !== 'all' && reszta && reszta.classList.contains('arkusze-grid-hidden')) {
+      reszta.classList.remove('arkusze-grid-hidden');
+      if (toggleBtn) toggleBtn.textContent = 'Zwiń listę ←';
+    }
+  }
+
+  function toggleWszystkieArkuszeRozsz(btn) {
+    var reszta = document.getElementById('arkusze-grid-rozsz-reszta');
+    if (!reszta) return;
+    var hidden = reszta.classList.toggle('arkusze-grid-hidden');
+    btn.textContent = hidden
+      ? 'Pokaż wszystkie ' + (document.querySelectorAll('.arkusz-tile[data-podstawa-r]').length) + ' arkuszy rozszerzonych →'
+      : 'Zwiń listę ←';
+  }
+</script>
+
+<style>
+  .breadcrumb {
+    padding: 14px 0;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb span { color: #FFDE59; }
+  .text-yellow { color: #FFDE59; }
+  .text-teal { color: #3FCECF; }
+  .lavender { color: #EBEEFF; opacity: 0.85; }
+
+  /* ===================================================== */
+  /* HERO                                                   */
+  /* ===================================================== */
+  .arkusze-hero {
+    padding: 48px 0 32px;
+  }
+  .arkusze-hero-inner {
+    text-align: center;
+  }
+  .arkusze-title {
+    font-size: 46px;
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -1.2px;
+    margin: 18px 0 14px;
+  }
+  .arkusze-desc {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .arkusze-jump {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .jump-chip {
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .jump-yellow {
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+    border: 1px solid rgba(255, 222, 89, 0.3);
+  }
+  .jump-teal {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.3);
+  }
+  .jump-lav {
+    background: rgba(235, 238, 255, 0.08);
+    color: #EBEEFF;
+    border: 1px solid rgba(235, 238, 255, 0.15);
+  }
+  .jump-soft {
+    background: rgba(235, 238, 255, 0.05);
+    color: rgba(235, 238, 255, 0.7);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+  }
+
+  /* ===================================================== */
+  /* STATY                                                  */
+  /* ===================================================== */
+  .arkusze-staty {
+    background: rgba(63, 206, 207, 0.06);
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .staty-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .staty-item {
+    padding: 18px;
+    text-align: center;
+    border-right: 1px solid rgba(235, 238, 255, 0.08);
+  }
+  .staty-item:last-child {
+    border-right: none;
+  }
+  .staty-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    color: #FFDE59;
+  }
+  .staty-num.teal {
+    color: #3FCECF;
+  }
+  .staty-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.65);
+  }
+
+  /* ===================================================== */
+  /* PODSTAWA INFO                                          */
+  /* ===================================================== */
+  .podstawa-info {
+    padding: 22px 0;
+    background: rgba(255, 222, 89, 0.05);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .podstawa-inner {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .podstawa-icon {
+    width: 42px;
+    height: 42px;
+    background: #FFDE59;
+    color: #050A24;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .podstawa-icon i {
+    font-size: 22px;
+  }
+  .podstawa-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFDE59;
+  }
+  .podstawa-text {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 3px;
+    line-height: 1.55;
+  }
+
+  /* ===================================================== */
+  /* SECTION ARKUSZE                                        */
+  /* ===================================================== */
+  .section-arkusze {
+    padding: 36px 0;
+  }
+  .section-arkusze-teal {
+    background: rgba(63, 206, 207, 0.05);
+    border-top: 1px solid rgba(63, 206, 207, 0.2);
+    border-bottom: 1px solid rgba(63, 206, 207, 0.2);
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .ark-title {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  /* === Filtry === */
+  .filtry {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filtr-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+  .filtr {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(235, 238, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+  }
+  .filtr-active {
+    background: #FFDE59;
+    color: #050A24;
+    font-weight: 600;
+  }
+  .filtry-info {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+
+  /* === Arkusze grid === */
+  .arkusze-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .arkusz-tile {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+  }
+  .arkusz-tile-new {
+    border-color: rgba(255, 222, 89, 0.25);
+  }
+  .arkusz-tile-teal-new {
+    border-color: rgba(63, 206, 207, 0.25);
+  }
+  .ark-badge {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: #FFDE59;
+    color: #050A24;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .ark-badge.teal {
+    background: #3FCECF;
+  }
+  .ark-date {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .ark-date.yellow {
+    color: #FFDE59;
+  }
+  .ark-date.teal {
+    color: #3FCECF;
+  }
+  .ark-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+  .ark-meta {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 6px;
+  }
+  .ark-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .ark-pdf {
+    flex: 1;
+    text-align: center;
+    font-size: 11px;
+    padding: 7px;
+  }
+  .ark-play {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    text-decoration: none;
+  }
+
+  .ark-more-wrap {
+    text-align: center;
+    margin-top: 14px;
+  }
+  .ark-more {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(235, 238, 255, 0.15);
+    color: rgba(235, 238, 255, 0.85);
+    padding: 11px 24px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-decoration: none;
+  }
+  .ark-more:hover {
+    border-color: rgba(255, 222, 89, 0.3);
+  }
+
+  /* ===================================================== */
+  /* 8 KLASA + TABLICE                                      */
+  /* ===================================================== */
+  .section-osmo-tablice {
+    padding: 36px 0;
+  }
+  .osmo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .ark-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 14px;
+  }
+  .ark-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 8px;
+    padding: 11px 13px;
+  }
+  .ark-row-icon-grp {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .ark-row-icon {
+    font-size: 16px;
+  }
+  .ark-row-icon.yellow {
+    color: #FFDE59;
+  }
+  .ark-row-icon.teal {
+    color: #3FCECF;
+  }
+  .ark-row-meta {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 2px;
+  }
+  .ark-pdf-sm {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  .ark-all-teal {
+    font-size: 11px;
+    color: #3FCECF;
+    text-decoration: none;
+  }
+
+  /* ===================================================== */
+  /* UPSELL                                                 */
+  /* ===================================================== */
+  .upsell-bar {
+    padding: 24px 0;
+    background: linear-gradient(90deg, rgba(255, 222, 89, 0.12), rgba(63, 206, 207, 0.12));
+    border-top: 1px solid rgba(255, 222, 89, 0.3);
+    border-bottom: 1px solid rgba(255, 222, 89, 0.3);
+  }
+  .upsell-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .upsell-info {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex: 1;
+  }
+  .upsell-icon {
+    width: 46px;
+    height: 46px;
+    background: #FFDE59;
+    color: #050A24;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .upsell-icon i {
+    font-size: 22px;
+  }
+  .upsell-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .upsell-desc {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 3px;
+  }
+  .upsell-cta {
+    white-space: nowrap;
+  }
+
+  /* ===================================================== */
+  /* CTA                                                    */
+  /* ===================================================== */
+  .section-cta-arkusze {
+    background: #FFDE59;
+    color: #050A24;
+    padding: 32px 0;
+  }
+  .cta-inner {
+    text-align: center;
+  }
+  .cta-title {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .cta-desc {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .cta-button {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .cta-button-out {
+    background: transparent;
+    color: #050A24;
+    border: 1px solid #050A24;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* ===================================================== */
+  /* RESPONSIVE                                             */
+  /* ===================================================== */
+  @media (max-width: 1024px) {
+    .arkusze-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .osmo-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .staty-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .staty-item {
+      border-right: none;
+      border-bottom: 1px solid rgba(235, 238, 255, 0.08);
+    }
+  }
+  @media (max-width: 640px) {
+    .arkusze-title {
+      font-size: 32px;
+    }
+    .ark-title {
+      font-size: 20px;
+    }
+    .arkusze-grid {
+      grid-template-columns: 1fr;
+    }
+    .upsell-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .upsell-cta {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  /* ===================================================== */
+  /* NOWE STYLE: ukrywanie listy + empty state              */
+  /* ===================================================== */
+  .arkusze-grid-hidden {
+    display: none !important;
+  }
+
+  /* Przycisk "Pokaż wszystkie" - zamiast linka */
+  button.ark-more {
+    background: transparent;
+    border: 1px solid rgba(255, 222, 89, 0.3);
+    color: #FFDE59;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  button.ark-more:hover {
+    background: rgba(255, 222, 89, 0.1);
+    border-color: #FFDE59;
+  }
+  /* Wariant turkusowy dla matury rozszerzonej */
+  button.ark-more.ark-more-teal {
+    border-color: rgba(63, 206, 207, 0.4);
+    color: #3FCECF;
+  }
+  button.ark-more.ark-more-teal:hover {
+    background: rgba(63, 206, 207, 0.1);
+    border-color: #3FCECF;
+  }
+  /* Filtry dla matury rozszerzonej - odstęp od nagłówka */
+  .filtry-rozsz {
+    margin-bottom: 22px;
+  }
+  .filtry-rozsz .filtr-active {
+    background: rgba(63, 206, 207, 0.15);
+    border-color: rgba(63, 206, 207, 0.5);
+    color: #3FCECF;
+  }
+
+  /* Empty state dla matury rozszerzonej */
+  .ark-empty {
+    background: rgba(63, 206, 207, 0.05);
+    border: 1px dashed rgba(63, 206, 207, 0.3);
+    border-radius: 16px;
+    padding: 40px 28px;
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .ark-empty-icon {
+    font-size: 44px;
+    margin-bottom: 12px;
+  }
+  .ark-empty-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #3FCECF;
+    margin-bottom: 8px;
+  }
+  .ark-empty-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(235, 238, 255, 0.7);
+    margin-bottom: 18px;
+  }
+  .ark-empty-cta {
+    display: inline-block;
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.4);
+    padding: 9px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .ark-empty-cta:hover {
+    background: rgba(63, 206, 207, 0.25);
+  }
+</style>

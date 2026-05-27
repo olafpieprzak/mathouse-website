@@ -1,0 +1,827 @@
+---
+// =====================================================
+// STRONA KURSY (wariant C — lista wszystkich)
+// =====================================================
+import Layout from '../layouts/Layout.astro';
+import { dzialy } from '../data/dzialy.js';
+
+// Kursy klasy 1 liceum - pobieramy z centralnej bazy dzialy.js
+const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
+---
+
+<Layout
+  title="Kursy matematyki online"
+  description="Kursy matematyki online: liceum klasa 1 (12 działów), matura podstawowa, matura rozszerzona, ósmoklasista. Dostęp na zawsze. Od 47 zł. Pakiet klasy 1 = 597 zł."
+>
+  <div class="breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> / <span>Kursy</span>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- HERO                                                   -->
+  <!-- ===================================================== -->
+  <section class="kursy-hero">
+    <div class="container-content">
+      <div class="kursy-hero-inner">
+        <span class="tag-teal">▶ kursy wideo · 47-597 zł · dostęp na zawsze</span>
+        <h1 class="kursy-title">
+          Wybierz kurs dla siebie<span class="text-yellow">.</span>
+        </h1>
+        <p class="kursy-desc">
+          Trzy ścieżki: liceum dział po dziale, intensywne kursy maturalne, kurs ósmoklasisty.
+        </p>
+        <div class="kursy-jump">
+          <a href="#liceum" class="jump-chip jump-yellow">↓ Liceum</a>
+          <a href="#matura" class="jump-chip jump-teal">↓ Matura</a>
+          <a href="#osmoklasista" class="jump-chip jump-lav">↓ Ósmoklasista</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- LICEUM                                                 -->
+  <!-- ===================================================== -->
+  <section id="liceum" class="section-liceum">
+    <div class="container-content">
+      <div class="section-header">
+        <div>
+          <div class="section-label yellow">§ 01 · LICEUM DZIAŁ PO DZIAŁE</div>
+          <h2 class="section-title">
+            Cała klasa 1 — <span class="text-yellow">12 działów</span>
+          </h2>
+        </div>
+        <div class="section-meta">Klasy 2, 3, 4 — w przygotowaniu</div>
+      </div>
+
+      <!-- PAKIET -->
+      <div class="pakiet-big">
+        <div>
+          <div class="pakiet-eyebrow">⭐ PAKIET · -14%</div>
+          <h3 class="pakiet-big-title">Pakiet podstawowy klasa 1 — wszystkie 12 działów</h3>
+          <p class="pakiet-big-desc">Kup 12 działów w jednym pakiecie i zaoszczędź 100 zł. Dostęp na zawsze.</p>
+        </div>
+        <div class="pakiet-big-right">
+          <div class="pakiet-big-prices">
+            <span class="cena-now">597 zł</span>
+            <span class="cena-old">697 zł</span>
+          </div>
+          <a href="/kursy/pakiet-klasa-1" class="pakiet-big-cta">Kup pakiet →</a>
+        </div>
+      </div>
+
+      <div class="dzialy-label">LUB KUP POJEDYNCZE DZIAŁY · 197 ZŁ / DZIAŁ</div>
+      <div class="dzialy-grid-expanded">
+        {kursyKlasa1.map((k) => (
+          <a href={`/kursy/${k.slug}`} class="dzial-card">
+            <div class="dzial-card-head">
+              <div class="dzial-num">{k.num}</div>
+              <div class="dzial-card-meta">
+                <div class="dzial-name">{k.short || k.name}</div>
+                {k.lekcjeSklep && (
+                  <div class="dzial-podlekcje">
+                    {k.lekcjeSklep.reduce((s,l)=>s+l.count, 0)} podlekcji · {k.lekcjeSklep.length} sekcji
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="dzial-card-body">
+              <div class="dzial-podtitle">📚 W tym dziale:</div>
+              <ul class="dzial-podpunkty">
+                {k.podpunkty.slice(0, 5).map((p) => <li>{p}</li>)}
+                {k.podpunkty.length > 5 && <li class="dzial-podpunkt-more">+ {k.podpunkty.length - 5} kolejnych</li>}
+              </ul>
+            </div>
+            <div class="dzial-card-foot">
+              <div class="dzial-price-row">
+                <span class="dzial-price">{k.price} zł</span>
+                {k.priceOld && <span class="dzial-price-old">{k.priceOld} zł</span>}
+              </div>
+              <div class="dzial-cta">Zobacz kurs →</div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="klasy-soon">
+        <div class="klasa-soon">Klasa 2 · wkrótce</div>
+        <div class="klasa-soon">Klasa 3 · wkrótce</div>
+        <div class="klasa-soon">Klasa 4 · wkrótce</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- MATURA                                                 -->
+  <!-- ===================================================== -->
+  <section id="matura" class="section-matura">
+    <div class="container-content">
+      <div style="margin-bottom: 22px;">
+        <div class="section-label">§ 02 · KURSY MATURALNE</div>
+        <h2 class="section-title">
+          Intensywne <span class="text-teal">powtórki przed maturą</span>
+        </h2>
+      </div>
+
+      <div class="matura-grid">
+        <div class="card-matura card-matura-teal">
+          <span class="matura-badge">PODSTAWOWA</span>
+          <h3 class="matura-h">14-dniowa powtórka<br />do matury podstawowej</h3>
+          <p class="matura-desc">Dzień po dniu, każdy dział z matury. Idealne 2 tygodnie przed egzaminem.</p>
+          <div class="matura-bonus">+ tablice matematyczne CKE gratis</div>
+          <div class="matura-price">197 zł</div>
+          <a href="/kursy/matura-14-dni" class="btn-primary matura-cta">Kup kurs →</a>
+        </div>
+
+        <div class="card-matura">
+          <span class="matura-badge yellow">START 47 ZŁ</span>
+          <h3 class="matura-h">3-dniowy Maturalny<br />Sprint</h3>
+          <p class="matura-desc">Najszybszy wgląd w to jak uczę. Idealne żeby sprawdzić styl.</p>
+          <div class="matura-price">47 zł</div>
+          <a href="/kursy/maturalny-sprint" class="btn-primary matura-cta">Kup kurs →</a>
+        </div>
+
+        <div class="card-matura card-matura-soon">
+          <div class="soon-label">WKRÓTCE</div>
+          <h3 class="matura-h">Kurs matura<br />rozszerzona</h3>
+          <p class="soon-desc">Powiadom mnie →</p>
+        </div>
+      </div>
+
+      <!-- AUTOPILOT -->
+      <div class="autopilot-bar">
+        <div class="autopilot-info">
+          <div class="autopilot-icon"><i class="ti ti-rocket"></i></div>
+          <div>
+            <div class="autopilot-name">Matematyczny Autopilot — schemat krok po kroku</div>
+            <div class="autopilot-desc">Dla osób, które chcą ogarnąć całość bez chaosu.</div>
+          </div>
+        </div>
+        <div class="autopilot-prices">
+          <span class="autopilot-now">99 zł</span>
+          <span class="autopilot-old">159 zł</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- ÓSMOKLASISTA                                           -->
+  <!-- ===================================================== -->
+  <section id="osmoklasista" class="section-osma">
+    <div class="container-content">
+      <div style="margin-bottom: 18px;">
+        <div class="section-label lavender">§ 03 · ÓSMOKLASISTA</div>
+        <h2 class="section-title">
+          Kurs przygotowujący<br />
+          do <span class="lavender">egzaminu ósmoklasisty</span>
+        </h2>
+      </div>
+
+      <div class="osma-placeholder">
+        <div class="osma-soon">W PRZYGOTOWANIU</div>
+        <div class="osma-h">Kurs zostanie udostępniony wkrótce.</div>
+        <p class="osma-desc">Zapisz się na powiadomienie — będziesz pierwszy.</p>
+        <form class="osma-form" action="https://formspree.io/f/PLACEHOLDER" method="POST">
+          <input type="email" name="email" placeholder="twoj@email.pl" required class="osma-input" />
+          <button type="submit" class="btn-primary">Powiadom mnie →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- CTA                                                    -->
+  <!-- ===================================================== -->
+  <section class="section-cta-kursy">
+    <div class="container-content cta-kursy-inner">
+      <h3 class="cta-title">Nie wiesz który kurs wybrać?</h3>
+      <p class="cta-desc">Obejrzyj darmową lekcję i sprawdź czy mój styl Ci pasuje.</p>
+      <a href="/kursy/logarytmy" class="cta-button">▶ Darmowa lekcja</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .breadcrumb {
+    padding: 14px 0;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb span { color: #FFDE59; }
+  .text-yellow { color: #FFDE59; }
+  .text-teal { color: #3FCECF; }
+  .lavender { color: #EBEEFF; }
+
+  /* ===================================================== */
+  /* HERO                                                   */
+  /* ===================================================== */
+  .kursy-hero {
+    padding: 48px 0;
+  }
+  .kursy-hero-inner {
+    text-align: center;
+  }
+  .kursy-title {
+    font-size: 46px;
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -1.2px;
+    margin: 18px 0 14px;
+  }
+  .kursy-desc {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .kursy-jump {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .jump-chip {
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .jump-chip:hover {
+    transform: translateY(-2px);
+  }
+  .jump-yellow {
+    background: rgba(255, 222, 89, 0.15);
+    color: #FFDE59;
+    border: 1px solid rgba(255, 222, 89, 0.3);
+  }
+  .jump-teal {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.3);
+  }
+  .jump-lav {
+    background: rgba(235, 238, 255, 0.08);
+    color: #EBEEFF;
+    border: 1px solid rgba(235, 238, 255, 0.15);
+  }
+
+  /* ===================================================== */
+  /* SECTION HEADER                                         */
+  /* ===================================================== */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .section-title {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+  }
+  .section-meta {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    max-width: 240px;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  /* ===================================================== */
+  /* LICEUM                                                 */
+  /* ===================================================== */
+  .section-liceum {
+    padding: 40px 0;
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+  }
+
+  /* === Pakiet duży === */
+  .pakiet-big {
+    background: #FFDE59;
+    color: #050A24;
+    border-radius: 16px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .pakiet-eyebrow {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .pakiet-big-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .pakiet-big-desc {
+    font-size: 12px;
+    opacity: 0.75;
+    line-height: 1.5;
+  }
+  .pakiet-big-right {
+    text-align: right;
+  }
+  .pakiet-big-prices {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+  .cena-now {
+    font-size: 32px;
+    font-weight: 700;
+  }
+  .cena-old {
+    font-size: 14px;
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+  .pakiet-big-cta {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .dzialy-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .dzialy-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .dzial-tile {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 10px;
+    padding: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.15s ease;
+    display: block;
+  }
+  .dzial-tile:hover {
+    border-color: rgba(255, 222, 89, 0.4);
+    transform: translateY(-2px);
+  }
+  .dzial-num {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+  }
+  .dzial-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  .dzial-price {
+    font-size: 12px;
+    color: #FFDE59;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  /* === ROZBUDOWANE KAFELKI DZIAŁÓW === */
+  .dzialy-grid-expanded {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .dzial-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 14px;
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.18s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .dzial-card:hover {
+    border-color: rgba(255, 222, 89, 0.45);
+    background: rgba(255, 222, 89, 0.04);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  }
+  .dzial-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .dzial-card .dzial-num {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .dzial-card-meta { flex: 1; min-width: 0; }
+  .dzial-card .dzial-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #EBEEFF;
+    margin: 0 0 4px;
+    line-height: 1.25;
+  }
+  .dzial-podlekcje {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.55);
+    font-weight: 500;
+  }
+  .dzial-card-body { flex: 1; min-height: 0; }
+  .dzial-podtitle {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+  }
+  .dzial-podpunkty {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .dzial-podpunkty li {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.45;
+    padding-left: 12px;
+    position: relative;
+  }
+  .dzial-podpunkty li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: #FFDE59;
+    font-weight: 700;
+  }
+  .dzial-podpunkt-more {
+    color: rgba(63, 206, 207, 0.7) !important;
+    font-style: italic;
+    font-size: 11px !important;
+  }
+  .dzial-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(235, 238, 255, 0.08);
+  }
+  .dzial-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .dzial-card .dzial-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFDE59;
+    margin: 0;
+  }
+  .dzial-price-old {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.4);
+    text-decoration: line-through;
+  }
+  .dzial-cta {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFDE59;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .dzialy-grid-expanded { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .dzialy-grid-expanded { grid-template-columns: 1fr; }
+  }
+
+  .klasy-soon {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .klasa-soon {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(235, 238, 255, 0.1);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    color: rgba(235, 238, 255, 0.5);
+    font-size: 12px;
+  }
+
+  /* ===================================================== */
+  /* MATURA                                                 */
+  /* ===================================================== */
+  .section-matura {
+    padding: 40px 0;
+    background: rgba(63, 206, 207, 0.05);
+    border-top: 1px solid rgba(63, 206, 207, 0.2);
+    border-bottom: 1px solid rgba(63, 206, 207, 0.2);
+  }
+  .matura-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .card-matura {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 16px;
+    padding: 22px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-matura-teal {
+    border-color: rgba(63, 206, 207, 0.3);
+  }
+  .card-matura-soon {
+    border: 1px dashed rgba(235, 238, 255, 0.2);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+  }
+  .matura-badge {
+    background: #3FCECF;
+    color: #050A24;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    align-self: flex-start;
+  }
+  .matura-badge.yellow {
+    background: #FFDE59;
+  }
+  .matura-h {
+    font-size: 19px;
+    font-weight: 600;
+    margin-top: 14px;
+    line-height: 1.2;
+  }
+  .matura-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 10px;
+    line-height: 1.55;
+  }
+  .matura-bonus {
+    background: rgba(255, 222, 89, 0.1);
+    border: 1px dashed rgba(255, 222, 89, 0.3);
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 11px;
+    color: #FFDE59;
+    margin-top: 12px;
+  }
+  .matura-price {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFDE59;
+    margin-top: 14px;
+  }
+  .matura-cta {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .soon-label {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    letter-spacing: 1.5px;
+  }
+  .soon-desc {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 8px;
+  }
+
+  /* === AUTOPILOT === */
+  .autopilot-bar {
+    background: rgba(255, 222, 89, 0.08);
+    border: 1px solid rgba(255, 222, 89, 0.3);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .autopilot-info {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .autopilot-icon {
+    width: 46px;
+    height: 46px;
+    background: #FFDE59;
+    color: #050A24;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .autopilot-icon i {
+    font-size: 22px;
+  }
+  .autopilot-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .autopilot-desc {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.65);
+  }
+  .autopilot-prices {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .autopilot-now {
+    font-size: 19px;
+    font-weight: 600;
+    color: #FFDE59;
+  }
+  .autopilot-old {
+    font-size: 12px;
+    text-decoration: line-through;
+    color: rgba(235, 238, 255, 0.5);
+  }
+
+  /* ===================================================== */
+  /* ÓSMOKLASISTA                                           */
+  /* ===================================================== */
+  .section-osma {
+    padding: 40px 0;
+  }
+  .lavender { color: #EBEEFF; opacity: 0.85; }
+  .osma-placeholder {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(235, 238, 255, 0.2);
+    border-radius: 14px;
+    padding: 36px 30px;
+    text-align: center;
+  }
+  .osma-soon {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+  .osma-h {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .osma-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 8px;
+  }
+  .osma-form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .osma-input {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(235, 238, 255, 0.15);
+    padding: 11px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #EBEEFF;
+    font-family: 'Montserrat', sans-serif;
+    width: 240px;
+  }
+  .osma-input:focus {
+    outline: none;
+    border-color: rgba(255, 222, 89, 0.4);
+  }
+
+  /* ===================================================== */
+  /* CTA                                                    */
+  /* ===================================================== */
+  .section-cta-kursy {
+    background: #FFDE59;
+    color: #050A24;
+    padding: 32px 0;
+  }
+  .cta-kursy-inner {
+    text-align: center;
+  }
+  .cta-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .cta-desc {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .cta-button {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 13px 26px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 16px;
+    text-decoration: none;
+  }
+
+  /* ===================================================== */
+  /* RESPONSIVE                                             */
+  /* ===================================================== */
+  @media (max-width: 1024px) {
+    .dzialy-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .matura-grid {
+      grid-template-columns: 1fr;
+    }
+    .pakiet-big {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+    .pakiet-big-right {
+      text-align: left;
+    }
+    .pakiet-big-prices {
+      justify-content: flex-start;
+    }
+  }
+  @media (max-width: 640px) {
+    .kursy-title {
+      font-size: 32px;
+    }
+    .section-title {
+      font-size: 22px;
+    }
+    .dzialy-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .klasy-soon {
+      grid-template-columns: 1fr;
+    }
+    .pakiet-big-title {
+      font-size: 20px;
+    }
+    .cena-now {
+      font-size: 26px;
+    }
+    .autopilot-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

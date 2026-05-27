@@ -1,0 +1,136 @@
+---
+// =====================================================
+// SCARCITY BAR V9
+// - "Grafik 85% wypełniony" (sztywno - wiarygodne)
+// - "Wolne miejsca: ~X" (dynamicznie z TidyCal, max 2 tyg)
+// - "Uczę już 1000+ uczniów"
+// =====================================================
+import { TIDYCAL_CONFIG } from '../config/tidycal.js';
+---
+
+<div class="scarcity-bar">
+  <div class="container-content scarcity-inner">
+    <div class="scarcity-item">
+      <span class="scarcity-dot"></span>
+      <span>grafik na ten tydzień <strong>85% wypełniony</strong></span>
+    </div>
+    <div class="scarcity-divider">·</div>
+    <div class="scarcity-item">
+      <span>aktualnie</span>
+      <strong data-scarcity-slots>~15 wolnych miejsc</strong>
+      <span class="scarcity-faint">(2 tyg.)</span>
+    </div>
+    <div class="scarcity-divider">·</div>
+    <div class="scarcity-item">
+      <span>uczę już</span>
+      <strong>1000+ uczniów</strong>
+      <span>· dołączasz?</span>
+    </div>
+    <a href="#kalendarz" class="scarcity-cta">↓ rezerwacja poniżej</a>
+  </div>
+</div>
+
+<script>
+  import { TIDYCAL_CONFIG } from '../config/tidycal.js';
+
+  const slotsEl = document.querySelector('[data-scarcity-slots]');
+
+  async function fetchSlotsCount() {
+    if (!slotsEl) return;
+    try {
+      const response = await fetch(`${TIDYCAL_CONFIG.apiUrl}/api/upcoming-slots?v=9`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (!response.ok) return;
+      const data = await response.json();
+
+      // Zbierz wszystkie sloty z ALL booking types
+      const allSlots = new Set();
+      const now = new Date();
+      const twoWeeksLater = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+      for (const btData of Object.values(data.by_booking_type || {})) {
+        for (const slot of btData.slots || []) {
+          const slotDate = new Date(slot.starts_at);
+          if (slotDate >= now && slotDate <= twoWeeksLater) {
+            // Klucz: czas rozpoczęcia (unikalne sloty)
+            allSlots.add(slot.starts_at);
+          }
+        }
+      }
+
+      const count = allSlots.size;
+      if (count > 0) {
+        slotsEl.textContent = `${count} wolnych miejsc`;
+      } else {
+        slotsEl.textContent = 'sprawdź kalendarz';
+      }
+    } catch (err) {
+      // milcz - zostaje placeholder
+      console.warn('[ScarcityBar] nie udało się pobrać:', err);
+    }
+  }
+
+  fetchSlotsCount();
+</script>
+
+<style>
+  .scarcity-bar {
+    background: rgba(2, 6, 23, 0.85);
+    border-top: 1px solid rgba(63, 206, 207, 0.15);
+    border-bottom: 1px solid rgba(63, 206, 207, 0.15);
+    padding: 12px 0;
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.7);
+  }
+  .scarcity-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .scarcity-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .scarcity-item strong {
+    color: #FFDE59;
+    font-weight: 600;
+  }
+  .scarcity-faint {
+    color: rgba(235, 238, 255, 0.4);
+    font-size: 11px;
+  }
+  .scarcity-divider {
+    color: rgba(235, 238, 255, 0.3);
+  }
+  .scarcity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #3FCECF;
+    box-shadow: 0 0 8px rgba(63, 206, 207, 0.6);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  .scarcity-cta {
+    color: rgba(235, 238, 255, 0.5);
+    font-size: 12px;
+    text-decoration: none;
+    margin-left: auto;
+    transition: color 0.15s ease;
+  }
+  .scarcity-cta:hover { color: #FFDE59; }
+
+  @media (max-width: 768px) {
+    .scarcity-bar { padding: 10px 0; font-size: 12px; }
+    .scarcity-inner { gap: 8px; }
+    .scarcity-divider { display: none; }
+    .scarcity-cta { display: none; }
+  }
+</style>
