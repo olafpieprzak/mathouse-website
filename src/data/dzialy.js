@@ -27,20 +27,47 @@ export const dzialy = [
     klasaNum: 1,
     name: 'Zbiory liczbowe',
     short: 'Zbiory liczbowe',
-    desc: 'Wszystkie rodzaje liczb używane w matematyce liceum — naturalne, całkowite, wymierne, niewymierne, rzeczywiste. Plus działania na zbiorach i przedziałach.',
+    desc: 'Wszystkie rodzaje liczb używane w matematyce liceum — naturalne, całkowite, wymierne, niewymierne, rzeczywiste. Plus działania na zbiorach i przedziałach. 310 podlekcji w 8 sekcjach — najobszerniejszy kurs w klasie 1.',
+
+    // Krótkie hasła do mapy nauki (kafelek)
     podpunkty: [
-      'Zbiory liczbowe — przegląd',
-      'Liczby naturalne, NWD, NWW',
-      'Liczby całkowite i wymierne',
-      'Liczby niewymierne',
-      'Działania na zbiorach',
+      'Zbiory liczbowe, liczby pierwsze, cyfry',
+      'Zbiór liczb naturalnych, podzielność',
+      'NWD i NWW',
+      'Zbiór liczb całkowitych i wymiernych',
+      'Zbiór liczb niewymiernych, dowody',
+      'Zbiór liczb rzeczywistych',
+      'Zbiory, działania na zbiorach',
+      'Przedziały',
     ],
+
+    // Pełna struktura lekcji ze sklepu kurs.mathouse.pl
+    // (każda sekcja = jedna "lekcja" w sklepie, ma N podlekcji)
+    lekcjeSklep: [
+      { num: '1.1', title: 'Zbiory liczbowe, liczby pierwsze, cyfry, liczba odwrotna, liczba przeciwna', count: 14 },
+      { num: '1.2', title: 'Zbiór liczb naturalnych, podzielność liczb, reszta z dzielenia, rozkład na czynniki pierwsze', count: 84 },
+      { num: '1.3', title: 'Największy wspólny dzielnik (NWD), Najmniejsza wspólna wielokrotność (NWW)', count: 16 },
+      { num: '1.4', title: 'Zbiór liczb całkowitych, wymiernych, rozwinięcie dziesiętne, zamiana ułamków', count: 22 },
+      { num: '1.5', title: 'Zbiór liczb niewymiernych, dowody', count: 12 },
+      { num: '1.6', title: 'Zbiór liczb rzeczywistych, prawa działania w zbiorze liczb rzeczywistych', count: 79 },
+      { num: '1.7', title: 'Zbiory, działania na zbiorach', count: 30 },
+      { num: '1.8', title: 'Przedziały', count: 53 },
+    ],
+
+    // Każda lekcja ma 3 typy materiałów - opis dla strony
+    typyMaterialow: [
+      { icon: '📄', name: 'Materiały PDF', desc: 'do pobrania na komputer i wydruku' },
+      { icon: '🎥', name: 'Bełkot matematyczny', desc: 'wideo z teorią - tłumaczę aż zrozumiesz' },
+      { icon: '✏️', name: 'Rozwiązane zadania', desc: 'wideo z dokładnym rozwiązaniem krok po kroku' },
+    ],
+
     teoria: [
       'ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ — każda liczba naturalna jest całkowita, każda całkowita wymierna itd.',
       'Liczba wymierna to taka, którą można zapisać jako p/q, gdzie p, q ∈ ℤ i q ≠ 0.',
       'Liczba niewymierna to liczba rzeczywista, której nie da się zapisać jako ułamek — np. √2, π, e.',
       'NWD(a, b) — największy wspólny dzielnik. NWW(a, b) — najmniejsza wspólna wielokrotność.',
       'Działania na zbiorach: suma A∪B, iloczyn A∩B, różnica A\\B.',
+      'Przedziały: [a,b] (domknięty), (a,b) (otwarty), [a,b) lub (a,b] (jednostronnie domknięty).',
     ],
     przyklady: [
       {
@@ -51,10 +78,16 @@ export const dzialy = [
         zadanie: 'Czy liczba 0,(3) jest wymierna?',
         rozwiazanie: 'Tak — 0,(3) = 1/3, a to ułamek liczb całkowitych. Każde rozwinięcie okresowe = liczba wymierna.',
       },
+      {
+        zadanie: 'Zapisz przedział (−2, 5] jako zbiór i zaznacz na osi liczbowej.',
+        rozwiazanie: 'Zbiór: {x ∈ ℝ : −2 < x ≤ 5}. Na osi: kółko puste przy −2, kółko pełne przy 5, łącząca kreska.',
+      },
     ],
+    sklepUrl: 'https://kurs.mathouse.pl/next/public/catalog/product/kurs-zbiory-liczbowe-podstawa-klasa-1224318523',
+    sklepEmbedId: '6ea9ab1baa0efb9e19094440c317e21b',
     price: 197,
     priceOld: 399,
-    duration: '~3 godz wideo',
+    duration: '310 lekcji wideo + PDF',
     status: 'live',
   },
   {

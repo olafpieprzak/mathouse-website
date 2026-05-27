@@ -5,6 +5,8 @@
 // plus sekcje "Teoria" i "Przykłady" dla pełniejszej treści.
 // =====================================================
 import Layout from '../../layouts/Layout.astro';
+import HeroMedia from '../../components/HeroMedia.astro';
+import KupTerazWidget from '../../components/KupTerazWidget.astro';
 import { dzialy, getDzialBySlug } from '../../data/dzialy.js';
 
 export function getStaticPaths() {
@@ -81,7 +83,13 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
         <div class="kurs-cta">
           {kurs.status === 'live' ? (
             <>
-              <a href="#kup" class="btn-primary">Kup kurs · {kurs.price} zł</a>
+              {kurs.sklepEmbedId ? (
+                <a href="#kup-teraz" class="btn-primary">🛒 Kup teraz · {kurs.price} zł</a>
+              ) : (
+                <a href={kurs.sklepUrl || '#kup'} class="btn-primary" target={kurs.sklepUrl ? '_blank' : '_self'} rel={kurs.sklepUrl ? 'noopener' : ''}>
+                  {kurs.sklepUrl ? `🛒 Kup w sklepie · ${kurs.price} zł` : `Kup kurs · ${kurs.price} zł`}
+                </a>
+              )}
               <a href="#wideo-gratis" class="btn-teal">▶ Obejrzyj lekcję gratis</a>
             </>
           ) : (
@@ -100,13 +108,11 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
         </p>
       </div>
 
-      <div id="wideo-gratis" class="kurs-video">
-        <div class="kurs-video-bg"></div>
-        <div class="kurs-video-frame">
-          <button class="kurs-play" type="button">▶</button>
-          <span class="kurs-video-badge">{kurs.status === 'live' ? 'LEKCJA GRATIS' : 'WKRÓTCE'}</span>
-          <span class="kurs-video-time">"{kurs.podpunkty[0]}" · ~8 min</span>
-        </div>
+      <div id="wideo-gratis">
+        <HeroMedia
+          slot="heroKursy"
+          captionOverride={`"${kurs.podpunkty[0]}" · ~8 min`}
+        />
       </div>
     </div>
   </section>
@@ -127,6 +133,19 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
     </div>
   </section>
 
+  {kurs.sklepEmbedId && (
+    <a href="#kup-teraz" class="mini-cta mini-cta-yellow">
+      <div class="container-content mini-cta-inner">
+        <span class="mini-cta-emoji">⚡</span>
+        <span class="mini-cta-text">
+          <strong>Chcesz pełną teorię z wideo?</strong>
+          <em>Kurs zawiera {kurs.lekcjeSklep ? kurs.lekcjeSklep.reduce((s,l)=>s+l.count,0) : '300+'} podlekcji wideo z PDF-ami.</em>
+        </span>
+        <span class="mini-cta-btn">🛒 Kup teraz · {kurs.price} zł ↓</span>
+      </div>
+    </a>
+  )}
+
   <!-- PRZYKŁADY -->
   <section class="kurs-przyklady">
     <div class="container-content">
@@ -145,26 +164,99 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
     </div>
   </section>
 
+  {kurs.sklepEmbedId && (
+    <a href="#kup-teraz" class="mini-cta mini-cta-teal">
+      <div class="container-content mini-cta-inner">
+        <span class="mini-cta-emoji">🎯</span>
+        <span class="mini-cta-text">
+          <strong>Chcesz rozwiązać setki takich zadań?</strong>
+          <em>Każde zadanie z kursu mam rozwiązane wideo — krok po kroku.</em>
+        </span>
+        <span class="mini-cta-btn">▶ Odbierz lekcje teraz ↓</span>
+      </div>
+    </a>
+  )}
+
   <!-- CO ZNAJDZIESZ -->
   <section class="kurs-lekcje">
-    <div class="container-content kurs-lekcje-grid">
-      <div>
-        <div class="section-label">CO ZNAJDZIESZ W KURSIE</div>
-        <h2 class="lekcje-title">{lekcje.length} lekcji wideo + zadania + ściąga.</h2>
-      </div>
-      <div class="lekcje-list">
-        {lekcje.map((l) => (
-          <div class="lekcja-row">
-            <span>
-              <span class="lekcja-num">{l.num} ·</span> {l.name}
-              {l.free && <span class="lekcja-free">GRATIS</span>}
-            </span>
-            <span class="lekcja-time">{l.time}</span>
+    <div class="container-content">
+      {kurs.lekcjeSklep ? (
+        <!-- WERSJA ROZBUDOWANA - dla działów z pełnymi danymi ze sklepu -->
+        <>
+          <div class="lekcje-head">
+            <div class="section-label">CO ZNAJDZIESZ W KURSIE</div>
+            <h2 class="lekcje-title">
+              <span class="text-yellow">{kurs.lekcjeSklep.reduce((sum, l) => sum + l.count, 0)}</span> podlekcji
+              w {kurs.lekcjeSklep.length} sekcjach.
+            </h2>
+            <p class="lekcje-sub">Każda lekcja zawiera <strong>trzy typy materiałów</strong>:</p>
           </div>
-        ))}
-      </div>
+
+          <!-- 3 typy materiałów - co dostajesz przy każdej lekcji -->
+          <div class="typy-materialow">
+            {kurs.typyMaterialow.map((t) => (
+              <div class="typ-card">
+                <div class="typ-ico">{t.icon}</div>
+                <div>
+                  <div class="typ-name">{t.name}</div>
+                  <div class="typ-desc">{t.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <!-- Pełna lista 8 sekcji ze sklepu -->
+          <div class="section-label" style="margin-top:36px;">📚 PEŁNY PROGRAM KURSU</div>
+          <div class="lekcje-sklep-list">
+            {kurs.lekcjeSklep.map((l, i) => (
+              <div class="lekcja-sklep">
+                <div class="lekcja-sklep-num">{l.num}</div>
+                <div class="lekcja-sklep-body">
+                  <div class="lekcja-sklep-title">{l.title}</div>
+                  <div class="lekcja-sklep-count">
+                    <span class="lekcja-sklep-badge">{l.count} podlekcji</span>
+                    {i === 0 && <span class="lekcja-sklep-free">▶ PIERWSZA GRATIS</span>}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <!-- WERSJA STANDARDOWA - dla działów które nie mają lekcjeSklep -->
+        <div class="kurs-lekcje-grid">
+          <div>
+            <div class="section-label">CO ZNAJDZIESZ W KURSIE</div>
+            <h2 class="lekcje-title">{lekcje.length} lekcji wideo + zadania + ściąga.</h2>
+          </div>
+          <div class="lekcje-list">
+            {lekcje.map((l) => (
+              <div class="lekcja-row">
+                <span>
+                  <span class="lekcja-num">{l.num} ·</span> {l.name}
+                  {l.free && <span class="lekcja-free">GRATIS</span>}
+                </span>
+                <span class="lekcja-time">{l.time}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   </section>
+
+  {kurs.sklepEmbedId && (
+    <a href="#kup-teraz" class="mini-cta mini-cta-yellow">
+      <div class="container-content mini-cta-inner">
+        <span class="mini-cta-emoji">🚀</span>
+        <span class="mini-cta-text">
+          <strong>Gotowy na cały kurs?</strong>
+          <em>Płatność BLIK / kartą / przelew · dostęp natychmiast po opłaceniu.</em>
+        </span>
+        <span class="mini-cta-btn">🛒 Zamawiam teraz · {kurs.price} zł ↓</span>
+      </div>
+    </a>
+  )}
 
   <!-- UPSELL: pakiet -->
   <section id="kup" class="kurs-upsell">
@@ -177,6 +269,11 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
       <a href="/kursy" class="upsell-cta">Pokaż pakiet →</a>
     </div>
   </section>
+
+  <!-- WIDGET PŁATNOŚCI Web To Learn - finalny moment zakupu -->
+  {kurs.sklepEmbedId && (
+    <KupTerazWidget embedId={kurs.sklepEmbedId} productName={kurs.name.toLowerCase()} />
+  )}
 
   <!-- NAWIGACJA: poprzedni / następny dział -->
   <section class="kurs-nav">
@@ -398,6 +495,184 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
     padding: 2px 8px;
     border-radius: 5px;
     margin-left: 6px;
+  }
+
+  /* ROZBUDOWANE LEKCJE ZE SKLEPU */
+  .lekcje-head { margin-bottom: 24px; }
+  .lekcje-sub {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-top: 8px;
+  }
+  .lekcje-sub strong { color: #FFDE59; }
+
+  /* 3 typy materiałów */
+  .typy-materialow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .typ-card {
+    display: flex;
+    gap: 14px;
+    padding: 16px 18px;
+    background: rgba(255, 222, 89, 0.06);
+    border: 1px solid rgba(255, 222, 89, 0.2);
+    border-radius: 12px;
+    align-items: center;
+  }
+  .typ-ico {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .typ-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #EBEEFF;
+    margin-bottom: 2px;
+  }
+  .typ-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.4;
+  }
+
+  /* Lista 8 sekcji ze sklepu */
+  .lekcje-sklep-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .lekcja-sklep {
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.08);
+    border-radius: 10px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .lekcja-sklep:hover {
+    border-color: rgba(255, 222, 89, 0.3);
+    background: rgba(255, 222, 89, 0.04);
+  }
+  .lekcja-sklep-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3FCECF;
+    background: rgba(63, 206, 207, 0.15);
+    padding: 6px 10px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    height: fit-content;
+    min-width: 42px;
+    text-align: center;
+  }
+  .lekcja-sklep-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .lekcja-sklep-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #EBEEFF;
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+  .lekcja-sklep-count {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .lekcja-sklep-badge {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 8px;
+    border-radius: 5px;
+  }
+  .lekcja-sklep-free {
+    font-size: 10px;
+    color: #050A24;
+    background: #FFDE59;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  /* MINI-CTA BANERY — pojawiają się między sekcjami i scrollują do widgetu zakupowego */
+  .mini-cta {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .mini-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 0 0 100vmax rgba(0, 0, 0, 0.05);
+  }
+  .mini-cta-yellow {
+    background: linear-gradient(90deg, #FFDE59 0%, #FFE680 100%);
+    color: #050A24;
+  }
+  .mini-cta-teal {
+    background: linear-gradient(90deg, #3FCECF 0%, #5CDADB 100%);
+    color: #050A24;
+  }
+  .mini-cta-inner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 0;
+    flex-wrap: wrap;
+  }
+  .mini-cta-emoji {
+    font-size: 32px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .mini-cta-text {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .mini-cta-text strong {
+    font-size: 16px;
+    font-weight: 700;
+    color: #050A24;
+  }
+  .mini-cta-text em {
+    font-size: 12.5px;
+    font-style: normal;
+    color: rgba(5, 10, 36, 0.7);
+  }
+  .mini-cta-btn {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+  .mini-cta-teal .mini-cta-btn { color: #3FCECF; }
+  .mini-cta:hover .mini-cta-btn { background: #0E1844; }
+
+  @media (max-width: 640px) {
+    .mini-cta-inner { padding: 14px 0; gap: 12px; }
+    .mini-cta-emoji { font-size: 24px; }
+    .mini-cta-text strong { font-size: 14px; }
+    .mini-cta-text em { font-size: 11.5px; }
+    .mini-cta-btn { width: 100%; text-align: center; padding: 12px; }
   }
 
   /* UPSELL */

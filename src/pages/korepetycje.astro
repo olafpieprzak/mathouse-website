@@ -7,6 +7,7 @@ import ScarcityBar from '../components/ScarcityBar.astro';
 import BookingSelector from '../components/BookingSelector.astro';
 import CustomCalendar from '../components/CustomCalendar.astro';
 import PaymentMethods from '../components/PaymentMethods.astro';
+import HeroMedia from '../components/HeroMedia.astro';
 
 const cennikSzkola = [
   { name: 'Szkoła podstawowa', sub: 'klasy 4-8 · ósmoklasista', prices: { '1': 130, '2': 80, '3': 70, '4': 60, '56': 40 } },
@@ -125,12 +126,7 @@ const faq = [
       </div>
 
       <div class="korep-video-wrap">
-        <div class="korep-video-bg"></div>
-        <div class="korep-video-frame">
-          <button class="korep-play" aria-label="Odtwórz wideo">▶</button>
-          <span class="korep-video-badge">JAK SIĘ ZAPISAĆ</span>
-          <span class="korep-video-time">4 kroki do pierwszej lekcji · 0:45</span>
-        </div>
+        <HeroMedia slot="heroKorepetycje" />
       </div>
     </div>
   </section>

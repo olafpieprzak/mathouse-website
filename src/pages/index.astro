@@ -3,6 +3,7 @@
 // STRONA GŁÓWNA — bohaterem są kursy
 // =====================================================
 import Layout from '../layouts/Layout.astro';
+import HeroMedia from '../components/HeroMedia.astro';
 ---
 
 <Layout
@@ -81,15 +82,8 @@ import Layout from '../layouts/Layout.astro';
         </a>
       </div>
 
-      <!-- Wideo intro placeholder -->
-      <div class="hero-video">
-        <div class="video-bg-deco" aria-hidden="true"></div>
-        <div class="video-frame" id="wideo-intro">
-          <button class="video-play" aria-label="Odtwórz wideo intro">▶</button>
-          <span class="video-badge">SAMOUCZEK</span>
-          <span class="video-time">cześć, jestem Olaf · 1:30</span>
-        </div>
-      </div>
+      <!-- Hero media (zdjęcie / wideo - sterowane przez src/data/media.js) -->
+      <HeroMedia slot="heroGlowna" />
     </div>
   </section>
 

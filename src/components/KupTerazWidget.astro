@@ -1,0 +1,105 @@
+---
+// =====================================================
+// KupTerazWidget — embed widget sklepu kurs.mathouse.pl (Web To Learn)
+// =====================================================
+// Props:
+//   embedId — ID embedu wygenerowane w panelu sklepu (np. '6ea9ab1baa0efb9e19094440c317e21b')
+//   productName — nazwa produktu (do nagłówka sekcji)
+// =====================================================
+
+const { embedId, productName = 'kurs' } = Astro.props;
+---
+
+<section id="kup-teraz" class="kup-teraz-section">
+  <div class="container-content">
+    <div class="section-label">🛒 ZAMAWIASZ TERAZ</div>
+    <h2 class="kup-teraz-title">
+      Kup <span class="text-yellow">{productName}</span> bezpośrednio na stronie.
+    </h2>
+    <p class="kup-teraz-sub">
+      Płatność BLIK · karty · przelewy · raty PayU.
+      <strong>Dostęp do kursu otrzymujesz natychmiast po opłaceniu</strong>.
+    </p>
+
+    <div class="kup-teraz-frame">
+      <style is:inline>
+        .wtl-responsive-iframe { width: 1px; min-width: 100%; }
+      </style>
+      <iframe
+        class="wtl-responsive-iframe"
+        src={`https://kurs.mathouse.pl/assets/js/s.php?id=${embedId}`}
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+        title={`Zakup: ${productName}`}
+      ></iframe>
+    </div>
+  </div>
+
+  <!-- Iframe-resizer skrypty (z poprawioną nazwą funkcji - poprzednio było iFrameResize, a powinno być iframeResize lub init automatyczny) -->
+  <script src="https://kurs.mathouse.pl/assets/js/iframe-resizer-embed.js" is:inline></script>
+  <script is:inline>
+    (function() {
+      function tryInit() {
+        // Web To Learn embed używa różnych wersji funkcji - próbujemy obu
+        if (typeof iframeResize === 'function') {
+          iframeResize({ log: false, checkOrigin: false }, '.wtl-responsive-iframe');
+        } else if (typeof iFrameResize === 'function') {
+          iFrameResize({ log: false, checkOrigin: false }, '.wtl-responsive-iframe');
+        }
+        // Jeśli skrypt iframe-resizer sam się inicjalizuje (auto-init), nic nie trzeba
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', tryInit);
+      } else {
+        tryInit();
+      }
+    })();
+  </script>
+</section>
+
+<style>
+  .kup-teraz-section {
+    padding: 50px 0;
+    background: linear-gradient(180deg, rgba(255, 222, 89, 0.04) 0%, rgba(63, 206, 207, 0.04) 100%);
+    border-top: 2px solid rgba(255, 222, 89, 0.25);
+    scroll-margin-top: 80px;
+  }
+  .text-yellow { color: #FFDE59; }
+  .kup-teraz-title {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+    margin: 8px 0 12px;
+    color: #EBEEFF;
+  }
+  .kup-teraz-sub {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 640px;
+  }
+  .kup-teraz-sub strong { color: #FFDE59; }
+
+  .kup-teraz-frame {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(235, 238, 255, 0.15);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.3);
+    min-height: 400px;
+  }
+  .kup-teraz-frame iframe {
+    width: 100%;
+    border: none;
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .kup-teraz-title { font-size: 24px; }
+    .kup-teraz-section { padding: 36px 0; }
+  }
+</style>
