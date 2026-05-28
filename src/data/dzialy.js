@@ -194,7 +194,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: 'c16a5320fa475530d9583c34fd356ef5',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',
@@ -256,7 +256,7 @@ export const dzialy = [
     ],
     sklepUrl: 'https://kurs.mathouse.pl/next/public/catalog/product/kurs-potegi',
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: '6364d3f0f495b6ab9dcf8d3b5c6e0b01',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     price: 197,
@@ -307,7 +307,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: '182be0c5cdcd5072bb1864cdee4d3d6e',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',      // opcjonalnie URL strony produktu w kurs.mathouse.pl
@@ -359,7 +359,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: 'e369853df766fa44e1ed0ff613f563bd',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',
@@ -415,7 +415,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: '1c383cd30b7c298ab50293adfecb7b18',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',
@@ -480,7 +480,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: '19ca14e7ea6328a42e0eb13d585e4c22',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',
@@ -544,7 +544,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: 'a5bfc9e07964f8dddeb95fc584cd965d',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',
@@ -598,7 +598,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: 'a5771bce93e200c36f7cd9dfd0e5deaa',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',
@@ -663,7 +663,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: 'd67d8ab4f4c10bf22aa353e27879133c',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',
@@ -713,7 +713,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: 'd645920e395fedad7bbbed0eca3fe2e0',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     // === DARMOWA LEKCJA - wklej ID filmu YouTube (np. 'dQw4w9WgXcQ') ===
     videoLekcjaGratis: '',
     sklepUrl: '',
