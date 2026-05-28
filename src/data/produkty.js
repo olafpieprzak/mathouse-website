@@ -140,6 +140,41 @@ export const produkty = {
     status: 'soon',
   },
 
+  // =========================================================================
+  // KOMPENDIUM MATURALNE — teoria w pigułce (77 stron, 26 tematów)
+  // Widoczny w: /kompendium
+  // =========================================================================
+  kompendium: {
+    name: 'Kompendium maturalne MATHOUSE',
+    short: 'Kompendium',
+    desc: 'Cała teoria do matury w jednym dokumencie — 26 tematów, definicje, wzory, twierdzenia. Do druku i na telefon.',
+    price: null,  // ← uzupełnij gdy zdecydujesz (lub zostaw null = darmowy lead magnet / "wkrótce")
+    priceOld: null,
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id (jeśli płatne) ===
+    sklepEmbedId: '',
+    sklepUrl: '',
+    // === jeśli darmowe za email - wklej ID Formspree ===
+    formspreeId: '',  // np. 'xyzabc' - jeśli puste, pokaże "wkrótce"
+    status: 'soon',
+  },
+
+  // =========================================================================
+  // MAPY MYŚLI — wizualne podsumowania działów
+  // Widoczny w: /mapa-mysli
+  // =========================================================================
+  mapaMysli: {
+    name: 'Mapy myśli MATHOUSE',
+    short: 'Mapy myśli',
+    desc: 'Każdy dział matury jako jedna wizualna mapa myśli — wszystkie wzory i powiązania na jednej kartce.',
+    price: null,
+    priceOld: null,
+    // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id (jeśli płatne) ===
+    sklepEmbedId: '',
+    sklepUrl: '',
+    formspreeId: '',
+    status: 'soon',
+  },
+
 };
 
 // Helper - sprawdza czy produkt ma działający przycisk kupowania

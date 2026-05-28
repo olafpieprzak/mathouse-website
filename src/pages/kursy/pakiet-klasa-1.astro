@@ -1,31 +1,40 @@
 ---
 // =====================================================
-// MATEMATYCZNY AUTOPILOT — schemat krok po kroku
-// =====================================================
-// Cena: 99 zł (było 159 zł, -38%)
+// PAKIET PODSTAWOWY KLASA 1 — wszystkie 12 działów
+// URL: /kursy/pakiet-klasa-1
+// Cena: 597 zł (było 697 zł)
 // =====================================================
 import Layout from '../../layouts/Layout.astro';
 import KupTerazWidget from '../../components/KupTerazWidget.astro';
 import { produkty } from '../../data/produkty.js';
+import { dzialy } from '../../data/dzialy.js';
 
-const product = produkty.autopilot;
-const PRICE = product.price; // 99
-const PRICE_OLD = product.priceOld; // 159
+const product = produkty.pakietKlasa1;
+const PRICE = product.price; // 597
+const PRICE_OLD = product.priceOld; // 697
 const EMBED_ID = product.sklepEmbedId;
 const SHOP_URL = product.sklepUrl;
 const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
+
+const klasa1 = dzialy.filter(d => d.klasaNum === 1);
+const totalPodlekcje = klasa1.reduce((sum, d) => {
+  if (d.lekcjeSklep) return sum + d.lekcjeSklep.reduce((s, l) => s + l.count, 0);
+  return sum;
+}, 0);
+const oszczednosc = PRICE_OLD - PRICE;
+const cenaOsobno = klasa1.length * 197; // gdyby kupować osobno
+const oszczednoscVsOsobno = cenaOsobno - PRICE;
 ---
 
 <Layout
-  title={`Matematyczny Autopilot — schemat krok po kroku · ${PRICE} zł`}
-  description="Schemat krok po kroku dla każdego typu zadania maturalnego. Dla osób, które chcą ogarnąć całość bez chaosu. Cena 99 zł (było 159 zł)."
+  title={`Pakiet podstawowy klasa 1 — wszystkie 12 działów · ${PRICE} zł`}
+  description={`Wszystkie 12 działów klasy 1 liceum w jednym pakiecie — ${totalPodlekcje}+ podlekcji wideo. Od zbiorów liczbowych po trygonometrię. ${PRICE} zł zamiast ${PRICE_OLD} zł. Dostęp na zawsze.`}
 >
-  <!-- Breadcrumb -->
   <div class="kurs-breadcrumb">
     <div class="container-content">
       <a href="/">←&nbsp;Strona główna</a> /
       <a href="/kursy">Kursy</a> /
-      <span>Matematyczny Autopilot</span>
+      <span>Pakiet klasa 1</span>
     </div>
   </div>
 
@@ -33,24 +42,26 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
   <section class="kurs-hero">
     <div class="container-content kurs-hero-grid">
       <div class="kurs-hero-left">
-        <div class="section-label">🚀 SCHEMAT · BESTSELLER</div>
+        <div class="section-label">⭐ NAJLEPSZA WARTOŚĆ · PAKIET</div>
         <h1 class="kurs-title">
-          Matematyczny <span class="text-yellow">Autopilot</span>.<br />
-          Schemat krok po kroku.
+          Pakiet podstawowy<br /><span class="text-yellow">klasa 1 liceum</span>
         </h1>
         <p class="kurs-desc">
-          Dla osób, które chcą ogarnąć całość bez chaosu. Daję Ci gotowy
-          <strong>schemat działania dla każdego typu zadania maturalnego</strong> —
-          krok po kroku, bez improwizacji. Otwierasz zadanie, sprawdzasz typ, idziesz schematem.
+          Wszystkie <strong>12 działów</strong> klasy 1 w jednym pakiecie — od zbiorów liczbowych
+          przez funkcje aż po trygonometrię. Łącznie <strong>{totalPodlekcje}+ podlekcji wideo</strong>
+          z teorią i rozwiązaniami krok po kroku. Dostęp na zawsze.
         </p>
         <div class="kurs-price-row">
           <span class="kurs-price">{PRICE} zł</span>
           {PRICE_OLD && <span class="kurs-price-old">{PRICE_OLD} zł</span>}
-          <span class="kurs-price-save">oszczędzasz {PRICE_OLD - PRICE} zł</span>
+          <span class="kurs-price-save">oszczędzasz {oszczednosc} zł</span>
         </div>
+        <p class="kurs-price-note">
+          Kupując działy osobno zapłaciłbyś {cenaOsobno} zł — w pakiecie oszczędzasz {oszczednoscVsOsobno} zł.
+        </p>
         <div class="kurs-cta">
           {HAS_CHECKOUT ? (
-            <a href="#kup-teraz" class="btn-primary">🛒 Kup teraz · {PRICE} zł</a>
+            <a href="#kup-teraz" class="btn-primary">🛒 Kup pakiet · {PRICE} zł</a>
           ) : (
             <a href="/kontakt" class="btn-primary">📩 Powiadom mnie</a>
           )}
@@ -59,49 +70,18 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
       </div>
       <div class="kurs-hero-right">
         <div class="hero-card">
-          <div class="hero-card-icon">🎯</div>
+          <div class="hero-card-icon">📦</div>
           <div class="hero-card-stat">
             <div class="hero-card-num">12</div>
-            <div class="hero-card-lbl">działów objętych</div>
+            <div class="hero-card-lbl">działów</div>
+          </div>
+          <div class="hero-card-stat">
+            <div class="hero-card-num">{totalPodlekcje}+</div>
+            <div class="hero-card-lbl">podlekcji wideo</div>
           </div>
           <div class="hero-card-stat">
             <div class="hero-card-num">∞</div>
             <div class="hero-card-lbl">dostęp na zawsze</div>
-          </div>
-          <div class="hero-card-stat">
-            <div class="hero-card-num">PDF</div>
-            <div class="hero-card-lbl">+ wideo</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DLA KOGO -->
-  <section class="kurs-dla-kogo">
-    <div class="container-content">
-      <div class="section-label">👤 DLA KOGO</div>
-      <h2 class="section-title">Komu Autopilot pomoże?</h2>
-      <div class="dla-kogo-grid">
-        <div class="dla-kogo-card">
-          <div class="dla-kogo-ico">🎓</div>
-          <div class="dla-kogo-text">
-            <strong>Maturzysta, który "umie zadania, ale gubi się w kolejności"</strong>
-            <span>Wiesz co masz robić, ale gdy widzisz nieznane zadanie — paraliż. Autopilot daje schemat: krok 1, krok 2, krok 3.</span>
-          </div>
-        </div>
-        <div class="dla-kogo-card">
-          <div class="dla-kogo-ico">⏰</div>
-          <div class="dla-kogo-text">
-            <strong>Osoba, której brakuje czasu na pełny kurs</strong>
-            <span>Nie masz miesięcy na cały materiał. Bierzesz schemat dla typu zadania, którego się boisz — i działasz.</span>
-          </div>
-        </div>
-        <div class="dla-kogo-card">
-          <div class="dla-kogo-ico">🧠</div>
-          <div class="dla-kogo-text">
-            <strong>Wzrokowiec, który lepiej uczy się z diagramów</strong>
-            <span>Schematy są wizualne. Widzisz drzewko decyzyjne, znaki strzałek, kolejność kroków — wszystko na jednej stronie.</span>
           </div>
         </div>
       </div>
@@ -111,46 +91,40 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
   {HAS_CHECKOUT && (
     <a href="#kup-teraz" class="mini-cta mini-cta-yellow">
       <div class="container-content mini-cta-inner">
-        <span class="mini-cta-emoji">⚡</span>
+        <span class="mini-cta-emoji">📦</span>
         <span class="mini-cta-text">
-          <strong>Chcesz cały schemat?</strong>
-          <em>Dostęp na zawsze. {PRICE} zł zamiast {PRICE_OLD} zł.</em>
+          <strong>Cały rok pierwszy w jednym pakiecie</strong>
+          <em>{PRICE} zł zamiast {PRICE_OLD} zł · dostęp na zawsze.</em>
         </span>
-        <span class="mini-cta-btn">🛒 Kup teraz · {PRICE} zł ↓</span>
+        <span class="mini-cta-btn">🛒 Kup pakiet · {PRICE} zł ↓</span>
       </div>
     </a>
   )}
 
-  <!-- CO ZNAJDZIESZ -->
+  <!-- CO WCHODZI W PAKIET -->
   <section class="kurs-co">
     <div class="container-content">
-      <div class="section-label">📋 CO ZNAJDZIESZ W AUTOPILOTE</div>
-      <h2 class="section-title">Schematy do każdego typu zadania.</h2>
+      <div class="section-label">📚 CO WCHODZI W PAKIET</div>
+      <h2 class="section-title">Wszystkie 12 działów klasy 1.</h2>
       <p class="kurs-co-sub">
-        Konkretna zawartość zostanie opublikowana wkrótce. Autopilot powstaje z myślą o najczęstszych
-        problemach uczniów — od identyfikacji typu zadania po wybór metody rozwiązywania.
+        Każdy dział to pełny kurs wideo z teorią, przykładami i rozwiązanymi zadaniami.
+        Klikasz w dział, żeby zobaczyć szczegóły.
       </p>
-      <div class="kurs-co-grid">
-        <div class="kurs-co-card">
-          <div class="kurs-co-num">01</div>
-          <div class="kurs-co-name">Identyfikacja typu zadania</div>
-          <div class="kurs-co-desc">Patrzysz na zadanie i w 10 sekund wiesz, jakim "narzędziem" je rozwiązać.</div>
-        </div>
-        <div class="kurs-co-card">
-          <div class="kurs-co-num">02</div>
-          <div class="kurs-co-name">Schemat krok po kroku</div>
-          <div class="kurs-co-desc">Drzewko decyzyjne — co robić, gdy zadanie wygląda inaczej niż w książce.</div>
-        </div>
-        <div class="kurs-co-card">
-          <div class="kurs-co-num">03</div>
-          <div class="kurs-co-name">Ściągi PDF</div>
-          <div class="kurs-co-desc">Do wydruku — schematy do trzymania pod ręką w domu i w szkole.</div>
-        </div>
-        <div class="kurs-co-card">
-          <div class="kurs-co-num">04</div>
-          <div class="kurs-co-name">Wideo omówienia</div>
-          <div class="kurs-co-desc">Krótkie filmy pokazujące jak schemat działa na konkretnych zadaniach.</div>
-        </div>
+      <div class="dzialy-pakiet-grid">
+        {klasa1.map((d) => (
+          <a href={`/kursy/${d.slug}`} class="dzial-pakiet-tile">
+            <div class="dzial-pakiet-num">{d.num}</div>
+            <div class="dzial-pakiet-info">
+              <div class="dzial-pakiet-name">{d.short || d.name}</div>
+              {d.lekcjeSklep && (
+                <div class="dzial-pakiet-meta">
+                  {d.lekcjeSklep.reduce((s,l)=>s+l.count, 0)} podlekcji
+                </div>
+              )}
+            </div>
+            <span class="dzial-pakiet-arrow">→</span>
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -158,19 +132,50 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
   {HAS_CHECKOUT && (
     <a href="#kup-teraz" class="mini-cta mini-cta-teal">
       <div class="container-content mini-cta-inner">
-        <span class="mini-cta-emoji">🚀</span>
+        <span class="mini-cta-emoji">🎓</span>
         <span class="mini-cta-text">
-          <strong>Gotowy ogarnąć całość bez chaosu?</strong>
+          <strong>Gotowy ogarnąć całą klasę 1?</strong>
           <em>Płatność BLIK / kartą / przelew · dostęp natychmiast.</em>
         </span>
-        <span class="mini-cta-btn">🛒 Zamawiam · {PRICE} zł ↓</span>
+        <span class="mini-cta-btn">🛒 Zamawiam pakiet · {PRICE} zł ↓</span>
       </div>
     </a>
   )}
 
+  <!-- DLACZEGO PAKIET -->
+  <section class="kurs-dla-kogo">
+    <div class="container-content">
+      <div class="section-label">💡 DLACZEGO PAKIET</div>
+      <h2 class="section-title">Dlaczego warto wziąć cały pakiet?</h2>
+      <div class="dla-kogo-grid">
+        <div class="dla-kogo-card">
+          <div class="dla-kogo-ico">💰</div>
+          <div class="dla-kogo-text">
+            <strong>Taniej niż osobno</strong>
+            <span>Działy pojedynczo to {cenaOsobno} zł. W pakiecie {PRICE} zł — oszczędzasz {oszczednoscVsOsobno} zł.</span>
+          </div>
+        </div>
+        <div class="dla-kogo-card">
+          <div class="dla-kogo-ico">🗺️</div>
+          <div class="dla-kogo-text">
+            <strong>Cały rok w kolejności</strong>
+            <span>Działy ułożone od 1.1 do 1.12 — idziesz po kolei, nic Cię nie zaskoczy na lekcji.</span>
+          </div>
+        </div>
+        <div class="dla-kogo-card">
+          <div class="dla-kogo-ico">∞</div>
+          <div class="dla-kogo-text">
+            <strong>Dostęp na zawsze</strong>
+            <span>Raz kupujesz — masz dożywotnio. Wracasz do materiału przed klasówką, maturą, kiedy chcesz.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- WIDGET PŁATNOŚCI -->
   {HAS_CHECKOUT && EMBED_ID && (
-    <KupTerazWidget embedId={EMBED_ID} productName="Matematyczny Autopilot" price={PRICE} priceOld={PRICE_OLD} />
+    <KupTerazWidget embedId={EMBED_ID} productName="Pakiet podstawowy klasa 1" price={PRICE} priceOld={PRICE_OLD} />
   )}
 
   {!EMBED_ID && SHOP_URL && (
@@ -188,8 +193,8 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
   {!HAS_CHECKOUT && (
     <section id="kup-teraz" class="kup-fallback">
       <div class="container-content">
-        <h2 class="kup-fallback-title">Autopilot — wkrótce dostępny</h2>
-        <p class="kup-fallback-sub">Produkt jest w przygotowaniu. Zostaw mi swój email — dam znać gdy ruszy sprzedaż.</p>
+        <h2 class="kup-fallback-title">Pakiet — wkrótce w sprzedaży online</h2>
+        <p class="kup-fallback-sub">Zostaw mi swój email — dam znać gdy płatność online ruszy.</p>
         <a href="/kontakt" class="btn-primary kup-fallback-btn">📩 Powiadom mnie →</a>
       </div>
     </section>
@@ -235,7 +240,7 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
     display: flex;
     align-items: baseline;
     gap: 12px;
-    margin-bottom: 18px;
+    margin-bottom: 8px;
     flex-wrap: wrap;
   }
   .kurs-price {
@@ -259,12 +264,17 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
     letter-spacing: 0.5px;
     text-transform: uppercase;
   }
+  .kurs-price-note {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.55);
+    margin-bottom: 18px;
+  }
   .kurs-cta { display: flex; gap: 10px; flex-wrap: wrap; }
 
   .kurs-hero-right { display: flex; justify-content: center; }
   .hero-card {
-    background: linear-gradient(135deg, rgba(255, 222, 89, 0.1), rgba(63, 206, 207, 0.05));
-    border: 1px solid rgba(255, 222, 89, 0.25);
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.12), rgba(63, 206, 207, 0.05));
+    border: 1px solid rgba(255, 222, 89, 0.3);
     border-radius: 18px;
     padding: 28px;
     display: flex;
@@ -295,7 +305,6 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
     margin-top: 4px;
   }
 
-  /* SEKCJE */
   .kurs-dla-kogo, .kurs-co { padding: 44px 0; }
   .section-label {
     font-size: 11px;
@@ -310,6 +319,62 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
     line-height: 1.2;
     letter-spacing: -0.5px;
     margin-bottom: 18px;
+  }
+
+  .kurs-co-sub {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.6);
+    margin-bottom: 22px;
+    max-width: 720px;
+    line-height: 1.6;
+  }
+  .dzialy-pakiet-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .dzial-pakiet-tile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.18s ease;
+  }
+  .dzial-pakiet-tile:hover {
+    border-color: rgba(255, 222, 89, 0.4);
+    background: rgba(255, 222, 89, 0.04);
+    transform: translateY(-2px);
+  }
+  .dzial-pakiet-num {
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .dzial-pakiet-info { flex: 1; min-width: 0; }
+  .dzial-pakiet-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #EBEEFF;
+    line-height: 1.3;
+  }
+  .dzial-pakiet-meta {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-top: 2px;
+  }
+  .dzial-pakiet-arrow {
+    color: #FFDE59;
+    font-weight: 700;
+    flex-shrink: 0;
   }
 
   .dla-kogo-grid {
@@ -336,44 +401,6 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
   .dla-kogo-text span {
     font-size: 12.5px;
     color: rgba(235, 238, 255, 0.65);
-    line-height: 1.55;
-  }
-
-  .kurs-co-sub {
-    font-size: 14px;
-    color: rgba(235, 238, 255, 0.6);
-    margin-bottom: 22px;
-    max-width: 720px;
-    line-height: 1.6;
-  }
-  .kurs-co-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-  }
-  .kurs-co-card {
-    padding: 20px;
-    background: rgba(255, 222, 89, 0.05);
-    border: 1px solid rgba(255, 222, 89, 0.2);
-    border-radius: 12px;
-  }
-  .kurs-co-num {
-    font-size: 22px;
-    font-weight: 800;
-    color: #FFDE59;
-    margin-bottom: 8px;
-    letter-spacing: -1px;
-  }
-  .kurs-co-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: #EBEEFF;
-    margin-bottom: 6px;
-    line-height: 1.3;
-  }
-  .kurs-co-desc {
-    font-size: 12px;
-    color: rgba(235, 238, 255, 0.6);
     line-height: 1.55;
   }
 
@@ -431,26 +458,18 @@ const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
     border-top: 1px solid rgba(255, 222, 89, 0.2);
     text-align: center;
   }
-  .kup-fallback-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-  .kup-fallback-sub {
-    font-size: 14px;
-    color: rgba(235, 238, 255, 0.7);
-    margin-bottom: 22px;
-  }
+  .kup-fallback-title { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+  .kup-fallback-sub { font-size: 14px; color: rgba(235, 238, 255, 0.7); margin-bottom: 22px; }
   .kup-fallback-btn { display: inline-block; }
 
   @media (max-width: 900px) {
     .kurs-hero-grid { grid-template-columns: 1fr; }
     .kurs-title { font-size: 32px; }
+    .dzialy-pakiet-grid { grid-template-columns: repeat(2, 1fr); }
     .dla-kogo-grid { grid-template-columns: 1fr; }
-    .kurs-co-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 600px) {
-    .kurs-co-grid { grid-template-columns: 1fr; }
+    .dzialy-pakiet-grid { grid-template-columns: 1fr; }
     .mini-cta-btn { width: 100%; text-align: center; }
   }
 </style>

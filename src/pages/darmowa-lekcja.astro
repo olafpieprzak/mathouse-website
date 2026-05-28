@@ -1,0 +1,431 @@
+---
+// =====================================================
+// DARMOWA LEKCJA — lead magnet z twardą bramką mailową
+// URL: /darmowa-lekcja
+// =====================================================
+// Wariant 2 (twarda bramka): user musi wpisać email,
+// żeby odblokować wideo. Mail leci do Formspree.
+// =====================================================
+import Layout from '../layouts/Layout.astro';
+
+// === KONFIGURACJA (do uzupełnienia przez Olafa) ===
+// 1. YOUTUBE: wklej ID filmu z darmową lekcją (sam ID, np. 'dQw4w9WgXcQ' z youtube.com/watch?v=dQw4w9WgXcQ)
+const YOUTUBE_ID = '';  // ← WKLEJ ID FILMU YOUTUBE
+// 2. FORMSPREE: zastąp TWOJE_ID swoim ID z formspree.io
+const FORMSPREE_ID = 'TWOJE_ID';  // ← WKLEJ ID FORMSPREE
+// 3. Link do kursu który promujemy po lekcji
+const KURS_PO_LEKCJI = '/kursy/zbiory-liczbowe';
+const KURS_NAZWA = 'Zbiory liczbowe';
+const KURS_CENA = 197;
+---
+
+<Layout
+  title="Darmowa lekcja MATHOUSE — zobacz jak uczę"
+  description="Zobacz pełną lekcję matematyki MATHOUSE za darmo. Zostaw email i przekonaj się, jak tłumaczę — zanim zdecydujesz się na kurs."
+>
+  <div class="kurs-breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> / <span>Darmowa lekcja</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="dl-hero">
+    <div class="container-content dl-hero-inner">
+      <div class="section-label">🎁 ZA DARMO · BEZ ZOBOWIĄZAŃ</div>
+      <h1 class="dl-title">
+        Zobacz pełną lekcję<br /><span class="text-yellow">zanim zapłacisz</span>.
+      </h1>
+      <p class="dl-sub">
+        Nie kupuj w ciemno. Zostaw email, obejrzyj prawdziwą lekcję z kursu MATHOUSE
+        i sam zdecyduj, czy mój sposób tłumaczenia Ci pasuje. Zero ryzyka.
+      </p>
+    </div>
+  </section>
+
+  <!-- BRAMKA + WIDEO -->
+  <section class="dl-gate-section">
+    <div class="container-content dl-gate-grid">
+      <!-- LEWA: korzyści -->
+      <div class="dl-benefits">
+        <h2 class="dl-benefits-title">Co zobaczysz w lekcji:</h2>
+        <ul class="dl-benefits-list">
+          <li><span class="dl-check">✓</span> Pełne tłumaczenie tematu krok po kroku — tak jak na prawdziwej lekcji</li>
+          <li><span class="dl-check">✓</span> Mój sposób wyjaśniania — bez spiny, aż zrozumiesz</li>
+          <li><span class="dl-check">✓</span> Rozwiązanie typowych zadań maturalnych</li>
+          <li><span class="dl-check">✓</span> Zero zobowiązań — oglądasz i sam decydujesz</li>
+        </ul>
+        <div class="dl-trust">
+          <div class="dl-trust-item"><strong>1000+</strong><span>uczniów od 2012</span></div>
+          <div class="dl-trust-item"><strong>4.9</strong><span>średnia ocena</span></div>
+          <div class="dl-trust-item"><strong>99%</strong><span>zdaje maturę</span></div>
+        </div>
+      </div>
+
+      <!-- PRAWA: bramka mailowa -->
+      <div class="dl-gate">
+        <!-- Player zasłonięty (pokazywany przed wpisaniem maila) -->
+        <div class="dl-player-locked" id="player-locked">
+          <div class="dl-lock-overlay">
+            <div class="dl-lock-icon">🔒</div>
+            <h3 class="dl-lock-title">Lekcja zablokowana</h3>
+            <p class="dl-lock-desc">Wpisz email, żeby odblokować pełne wideo</p>
+            <form class="dl-form" id="dl-form" action={`https://formspree.io/f/${FORMSPREE_ID}`} method="POST">
+              <input type="hidden" name="_subject" value="MATHOUSE: nowy zapis - darmowa lekcja" />
+              <input type="hidden" name="zrodlo" value="Darmowa lekcja" />
+              <input type="email" name="email" id="dl-email" placeholder="twoj@email.pl" required class="dl-input" />
+              <button type="submit" class="dl-btn">▶ Odblokuj lekcję</button>
+            </form>
+            <p class="dl-privacy">Nie spamuję. Email tylko do powiadomień o kursach.</p>
+          </div>
+        </div>
+
+        <!-- Player odblokowany (pokazywany po wpisaniu maila) -->
+        <div class="dl-player-unlocked" id="player-unlocked" style="display:none;">
+          {YOUTUBE_ID ? (
+            <div class="dl-video-wrap">
+              <iframe
+                id="dl-iframe"
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${YOUTUBE_ID}`}
+                title="Darmowa lekcja MATHOUSE"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          ) : (
+            <div class="dl-video-placeholder">
+              <div class="dl-placeholder-icon">🎬</div>
+              <p>Wideo zostanie dodane wkrótce.<br />Twój email został zapisany — dam znać gdy lekcja będzie gotowa!</p>
+            </div>
+          )}
+          <div class="dl-after">
+            <p class="dl-after-text">Spodobało się? Cały dział masz tutaj:</p>
+            <a href={KURS_PO_LEKCJI} class="dl-after-btn">
+              📚 {KURS_NAZWA} — {KURS_CENA} zł →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JAK TO DZIAŁA -->
+  <section class="dl-how">
+    <div class="container-content">
+      <h2 class="section-title-center">Jak to działa?</h2>
+      <div class="dl-steps">
+        <div class="dl-step">
+          <div class="dl-step-num">1</div>
+          <div class="dl-step-name">Zostaw email</div>
+          <div class="dl-step-desc">Jedno pole, sekunda roboty. Bez karty, bez zobowiązań.</div>
+        </div>
+        <div class="dl-step">
+          <div class="dl-step-num">2</div>
+          <div class="dl-step-name">Obejrzyj lekcję</div>
+          <div class="dl-step-desc">Pełna lekcja z kursu odblokowuje się od razu na stronie.</div>
+        </div>
+        <div class="dl-step">
+          <div class="dl-step-num">3</div>
+          <div class="dl-step-name">Zdecyduj sam</div>
+          <div class="dl-step-desc">Pasuje Ci mój styl? Bierzesz cały dział. Nie? Żaden problem.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline define:vars={{ YOUTUBE_ID }}>
+  (function() {
+    const form = document.getElementById('dl-form');
+    const locked = document.getElementById('player-locked');
+    const unlocked = document.getElementById('player-unlocked');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+      // Jeśli Formspree nie jest skonfigurowany (TWOJE_ID), nie wysyłaj - tylko odblokuj
+      const action = form.getAttribute('action');
+      const notConfigured = action.includes('TWOJE_ID');
+
+      if (notConfigured) {
+        e.preventDefault();
+      }
+      // Odblokowujemy player niezależnie (po submit Formspree przekieruje, ale zapisujemy też lokalnie)
+      try {
+        const email = document.getElementById('dl-email').value;
+        if (email) {
+          // Odblokuj wideo
+          if (locked) locked.style.display = 'none';
+          if (unlocked) unlocked.style.display = 'block';
+          // Autoplay wideo jeśli jest
+          const iframe = document.getElementById('dl-iframe');
+          if (iframe && YOUTUBE_ID) {
+            iframe.src = 'https://www.youtube.com/embed/' + YOUTUBE_ID + '?autoplay=1';
+          }
+          // Scroll do wideo
+          if (unlocked) unlocked.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  })();
+</script>
+
+<style>
+  .kurs-breadcrumb {
+    padding: 14px 0;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .kurs-breadcrumb a { color: inherit; text-decoration: none; }
+  .kurs-breadcrumb a:hover { color: #FFDE59; }
+  .kurs-breadcrumb span { color: #FFDE59; }
+  .text-yellow { color: #FFDE59; }
+
+  .dl-hero { padding: 44px 0 20px; text-align: center; }
+  .dl-hero-inner { max-width: 760px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px;
+    color: #3FCECF;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .dl-title {
+    font-size: 44px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1.2px;
+    margin-bottom: 16px;
+  }
+  .dl-sub {
+    font-size: 15.5px;
+    color: rgba(235, 238, 255, 0.72);
+    line-height: 1.65;
+  }
+
+  .dl-gate-section { padding: 30px 0 50px; }
+  .dl-gate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .dl-benefits-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .dl-benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .dl-benefits-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.8);
+    line-height: 1.5;
+  }
+  .dl-check { color: #2ECC71; font-weight: 800; flex-shrink: 0; }
+  .dl-trust {
+    display: flex;
+    gap: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .dl-trust-item { display: flex; flex-direction: column; }
+  .dl-trust-item strong {
+    font-size: 24px;
+    color: #FFDE59;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .dl-trust-item span {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.55);
+    margin-top: 4px;
+  }
+
+  /* BRAMKA */
+  .dl-gate {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(235, 238, 255, 0.12);
+    border-radius: 18px;
+    overflow: hidden;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+  }
+  .dl-player-locked {
+    background: linear-gradient(135deg, rgba(5, 10, 36, 0.95), rgba(63, 206, 207, 0.08));
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 28px;
+    position: relative;
+  }
+  .dl-lock-overlay { text-align: center; max-width: 360px; }
+  .dl-lock-icon { font-size: 48px; margin-bottom: 12px; }
+  .dl-lock-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .dl-lock-desc {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.65);
+    margin-bottom: 18px;
+  }
+  .dl-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .dl-input {
+    width: 100%;
+    padding: 13px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(235, 238, 255, 0.2);
+    border-radius: 10px;
+    color: #EBEEFF;
+    font-size: 14px;
+    font-family: inherit;
+    text-align: center;
+  }
+  .dl-input::placeholder { color: rgba(235, 238, 255, 0.4); }
+  .dl-input:focus { outline: none; border-color: #FFDE59; }
+  .dl-btn {
+    width: 100%;
+    padding: 14px;
+    background: #FFDE59;
+    color: #050A24;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .dl-btn:hover { background: #FFE680; transform: translateY(-1px); }
+  .dl-privacy {
+    font-size: 10.5px;
+    color: rgba(235, 238, 255, 0.4);
+    margin-top: 12px;
+  }
+
+  /* PLAYER ODBLOKOWANY */
+  .dl-video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+  .dl-video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .dl-video-placeholder {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    background: rgba(5, 10, 36, 0.6);
+    color: rgba(235, 238, 255, 0.7);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .dl-placeholder-icon { font-size: 42px; margin-bottom: 12px; }
+  .dl-after {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+  }
+  .dl-after-text {
+    font-size: 13px;
+    color: rgba(235, 238, 255, 0.7);
+    margin-bottom: 10px;
+  }
+  .dl-after-btn {
+    display: inline-block;
+    background: #3FCECF;
+    color: #050A24;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .dl-after-btn:hover { background: #5CDADB; }
+
+  /* JAK TO DZIAŁA */
+  .dl-how { padding: 44px 0; background: rgba(63, 206, 207, 0.03); border-top: 1px solid rgba(63, 206, 207, 0.12); }
+  .section-title-center {
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 28px;
+    letter-spacing: -0.5px;
+  }
+  .dl-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .dl-step {
+    text-align: center;
+    padding: 24px 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 12px;
+  }
+  .dl-step-num {
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 12px;
+    background: #FFDE59;
+    color: #050A24;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+  }
+  .dl-step-name {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .dl-step-desc {
+    font-size: 12.5px;
+    color: rgba(235, 238, 255, 0.6);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .dl-gate-grid { grid-template-columns: 1fr; }
+    .dl-title { font-size: 32px; }
+    .dl-steps { grid-template-columns: 1fr; }
+    .dl-trust { justify-content: space-around; }
+  }
+</style>

@@ -125,3 +125,31 @@ Po wklejeniu i deploy'u:
 ---
 
 **Powodzenia! Po wklejeniu wszystkich 17 embedów masz w pełni działający sklep online.**
+
+---
+
+## 📧 FORMULARZE EMAIL (Formspree) — NOWE w V12_18
+
+Trzy miejsca zbierają emaile przez Formspree (darmowy serwis, maile lecą na Twoją skrzynkę):
+
+1. **Darmowa lekcja** (`/darmowa-lekcja`) — bramka mailowa przed wideo
+2. **Matura rozszerzona "Powiadom mnie"** (na `/kursy`)
+3. **Kompendium / Mapy myśli** (jeśli ustawisz jako darmowe za email)
+
+### Jak uruchomić Formspree (5 minut, raz):
+1. Wejdź na **formspree.io** → załóż konto na **olaf.pieprzak@gmail.com**
+2. Kliknij **+ New Form**, nazwij np. "MATHOUSE zapisy"
+3. Skopiuj swój endpoint — wygląda tak: `https://formspree.io/f/xyzabcd` (8 znaków po `/f/`)
+4. W kodzie zamień **`TWOJE_ID`** na te 8 znaków (sam kod po `/f/`):
+   - `src/pages/darmowa-lekcja.astro` → linia `const FORMSPREE_ID = 'TWOJE_ID'`
+   - `src/pages/kursy.astro` → szukaj `formspree.io/f/TWOJE_ID`
+   - `src/data/produkty.js` → pola `formspreeId: ''` przy kompendium i mapaMysli
+5. Push → maile z formularzy będą przychodzić na Twoją skrzynkę
+
+**Uwaga:** Dopóki nie ustawisz Formspree, formularz darmowej lekcji i tak **odblokuje wideo** (działa lokalnie), ale email nigdzie nie poleci. Ustaw Formspree żeby zbierać kontakty.
+
+### Kompendium i Mapy myśli — 3 tryby
+W `produkty.js` (`kompendium`, `mapaMysli`) decydujesz czym są:
+- **Płatne**: wpisz `sklepEmbedId` (jak inne produkty) → pokaże widget zakupu
+- **Darmowe za email**: wpisz `formspreeId` → pokaże formularz "Pobierz za darmo"
+- **Wkrótce** (domyślnie): puste oba → pokaże "Powiadom mnie"

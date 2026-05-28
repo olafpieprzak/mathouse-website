@@ -151,7 +151,7 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
         </div>
 
         <div class="card-matura card-matura-autopilot">
-          <span class="matura-badge yellow">−38%</span>
+          <span class="matura-badge yellow">−60 ZŁ</span>
           <h3 class="matura-h">Matematyczny Autopilot<br />— schemat krok po kroku</h3>
           <p class="matura-desc">Dla osób, które chcą ogarnąć całość bez chaosu. Schemat działania dla każdego typu zadania.</p>
           <div class="matura-price-row">
@@ -164,7 +164,14 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
         <div class="card-matura card-matura-soon">
           <div class="soon-label">WKRÓTCE</div>
           <h3 class="matura-h">Kurs matura<br />rozszerzona</h3>
-          <p class="soon-desc">Powiadom mnie →</p>
+          <p class="soon-desc-small">Zostaw email — dam znać gdy ruszy:</p>
+          <!-- FORMSPREE: zastąp TWOJE_ID swoim ID z formspree.io (zakładasz konto na olaf.pieprzak@gmail.com, tworzysz formularz, kopiujesz endpoint) -->
+          <form class="powiadom-form" action="https://formspree.io/f/TWOJE_ID" method="POST">
+            <input type="hidden" name="_subject" value="MATHOUSE: zapis na powiadomienie - Matura rozszerzona" />
+            <input type="hidden" name="produkt" value="Kurs matura rozszerzona" />
+            <input type="email" name="email" placeholder="twoj@email.pl" required class="powiadom-input" />
+            <button type="submit" class="powiadom-btn">Powiadom mnie →</button>
+          </form>
         </div>
       </div>
     </div>
@@ -604,8 +611,8 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
     border: 1px dashed rgba(235, 238, 255, 0.2);
     text-align: center;
     align-items: center;
-    justify-content: center;
-    opacity: 0.7;
+    justify-content: flex-start;
+    opacity: 0.92;
   }
   .matura-badge {
     background: #3FCECF;
@@ -662,6 +669,47 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
     color: rgba(235, 238, 255, 0.5);
     margin-top: 8px;
   }
+  .soon-desc-small {
+    font-size: 11.5px;
+    color: rgba(235, 238, 255, 0.6);
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .powiadom-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  .powiadom-input {
+    width: 100%;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(235, 238, 255, 0.15);
+    border-radius: 8px;
+    color: #EBEEFF;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  .powiadom-input::placeholder { color: rgba(235, 238, 255, 0.4); }
+  .powiadom-input:focus {
+    outline: none;
+    border-color: rgba(255, 222, 89, 0.5);
+  }
+  .powiadom-btn {
+    width: 100%;
+    padding: 10px 14px;
+    background: #FFDE59;
+    color: #050A24;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease;
+  }
+  .powiadom-btn:hover { background: #FFE680; }
 
   /* === AUTOPILOT === */
   .autopilot-bar {
