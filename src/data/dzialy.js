@@ -190,7 +190,7 @@ export const dzialy = [
       },
     ],
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id z URL sklepu (s.php?id=XXX) ===
-    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: 'c16a5320fa475530d9583c34fd356ef5',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     sklepUrl: '',
     price: 197,
     priceOld: 399,
