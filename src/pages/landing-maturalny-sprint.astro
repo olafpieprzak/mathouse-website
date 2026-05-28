@@ -7,6 +7,9 @@
 // =====================================================
 import Layout from '../layouts/Layout.astro';
 import { isLandingEnabled, getLandingPage } from '../config/landingPages.js';
+import KupTerazWidget from '../components/KupTerazWidget.astro';
+import { produkty } from '../data/produkty.js';
+const prod = produkty.maturalnySprint;
 
 const SLUG = 'landing-maturalny-sprint';
 const page = getLandingPage(SLUG);
@@ -102,7 +105,7 @@ const korzysci = [
             </div>
 
             <a href={page.purchaseUrl} class="btn-primary lp-cta-btn">
-              DOŁĄCZAM TERAZ →
+              KUPUJĘ I ZACZYNAM →
             </a>
             <p class="lp-cta-note">⚡ Dostęp od razu po zakupie · oglądasz ile chcesz</p>
           </div>
@@ -310,7 +313,7 @@ const korzysci = [
           </div>
 
           <a href={page.purchaseUrl} class="btn-primary lp-cta-btn lp-cta-final">
-            DOŁĄCZAM DO SPRINTU →
+            KUPUJĘ SPRINT →
           </a>
 
           <p class="lp-final-bottom">
@@ -320,6 +323,23 @@ const korzysci = [
         </div>
       </div>
     </section>
+
+    <!-- KOSZYK / WIDGET ZAKUPOWY -->
+    {prod.sklepEmbedId ? (
+      <KupTerazWidget embedId={prod.sklepEmbedId} productName="3-dniowy Maturalny Sprint" price={prod.price} priceOld={prod.priceOld} />
+    ) : (
+      <section id="kup-teraz" class="lp-checkout-fallback">
+        <div class="container-content">
+          <h2 class="lp-cf-title">Gotowy zabezpieczyć punkty?</h2>
+          <p class="lp-cf-sub">Dostęp od razu po zakupie. 3 działy, które wracają co roku.</p>
+          {prod.sklepUrl ? (
+            <a href={prod.sklepUrl} target="_blank" rel="noopener" class="btn-primary lp-cf-btn">🛒 Kup sprint · {prod.price} zł →</a>
+          ) : (
+            <a href="/kontakt" class="btn-primary lp-cf-btn">📩 Napisz do mnie po dostęp →</a>
+          )}
+        </div>
+      </section>
+    )}
 
   </main>
 </Layout>
@@ -491,4 +511,14 @@ const korzysci = [
     .lp-final-title { font-size: 24px; }
     .lp-final-price-amount { font-size: 42px; }
   }
+
+  .lp-checkout-fallback {
+    padding: 56px 0;
+    background: rgba(255, 222, 89, 0.06);
+    border-top: 1px solid rgba(255, 222, 89, 0.2);
+    text-align: center;
+  }
+  .lp-cf-title { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+  .lp-cf-sub { font-size: 14px; color: rgba(235, 238, 255, 0.7); margin-bottom: 22px; }
+  .lp-cf-btn { display: inline-block; }
 </style>

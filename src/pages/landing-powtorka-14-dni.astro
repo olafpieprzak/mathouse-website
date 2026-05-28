@@ -7,6 +7,9 @@
 // =====================================================
 import Layout from '../layouts/Layout.astro';
 import { isLandingEnabled, getLandingPage } from '../config/landingPages.js';
+import KupTerazWidget from '../components/KupTerazWidget.astro';
+import { produkty } from '../data/produkty.js';
+const prod = produkty.powtorka14Dni;
 
 const SLUG = 'landing-powtorka-14-dni';
 const page = getLandingPage(SLUG);
@@ -119,20 +122,20 @@ const planDni = [
 ];
 
 const korzysci = [
-  { icon: '✅', tytul: 'Kompletna powtórka całego materiału', opis: 'Krok po kroku przechodzimy przez wszystkie 14 działów matury podstawowej.' },
+  { icon: '✅', tytul: 'Kompletna powtórka całego materiału', opis: 'Krok po kroku przechodzisz przez wszystkie 14 działów matury podstawowej.' },
   { icon: '🎯', tytul: 'Spokój i jasny plan', opis: 'Przygotowanie do egzaminu bez chaosu. Każdy dzień to konkretny dział.' },
-  { icon: '📹', tytul: 'Dostęp do nagrań', opis: 'Każdą lekcję nagrywam — wracasz do niej w dowolnym momencie, pauzujesz, powtarzasz.' },
+  { icon: '📹', tytul: 'Gotowe nagrania wideo', opis: 'Wszystkie lekcje już nagrane — oglądasz kiedy chcesz, pauzujesz, powtarzasz dowolną liczbę razy.' },
   { icon: '📈', tytul: 'Szanse na wyższy wynik', opis: 'Poznajesz typowe pułapki maturalne i wiesz jak ich unikać.' },
   { icon: '😌', tytul: 'Mniej stresu, więcej pewności', opis: 'Wchodzisz na egzamin spokojny — masz kontrolę nad materiałem.' },
   { icon: '🚀', tytul: 'Postępy widoczne od razu', opis: 'Dział po dziale widzisz realny progres. Dostajesz też materiały do samodzielnej pracy.' },
-  { icon: '💬', tytul: 'Nauka na żywo z pytaniami', opis: 'Natychmiastowe wyjaśnianie trudnych zagadnień. Pytasz o wszystko.' },
+  { icon: '⏱️', tytul: 'Dostęp od razu po zakupie', opis: 'Nie czekasz na start. Kupujesz i od razu masz cały materiał — uczysz się we własnym tempie.' },
   { icon: '🎓', tytul: 'Doświadczenie 13+ lat', opis: 'Ponad 1000 uczniów za mną. Wiem gdzie tracisz punkty i jak to zmienić.' },
 ];
 ---
 
 <Layout
   title="14-dniowa powtórka do matury z matematyki (poziom podstawowy)"
-  description="14 dni, cały materiał maturalny z matematyki, zajęcia online na żywo + nagrania. Cena 197 zł. Gwarancja satysfakcji!"
+  description="14 dni, cały materiał maturalny z matematyki, cały materiał w gotowych nagraniach wideo. Cena 197 zł. Gwarancja satysfakcji!"
   noindex={false}
 >
   <main class="lp-page">
@@ -148,19 +151,19 @@ const korzysci = [
               <span class="lp-hero-accent">w 14 dni.</span>
             </h1>
             <p class="lp-hero-sub">
-              Pełna powtórka materiału + gwarancja satysfakcji.<br />
+              Cały materiał maturalny w gotowych nagraniach wideo.<br />
               <strong>Bez chaosu. Bez zgadywania. Bez stresu.</strong>
             </p>
 
             <div class="lp-hero-price">
               <div class="lp-price-amount">197 zł</div>
-              <div class="lp-price-note">za 14 dni nauki</div>
+              <div class="lp-price-note">cały materiał · dostęp na zawsze</div>
             </div>
 
             <a href={page.purchaseUrl} class="btn-primary lp-cta-btn">
-              ZAPISUJĘ SIĘ! →
+              KUPUJĘ I ZACZYNAM →
             </a>
-            <p class="lp-cta-note">⏰ Start 15 lutego · ograniczone miejsca</p>
+            <p class="lp-cta-note">⏱️ Dostęp od razu po zakupie · oglądasz we własnym tempie</p>
           </div>
 
           <div class="lp-hero-visual">
@@ -216,13 +219,13 @@ const korzysci = [
           </div>
           <div class="lp-jak-card">
             <div class="lp-jak-icon">🎥</div>
-            <h3>Zajęcia online na żywo</h3>
-            <p>Codziennie spotykamy się przez Google Meet. Ty wybierasz: aktywnie czy tylko słuchasz.</p>
+            <h3>Nagrania wideo krok po kroku</h3>
+            <p>Każdy dział to gotowe lekcje wideo. Oglądasz kiedy chcesz, w swoim tempie.</p>
           </div>
           <div class="lp-jak-card">
             <div class="lp-jak-icon">📼</div>
-            <h3>Nagrania z każdej lekcji</h3>
-            <p>Możesz nadrabiać, wracać, powtarzać do skutku. Dostęp przez cały okres kursu.</p>
+            <h3>Dostęp do wszystkich lekcji</h3>
+            <p>Możesz nadrabiać, wracać, powtarzać do skutku. Dostęp na zawsze.</p>
           </div>
           <div class="lp-jak-card">
             <div class="lp-jak-icon">📝</div>
@@ -232,7 +235,7 @@ const korzysci = [
           <div class="lp-jak-card">
             <div class="lp-jak-icon">💬</div>
             <h3>Możliwość pytań</h3>
-            <p>Pytasz na żywo lub mailem — odpowiadam każdemu, bez wyjątku.</p>
+            <p>Masz pytanie? Napisz do mnie mailem — odpowiadam każdemu, bez wyjątku.</p>
           </div>
           <div class="lp-jak-card">
             <div class="lp-jak-icon">👨‍🏫</div>
@@ -351,7 +354,7 @@ const korzysci = [
           <h2 class="lp-final-title">14-dniowa powtórka do matury z matematyki<br /><span class="text-yellow">(poziom podstawowy)</span></h2>
 
           <div class="lp-final-features">
-            <div class="lp-final-feature">✅ Zajęcia na żywo przez 14 dni</div>
+            <div class="lp-final-feature">✅ Gotowe nagrania wideo — 14 działów</div>
             <div class="lp-final-feature">✅ Dostęp do wszystkich nagrań</div>
             <div class="lp-final-feature">✅ Możliwość zadawania pytań</div>
             <div class="lp-final-feature">✅ Materiały do samodzielnej pracy</div>
@@ -366,7 +369,7 @@ const korzysci = [
           </div>
 
           <a href={page.purchaseUrl} class="btn-primary lp-cta-btn lp-cta-final">
-            ZAPISUJĘ SIĘ TERAZ →
+            KUPUJĘ I ZACZYNAM →
           </a>
 
           <p class="lp-final-bottom">
@@ -376,6 +379,23 @@ const korzysci = [
         </div>
       </div>
     </section>
+
+    <!-- KOSZYK / WIDGET ZAKUPOWY -->
+    {prod.sklepEmbedId ? (
+      <KupTerazWidget embedId={prod.sklepEmbedId} productName="14-dniowa powtórka do matury podstawowej" price={prod.price} priceOld={prod.priceOld} />
+    ) : (
+      <section id="kup-teraz" class="lp-checkout-fallback">
+        <div class="container-content">
+          <h2 class="lp-cf-title">Gotowy zacząć powtórkę?</h2>
+          <p class="lp-cf-sub">Dostęp od razu po zakupie. Cały materiał maturalny w nagraniach wideo.</p>
+          {prod.sklepUrl ? (
+            <a href={prod.sklepUrl} target="_blank" rel="noopener" class="btn-primary lp-cf-btn">🛒 Kup teraz · {prod.price} zł →</a>
+          ) : (
+            <a href="/kontakt" class="btn-primary lp-cf-btn">📩 Napisz do mnie po dostęp →</a>
+          )}
+        </div>
+      </section>
+    )}
 
   </main>
 </Layout>
@@ -872,4 +892,14 @@ const korzysci = [
     .lp-final-title { font-size: 24px; }
     .lp-final-price-amount { font-size: 42px; }
   }
+
+  .lp-checkout-fallback {
+    padding: 56px 0;
+    background: rgba(255, 222, 89, 0.06);
+    border-top: 1px solid rgba(255, 222, 89, 0.2);
+    text-align: center;
+  }
+  .lp-cf-title { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+  .lp-cf-sub { font-size: 14px; color: rgba(235, 238, 255, 0.7); margin-bottom: 22px; }
+  .lp-cf-btn { display: inline-block; }
 </style>

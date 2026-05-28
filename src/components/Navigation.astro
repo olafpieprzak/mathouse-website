@@ -40,7 +40,7 @@ const currentPath = Astro.url.pathname;
 <header class="main-nav">
   <div class="container-content nav-inner">
     <a href="/" class="nav-logo" aria-label="Strona główna MATHOUSE">
-      <span class="logo-mark">M</span>
+      <img src="/images/logo-icon.svg" alt="MATHOUSE" class="logo-mark-img" width="40" height="40" />
       <span class="logo-text">MATHOUSE</span>
     </a>
 
@@ -109,25 +109,25 @@ const currentPath = Astro.url.pathname;
             </div>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="/sklep?kategoria=kompendia" class="dropdown-item">
+          <a href="/kompendium" class="dropdown-item">
             <div class="dropdown-icon">📚</div>
             <div>
-              <div class="dropdown-title">Kompendia</div>
+              <div class="dropdown-title">Kompendium</div>
               <div class="dropdown-desc">Pełna teoria w jednym miejscu</div>
             </div>
           </a>
-          <a href="/sklep?kategoria=mapy-mysli" class="dropdown-item">
+          <a href="/mapa-mysli" class="dropdown-item">
             <div class="dropdown-icon">🧠</div>
             <div>
               <div class="dropdown-title">Mapy myśli</div>
-              <div class="dropdown-desc">Wizualne podsumowania</div>
+              <div class="dropdown-desc">Wizualne podsumowania działów</div>
             </div>
           </a>
-          <a href="/sklep?kategoria=ebooki" class="dropdown-item">
-            <div class="dropdown-icon">📖</div>
+          <a href="/kursy/matematyczny-autopilot" class="dropdown-item">
+            <div class="dropdown-icon">🚀</div>
             <div>
-              <div class="dropdown-title">Ebooki</div>
-              <div class="dropdown-desc">Zadania + rozwiązania</div>
+              <div class="dropdown-title">Matematyczny Autopilot</div>
+              <div class="dropdown-desc">Schemat krok po kroku</div>
             </div>
           </a>
         </div>
@@ -186,7 +186,7 @@ const currentPath = Astro.url.pathname;
     <!-- Header z X close -->
     <div class="mobile-header">
       <a href="/" class="mobile-logo">
-        <span class="logo-mark">M</span>
+        <img src="/images/logo-icon.svg" alt="MATHOUSE" class="logo-mark-img" width="34" height="34" />
         <span>MATHOUSE</span>
       </a>
       <button class="mobile-close" onclick="mathouseCloseMenu(event)" aria-label="Zamknij menu" type="button">
@@ -233,9 +233,9 @@ const currentPath = Astro.url.pathname;
         </summary>
         <div class="mobile-sublinks">
           <a href="/sklep" class="mobile-sublink">🛍️ Wszystkie produkty</a>
-          <a href="/sklep?kategoria=kompendia" class="mobile-sublink">📚 Kompendia</a>
-          <a href="/sklep?kategoria=mapy-mysli" class="mobile-sublink">🧠 Mapy myśli</a>
-          <a href="/sklep?kategoria=ebooki" class="mobile-sublink">📖 Ebooki</a>
+          <a href="/kompendium" class="mobile-sublink">📚 Kompendium</a>
+          <a href="/mapa-mysli" class="mobile-sublink">🧠 Mapy myśli</a>
+          <a href="/kursy/matematyczny-autopilot" class="mobile-sublink">🚀 Matematyczny Autopilot</a>
         </div>
       </details>
 
@@ -405,6 +405,13 @@ const currentPath = Astro.url.pathname;
     font-weight: 700;
     font-size: 20px;
     font-family: 'Instrument Serif', serif;
+  }
+  .logo-mark-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    display: block;
+    object-fit: contain;
   }
   .logo-text {
     font-size: 18px;

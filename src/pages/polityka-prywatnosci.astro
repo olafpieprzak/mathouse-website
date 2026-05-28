@@ -1,0 +1,118 @@
+---
+import Layout from '../layouts/Layout.astro';
+const dataAktualizacji = '28 maja 2026';
+---
+
+<Layout
+  title="Polityka prywatności — MATHOUSE"
+  description="Polityka prywatności serwisu MATHOUSE. Informacje o przetwarzaniu danych osobowych."
+  noindex={true}
+>
+  <main class="legal-page">
+    <div class="container-content">
+      <div class="breadcrumb">
+        <a href="/">←&nbsp;Strona główna</a> / <span>Polityka prywatności</span>
+      </div>
+
+      <h1 class="legal-title">Polityka prywatności</h1>
+      <p class="legal-updated">Ostatnia aktualizacja: {dataAktualizacji}</p>
+
+      <div class="legal-content">
+        <h2>1. Administrator danych</h2>
+        <p>
+          Administratorem danych osobowych jest Olaf Pieprzak, prowadzący działalność pod marką
+          MATHOUSE. Kontakt: olaf.pieprzak@gmail.com, tel. 570 840 416.
+        </p>
+
+        <h2>2. Jakie dane zbieramy</h2>
+        <p>W zależności od sposobu korzystania z serwisu możemy przetwarzać:</p>
+        <ul>
+          <li>adres e-mail (przy zapisie na powiadomienia, darmową lekcję lub newsletter),</li>
+          <li>imię i dane kontaktowe (przy rezerwacji korepetycji),</li>
+          <li>dane niezbędne do realizacji zamówienia (przy zakupie kursów).</li>
+        </ul>
+
+        <h2>3. Cel przetwarzania</h2>
+        <p>Dane przetwarzamy wyłącznie w celu:</p>
+        <ul>
+          <li>realizacji zamówień i udostępniania zakupionych materiałów,</li>
+          <li>obsługi rezerwacji korepetycji,</li>
+          <li>wysyłania powiadomień, o które prosiłeś (np. o starcie kursu),</li>
+          <li>kontaktu w sprawach związanych z usługą.</li>
+        </ul>
+
+        <h2>4. Podstawa prawna</h2>
+        <p>
+          Dane przetwarzane są na podstawie zgody (art. 6 ust. 1 lit. a RODO), w celu wykonania
+          umowy (art. 6 ust. 1 lit. b RODO) oraz w prawnie uzasadnionym interesie administratora
+          (art. 6 ust. 1 lit. f RODO).
+        </p>
+
+        <h2>5. Twoje prawa</h2>
+        <p>Masz prawo do:</p>
+        <ul>
+          <li>dostępu do swoich danych i ich poprawiania,</li>
+          <li>usunięcia danych ("prawo do bycia zapomnianym"),</li>
+          <li>ograniczenia przetwarzania,</li>
+          <li>wycofania zgody w dowolnym momencie,</li>
+          <li>wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.</li>
+        </ul>
+
+        <h2>6. Pliki cookies</h2>
+        <p>
+          Serwis może wykorzystywać pliki cookies w celach technicznych i analitycznych.
+          Możesz zarządzać cookies w ustawieniach swojej przeglądarki.
+        </p>
+
+        <h2>7. Kontakt</h2>
+        <p>
+          W sprawach dotyczących ochrony danych osobowych skontaktuj się: olaf.pieprzak@gmail.com.
+        </p>
+
+        <p class="legal-disclaimer">
+          ⚠️ Powyższy dokument jest wzorem podstawowym. Przed publikacją zalecamy konsultację
+          z prawnikiem w celu dostosowania do faktycznego zakresu działalności.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .legal-page { padding: 20px 0 60px; }
+  .breadcrumb { padding: 14px 0 24px; font-size: 11px; color: rgba(235, 238, 255, 0.5); }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb a:hover { color: #FFDE59; }
+  .breadcrumb span { color: #FFDE59; }
+  .legal-title { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  .legal-updated { font-size: 13px; color: rgba(235, 238, 255, 0.5); margin-bottom: 32px; }
+  .legal-content { max-width: 760px; }
+  .legal-content h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #FFDE59;
+    margin: 28px 0 10px;
+  }
+  .legal-content p {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.8);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .legal-content ul { margin: 0 0 12px; padding-left: 22px; }
+  .legal-content li {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.8);
+    line-height: 1.7;
+    margin-bottom: 6px;
+  }
+  .legal-disclaimer {
+    margin-top: 32px;
+    padding: 14px 18px;
+    background: rgba(255, 222, 89, 0.08);
+    border: 1px solid rgba(255, 222, 89, 0.25);
+    border-radius: 10px;
+    font-size: 12.5px !important;
+    color: rgba(235, 238, 255, 0.65) !important;
+  }
+</style>

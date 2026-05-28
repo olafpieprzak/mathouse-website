@@ -11,7 +11,7 @@ const year = new Date().getFullYear();
       <!-- Kolumna 1: Logo + opis -->
       <div class="footer-col footer-col-brand">
         <div class="footer-logo">
-          <div class="logo-mark">M</div>
+          <img src="/images/logo-icon.svg" alt="MATHOUSE" class="footer-logo-img" width="32" height="32" />
           <span class="logo-text">MATHOUSE</span>
         </div>
         <p class="footer-tagline">Coś więcej niż matma.</p>
@@ -164,6 +164,13 @@ const year = new Date().getFullYear();
     color: #050A24;
     font-weight: 700;
     font-size: 15px;
+  }
+  .footer-logo-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    display: block;
+    object-fit: contain;
   }
   .footer-logo .logo-text {
     font-weight: 600;

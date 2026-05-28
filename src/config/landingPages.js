@@ -14,8 +14,8 @@ export const LANDING_PAGES = [
     shortTitle: 'Powtórka 14 dni',
     price: '197 zł',
     icon: '📚',
-    description: 'Pełna powtórka materiału w 14 dni, zajęcia online na żywo + nagrania. Gwarancja satysfakcji.',
-    purchaseUrl: '#', // ← Podmień na właściwy link do zakupu
+    description: 'Cały materiał maturalny w gotowych nagraniach wideo. Dostęp od razu po zakupie.',
+    purchaseUrl: '#kup-teraz',
   },
   {
     id: 'maturalny-sprint',
@@ -26,7 +26,7 @@ export const LANDING_PAGES = [
     price: '67 zł',
     icon: '🏃',
     description: '3 działy które wracają co roku. Dostęp od razu po zakupie. Nagrania 24/7.',
-    purchaseUrl: '#', // ← Podmień na właściwy link do zakupu
+    purchaseUrl: '#kup-teraz',
   },
   {
     id: 'webinar-15-01',

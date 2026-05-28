@@ -35,6 +35,9 @@ const lekcje = [
 
 const pakietCena = kurs.klasaNum === 1 ? 597 : 597;
 const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
+
+// Darmowa lekcja - jeśli dział ma videoLekcjaGratis (YouTube ID), pokazujemy embed
+const LEKCJA_GRATIS_ID = kurs.videoLekcjaGratis || '';
 ---
 
 <Layout
@@ -109,10 +112,27 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
       </div>
 
       <div id="wideo-gratis">
-        <HeroMedia
-          slot="heroKursy"
-          captionOverride={`"${kurs.podpunkty[0]}" · ~8 min`}
-        />
+        {LEKCJA_GRATIS_ID ? (
+          <div class="lekcja-gratis-wrap">
+            <div class="lekcja-gratis-badge">🎁 LEKCJA GRATIS — zobacz jak uczę</div>
+            <div class="lekcja-gratis-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${LEKCJA_GRATIS_ID}`}
+                title={`Darmowa lekcja — ${kurs.name}`}
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="lekcja-gratis-caption">"{kurs.podpunkty[0]}" · fragment pełnego kursu</div>
+          </div>
+        ) : (
+          <HeroMedia
+            slot="heroKursy"
+            captionOverride={`"${kurs.podpunkty[0]}" · ~8 min`}
+          />
+        )}
       </div>
     </div>
   </section>
@@ -760,5 +780,43 @@ const pakietLiczba = kurs.klasaNum === 1 ? 12 : kurs.klasaNum === 2 ? 8 : 6;
     .teoria-grid { grid-template-columns: 1fr; }
     .kurs-nav-inner { flex-direction: column; }
     .kurs-nav-back, .kurs-nav-all { text-align: center; }
+  }
+  .lekcja-gratis-wrap {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    border-radius: 16px;
+    padding: 14px;
+  }
+  .lekcja-gratis-badge {
+    display: inline-block;
+    background: rgba(63, 206, 207, 0.15);
+    color: #3FCECF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+  }
+  .lekcja-gratis-video {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+  }
+  .lekcja-gratis-video iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .lekcja-gratis-caption {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.55);
+    margin-top: 10px;
+    text-align: center;
   }
 </style>

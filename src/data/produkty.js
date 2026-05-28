@@ -35,7 +35,7 @@ export const produkty = {
     price: 597,
     priceOld: 697,
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id ===
-    sklepEmbedId: '66f041e16a60928b05a7e228a89c3799',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
+    sklepEmbedId: '',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     sklepUrl: '',      // opcjonalnie URL strony produktu
     status: 'live',
   },
@@ -52,7 +52,7 @@ export const produkty = {
     price: 197,
     priceOld: null,
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id ===
-    sklepEmbedId: '072b030ba126b2f4b2374f342be9ed44',
+    sklepEmbedId: '',
     sklepUrl: '',
     landingUrl: '/landing-powtorka-14-dni',
     status: 'live',
@@ -70,7 +70,7 @@ export const produkty = {
     price: 67,
     priceOld: null,
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id ===
-    sklepEmbedId: '03afdbd66e7929b125f8597834fa83a4',
+    sklepEmbedId: '',
     sklepUrl: '',
     landingUrl: '/landing-maturalny-sprint',
     status: 'live',
@@ -88,7 +88,7 @@ export const produkty = {
     price: 99,
     priceOld: 159,
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id ===
-    sklepEmbedId: 'd82c8d1619ad8176d665453cfb2e55f0',
+    sklepEmbedId: '',
     sklepUrl: '',
     status: 'live',
   },

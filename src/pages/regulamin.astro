@@ -1,0 +1,119 @@
+---
+import Layout from '../layouts/Layout.astro';
+const dataAktualizacji = '28 maja 2026';
+---
+
+<Layout
+  title="Regulamin — MATHOUSE"
+  description="Regulamin świadczenia usług i sprzedaży kursów MATHOUSE."
+  noindex={true}
+>
+  <main class="legal-page">
+    <div class="container-content">
+      <div class="breadcrumb">
+        <a href="/">←&nbsp;Strona główna</a> / <span>Regulamin</span>
+      </div>
+
+      <h1 class="legal-title">Regulamin</h1>
+      <p class="legal-updated">Ostatnia aktualizacja: {dataAktualizacji}</p>
+
+      <div class="legal-content">
+        <h2>1. Postanowienia ogólne</h2>
+        <p>
+          Niniejszy regulamin określa zasady korzystania z serwisu MATHOUSE oraz zakupu kursów
+          i materiałów edukacyjnych. Usługodawcą jest Olaf Pieprzak działający pod marką MATHOUSE.
+        </p>
+
+        <h2>2. Definicje</h2>
+        <ul>
+          <li><strong>Serwis</strong> — strona internetowa MATHOUSE,</li>
+          <li><strong>Kursy</strong> — materiały wideo i PDF dostępne po zakupie,</li>
+          <li><strong>Korepetycje</strong> — indywidualne zajęcia online,</li>
+          <li><strong>Użytkownik</strong> — osoba korzystająca z serwisu.</li>
+        </ul>
+
+        <h2>3. Zakup kursów</h2>
+        <p>
+          Zakup kursów odbywa się za pośrednictwem platformy sklepowej. Po dokonaniu płatności
+          Użytkownik otrzymuje dostęp do zakupionych materiałów. Dostęp do kursów wideo jest
+          bezterminowy, chyba że opis produktu stanowi inaczej.
+        </p>
+
+        <h2>4. Płatności</h2>
+        <p>
+          Dostępne metody płatności obejmują BLIK, kartę płatniczą, przelew oraz inne udostępnione
+          w procesie zakupu. Ceny podane w serwisie są cenami brutto.
+        </p>
+
+        <h2>5. Korepetycje</h2>
+        <p>
+          Rezerwacja korepetycji odbywa się przez system rezerwacji online. Szczegóły dotyczące
+          terminów, odwoływania i płatności ustalane są indywidualnie.
+        </p>
+
+        <h2>6. Prawo odstąpienia od umowy</h2>
+        <p>
+          Z uwagi na cyfrowy charakter treści, rozpoczęcie korzystania z materiałów (uzyskanie
+          dostępu) może oznaczać utratę prawa do odstąpienia od umowy, zgodnie z obowiązującymi
+          przepisami o prawach konsumenta.
+        </p>
+
+        <h2>7. Reklamacje</h2>
+        <p>
+          Reklamacje można zgłaszać na adres olaf.pieprzak@gmail.com. Reklamacje rozpatrywane są
+          w terminie do 14 dni.
+        </p>
+
+        <h2>8. Kontakt</h2>
+        <p>
+          Olaf Pieprzak · MATHOUSE · olaf.pieprzak@gmail.com · tel. 570 840 416.
+        </p>
+
+        <p class="legal-disclaimer">
+          ⚠️ Powyższy dokument jest wzorem podstawowym. Przed publikacją zalecamy konsultację
+          z prawnikiem w celu dostosowania do faktycznego zakresu działalności i przepisów.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .legal-page { padding: 20px 0 60px; }
+  .breadcrumb { padding: 14px 0 24px; font-size: 11px; color: rgba(235, 238, 255, 0.5); }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb a:hover { color: #FFDE59; }
+  .breadcrumb span { color: #FFDE59; }
+  .legal-title { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  .legal-updated { font-size: 13px; color: rgba(235, 238, 255, 0.5); margin-bottom: 32px; }
+  .legal-content { max-width: 760px; }
+  .legal-content h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #FFDE59;
+    margin: 28px 0 10px;
+  }
+  .legal-content p {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.8);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .legal-content ul { margin: 0 0 12px; padding-left: 22px; }
+  .legal-content li {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.8);
+    line-height: 1.7;
+    margin-bottom: 6px;
+  }
+  .legal-content strong { color: #EBEEFF; }
+  .legal-disclaimer {
+    margin-top: 32px;
+    padding: 14px 18px;
+    background: rgba(255, 222, 89, 0.08);
+    border: 1px solid rgba(255, 222, 89, 0.25);
+    border-radius: 10px;
+    font-size: 12.5px !important;
+    color: rgba(235, 238, 255, 0.65) !important;
+  }
+</style>
