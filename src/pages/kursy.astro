@@ -11,7 +11,7 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
 
 <Layout
   title="Kursy matematyki online"
-  description="Kursy matematyki online: liceum klasa 1 (12 działów), matura podstawowa, matura rozszerzona, ósmoklasista. Dostęp na zawsze. Od 47 zł. Pakiet klasy 1 = 597 zł."
+  description="Kursy matematyki online: liceum klasa 1 (12 działów), matura podstawowa, matura rozszerzona, ósmoklasista. Dostęp na zawsze. Od 67 zł. Pakiet klasy 1 = 597 zł."
 >
   <div class="breadcrumb">
     <div class="container-content">
@@ -90,8 +90,15 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
             <div class="dzial-card-body">
               <div class="dzial-podtitle">📚 W tym dziale:</div>
               <ul class="dzial-podpunkty">
-                {k.podpunkty.slice(0, 5).map((p) => <li>{p}</li>)}
-                {k.podpunkty.length > 5 && <li class="dzial-podpunkt-more">+ {k.podpunkty.length - 5} kolejnych</li>}
+                {k.podpunkty.slice(0, 3).map((p) => <li>{p}</li>)}
+                {k.podpunkty.slice(3).map((p) => <li class="dzial-podpunkt-extra">{p}</li>)}
+                {k.podpunkty.length > 3 && (
+                  <li class="dzial-podpunkt-more">
+                    <button type="button" class="dzial-more-btn" onclick="toggleDzialPodpunkty(event, this)">
+                      + pokaż jeszcze {k.podpunkty.length - 3}
+                    </button>
+                  </li>
+                )}
               </ul>
             </div>
             <div class="dzial-card-foot">
@@ -125,43 +132,39 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
         </h2>
       </div>
 
-      <div class="matura-grid">
+      <div class="matura-grid matura-grid-4">
         <div class="card-matura card-matura-teal">
           <span class="matura-badge">PODSTAWOWA</span>
           <h3 class="matura-h">14-dniowa powtórka<br />do matury podstawowej</h3>
           <p class="matura-desc">Dzień po dniu, każdy dział z matury. Idealne 2 tygodnie przed egzaminem.</p>
           <div class="matura-bonus">+ tablice matematyczne CKE gratis</div>
           <div class="matura-price">197 zł</div>
-          <a href="/kursy/matura-14-dni" class="btn-primary matura-cta">Kup kurs →</a>
+          <a href="/landing-powtorka-14-dni" class="btn-primary matura-cta">Kup kurs →</a>
         </div>
 
         <div class="card-matura">
-          <span class="matura-badge yellow">START 47 ZŁ</span>
+          <span class="matura-badge yellow">START 67 ZŁ</span>
           <h3 class="matura-h">3-dniowy Maturalny<br />Sprint</h3>
           <p class="matura-desc">Najszybszy wgląd w to jak uczę. Idealne żeby sprawdzić styl.</p>
-          <div class="matura-price">47 zł</div>
-          <a href="/kursy/maturalny-sprint" class="btn-primary matura-cta">Kup kurs →</a>
+          <div class="matura-price">67 zł</div>
+          <a href="/landing-maturalny-sprint" class="btn-primary matura-cta">Kup kurs →</a>
+        </div>
+
+        <div class="card-matura card-matura-autopilot">
+          <span class="matura-badge yellow">−38%</span>
+          <h3 class="matura-h">Matematyczny Autopilot<br />— schemat krok po kroku</h3>
+          <p class="matura-desc">Dla osób, które chcą ogarnąć całość bez chaosu. Schemat działania dla każdego typu zadania.</p>
+          <div class="matura-price-row">
+            <span class="matura-price">99 zł</span>
+            <span class="matura-price-old">159 zł</span>
+          </div>
+          <a href="/kursy/matematyczny-autopilot" class="btn-primary matura-cta">Kup kurs →</a>
         </div>
 
         <div class="card-matura card-matura-soon">
           <div class="soon-label">WKRÓTCE</div>
           <h3 class="matura-h">Kurs matura<br />rozszerzona</h3>
           <p class="soon-desc">Powiadom mnie →</p>
-        </div>
-      </div>
-
-      <!-- AUTOPILOT -->
-      <div class="autopilot-bar">
-        <div class="autopilot-info">
-          <div class="autopilot-icon"><i class="ti ti-rocket"></i></div>
-          <div>
-            <div class="autopilot-name">Matematyczny Autopilot — schemat krok po kroku</div>
-            <div class="autopilot-desc">Dla osób, które chcą ogarnąć całość bez chaosu.</div>
-          </div>
-        </div>
-        <div class="autopilot-prices">
-          <span class="autopilot-now">99 zł</span>
-          <span class="autopilot-old">159 zł</span>
         </div>
       </div>
     </div>
@@ -564,6 +567,27 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
     gap: 14px;
     margin-bottom: 14px;
   }
+  .matura-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .card-matura-autopilot {
+    border-color: rgba(255, 222, 89, 0.35);
+    background: rgba(255, 222, 89, 0.04);
+  }
+  .matura-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .matura-price-row .matura-price {
+    margin-top: 0;
+  }
+  .matura-price-old {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.45);
+    text-decoration: line-through;
+  }
   .card-matura {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(235, 238, 255, 0.1);
@@ -789,6 +813,9 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
     .matura-grid {
       grid-template-columns: 1fr;
     }
+    .matura-grid-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
     .pakiet-big {
       grid-template-columns: 1fr;
       text-align: left;
@@ -800,6 +827,48 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
       justify-content: flex-start;
     }
   }
+  @media (max-width: 640px) {
+    .matura-grid-4 {
+      grid-template-columns: 1fr;
+    }
+  }
+  /* === COLLAPSIBLE PODPUNKTY === */
+  .dzial-podpunkt-extra {
+    display: none;
+  }
+  .dzial-card.expanded .dzial-podpunkt-extra {
+    display: list-item;
+  }
+  .dzial-podpunkt-more {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-top: 4px;
+  }
+  .dzial-podpunkt-more::before {
+    display: none !important;
+  }
+  .dzial-more-btn {
+    background: rgba(63, 206, 207, 0.12);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+    transition: all 0.15s ease;
+  }
+  .dzial-more-btn:hover {
+    background: rgba(63, 206, 207, 0.2);
+    border-color: rgba(63, 206, 207, 0.5);
+  }
+  .dzial-card.expanded .dzial-more-btn::after {
+    content: ' (zwiń)';
+    opacity: 0.7;
+  }
+
   @media (max-width: 640px) {
     .kursy-title {
       font-size: 32px;
@@ -825,3 +894,21 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
     }
   }
 </style>
+
+<script is:inline>
+  // Toggle podpunktów w kafelku działu - nie nawigujemy do kursu, tylko rozwijamy
+  function toggleDzialPodpunkty(event, btn) {
+    event.preventDefault();
+    event.stopPropagation();
+    const card = btn.closest('.dzial-card');
+    if (!card) return;
+    const expanded = card.classList.toggle('expanded');
+    if (expanded) {
+      const hidden = card.querySelectorAll('.dzial-podpunkt-extra').length;
+      btn.textContent = '− zwiń (' + hidden + ' więcej widocznych)';
+    } else {
+      const hidden = card.querySelectorAll('.dzial-podpunkt-extra').length;
+      btn.textContent = '+ pokaż jeszcze ' + hidden;
+    }
+  }
+</script>

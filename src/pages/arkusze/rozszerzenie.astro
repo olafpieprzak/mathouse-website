@@ -1,0 +1,331 @@
+---
+// =====================================================
+// ARKUSZE - MATURA ROZSZERZONA
+// URL: /arkusze/rozszerzenie
+// =====================================================
+import Layout from '../../layouts/Layout.astro';
+import ArkuszMaterialy from '../../components/ArkuszMaterialy.astro';
+import { arkuszeRozsz, informatory } from '../../data/arkusze.js';
+
+const arkuszeTop = arkuszeRozsz.slice(0, 8);
+const arkuszeReszta = arkuszeRozsz.slice(8);
+---
+
+<Layout
+  title="Arkusze CKE — matura rozszerzona"
+  description={`Wszystkie ${arkuszeRozsz.length} arkusze CKE matury rozszerzonej — z odpowiedziami i moimi rozwiązaniami wideo. Za darmo.`}
+>
+  <div class="breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> /
+      <a href="/arkusze">Arkusze CKE</a> /
+      <span>Matura rozszerzona</span>
+    </div>
+  </div>
+
+  <section class="ark-hero">
+    <div class="container-content ark-hero-inner">
+      <span class="tag-teal">🔬 MATURA ROZSZERZONA · {arkuszeRozsz.length} arkuszy</span>
+      <h1 class="ark-h1">
+        Arkusze matury <span class="text-teal">rozszerzonej</span>
+      </h1>
+      <p class="ark-sub">
+        Cała baza arkuszy CKE matury rozszerzonej. Z odpowiedziami i moimi rozwiązaniami wideo.
+        Sortowane od najnowszego.
+      </p>
+      <div class="ark-jumps">
+        <a href="/arkusze/podstawa" class="jump-chip jump-yellow">→ Podstawa</a>
+        <a href="/arkusze/osmoklasista" class="jump-chip jump-lav">→ Ósmoklasista</a>
+        <a href="/arkusze" class="jump-chip jump-soft">← Pełne archiwum</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-arkusze">
+    <div class="container-content">
+      <div class="section-header">
+        <div>
+          <div class="section-label teal">§ 01 · ARKUSZE</div>
+          <h2 class="ark-title">Poziom <span class="text-teal">rozszerzony</span></h2>
+        </div>
+        <div class="filtry">
+          <span class="filtr-label">podstawa:</span>
+          <button class="filtr filtr-active filtr-teal" data-filtr="all" onclick="filtrujArkusze(this, 'all')">wszystkie</button>
+          <button class="filtr" data-filtr="2023+" onclick="filtrujArkusze(this, '2023+')">2023+</button>
+          <button class="filtr" data-filtr="2015-2022" onclick="filtrujArkusze(this, '2015-2022')">2015-2022</button>
+        </div>
+      </div>
+
+      <div class="arkusze-grid" id="arkusze-grid-top">
+        {arkuszeTop.map((a) => (
+          <article class={`arkusz-tile arkusz-tile-teal ${a.badge ? 'arkusz-tile-new' : ''}`} data-podstawa={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
+            {a.badge && <span class="ark-badge ark-badge-teal">{a.badge}</span>}
+            <div class={`ark-date ${a.badge ? 'teal' : ''}`}>{a.monthLabel}</div>
+            <div class="ark-name">{a.name}</div>
+            <div class="ark-meta">{a.meta}</div>
+            <ArkuszMaterialy arkusz={a} poziom="rozsz" />
+          </article>
+        ))}
+      </div>
+
+      <div class="arkusze-grid arkusze-grid-hidden" id="arkusze-grid-reszta">
+        {arkuszeReszta.map((a) => (
+          <article class="arkusz-tile arkusz-tile-teal" data-podstawa={a.year >= 2023 ? '2023+' : (a.year >= 2015 ? '2015-2022' : 'do 2014')}>
+            <div class="ark-date">{a.monthLabel}</div>
+            <div class="ark-name">{a.name}</div>
+            <div class="ark-meta">{a.meta}</div>
+            <ArkuszMaterialy arkusz={a} poziom="rozsz" />
+          </article>
+        ))}
+      </div>
+
+      {arkuszeReszta.length > 0 && (
+        <div class="ark-more-wrap">
+          <button type="button" class="ark-more ark-more-teal" id="ark-more-toggle" onclick="toggleWszystkieArkusze(this)">
+            Pokaż wszystkie {arkuszeRozsz.length} arkuszy rozszerzonych →
+          </button>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Informatory CKE -->
+  <section class="section-info">
+    <div class="container-content">
+      <div class="section-label yellow">§ 02 · MATERIAŁY DODATKOWE</div>
+      <h2 class="ark-title">Informatory CKE — <span class="text-yellow">do pobrania</span></h2>
+      <p class="ark-sub">
+        Oficjalne dokumenty CKE z wymaganiami egzaminacyjnymi, zasadami oceniania i przykładowymi
+        zadaniami. Bezpłatne, do wydruku.
+      </p>
+      <div class="info-grid">
+        {informatory.map((m) => (
+          <a href={m.url || '#'} target="_blank" rel="noopener noreferrer" class="info-tile">
+            <span class="info-icon"><i class="ti ti-file-text"></i></span>
+            <div class="info-text">
+              <div class="info-name">{m.name}</div>
+              {m.meta && <div class="info-meta">{m.meta}</div>}
+            </div>
+            <span class="info-arrow">↓</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  function filtrujArkusze(btn, filtr) {
+    document.querySelectorAll('.filtr').forEach(b => b.classList.remove('filtr-active'));
+    btn.classList.add('filtr-active');
+    document.querySelectorAll('.arkusz-tile').forEach(tile => {
+      const tilePodstawa = tile.dataset.podstawa;
+      tile.style.display = (filtr === 'all' || tilePodstawa === filtr) ? '' : 'none';
+    });
+  }
+  function toggleWszystkieArkusze(btn) {
+    const grid = document.getElementById('arkusze-grid-reszta');
+    if (!grid) return;
+    const expanded = grid.classList.toggle('arkusze-grid-hidden');
+    btn.textContent = expanded
+      ? 'Pokaż wszystkie ' + (grid.children.length + document.querySelectorAll('#arkusze-grid-top .arkusz-tile').length) + ' arkuszy rozszerzonych →'
+      : '← Zwiń listę';
+  }
+</script>
+
+<style>
+  .breadcrumb { padding: 14px 0; font-size: 11px; color: rgba(235, 238, 255, 0.5); border-bottom: 1px solid rgba(235, 238, 255, 0.06); }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb a:hover { color: #3FCECF; }
+  .breadcrumb span { color: #3FCECF; }
+  .text-yellow { color: #FFDE59; }
+  .text-teal { color: #3FCECF; }
+
+  .ark-hero { padding: 38px 0 24px; }
+  .ark-hero-inner { max-width: 920px; }
+  .tag-teal {
+    display: inline-block;
+    background: rgba(63, 206, 207, 0.12);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    padding: 6px 14px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+  }
+  .ark-h1 {
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1.2px;
+    margin: 14px 0 14px;
+  }
+  .ark-sub {
+    font-size: 14.5px;
+    color: rgba(235, 238, 255, 0.7);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .ark-jumps { display: flex; gap: 8px; flex-wrap: wrap; }
+  .jump-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.7);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .jump-chip:hover { border-color: rgba(63, 206, 207, 0.4); }
+  .jump-yellow { color: #FFDE59 !important; border-color: rgba(255, 222, 89, 0.3); }
+  .jump-lav { color: #B5A6FF !important; border-color: rgba(181, 166, 255, 0.3); }
+  .jump-soft { color: rgba(235, 238, 255, 0.6); }
+
+  .section-arkusze, .section-info { padding: 36px 0; }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #3FCECF;
+    margin-bottom: 6px;
+  }
+  .section-label.yellow { color: #FFDE59; }
+  .section-label.teal { color: #3FCECF; }
+  .ark-title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .filtry { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .filtr-label { font-size: 11px; color: rgba(235, 238, 255, 0.45); margin-right: 4px; }
+  .filtr {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    color: rgba(235, 238, 255, 0.7);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+  }
+  .filtr:hover { color: #3FCECF; }
+  .filtr-active { background: #3FCECF; color: #050A24; border-color: #3FCECF; }
+
+  .arkusze-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .arkusze-grid-hidden { display: none; }
+  .arkusz-tile {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+  }
+  .arkusz-tile-teal { }
+  .arkusz-tile-new {
+    border-color: rgba(63, 206, 207, 0.3);
+    background: rgba(63, 206, 207, 0.04);
+  }
+  .ark-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #FFDE59;
+    color: #050A24;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+  }
+  .ark-badge-teal { background: #3FCECF; }
+  .ark-date {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .ark-date.teal { color: #3FCECF; }
+  .ark-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #EBEEFF;
+    margin: 4px 0 4px;
+    line-height: 1.3;
+  }
+  .ark-meta {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-bottom: 10px;
+  }
+
+  .ark-more-wrap { text-align: center; margin-top: 22px; }
+  .ark-more {
+    background: rgba(63, 206, 207, 0.1);
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    color: #3FCECF;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .ark-more:hover { background: rgba(63, 206, 207, 0.2); }
+
+  .section-info { background: rgba(255, 222, 89, 0.03); border-top: 1px solid rgba(255, 222, 89, 0.15); }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .info-tile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.18s ease;
+  }
+  .info-tile:hover {
+    border-color: rgba(255, 222, 89, 0.4);
+    background: rgba(255, 222, 89, 0.04);
+    transform: translateY(-2px);
+  }
+  .info-icon { font-size: 22px; color: #FFDE59; }
+  .info-text { flex: 1; }
+  .info-name { font-size: 13.5px; font-weight: 700; color: #EBEEFF; line-height: 1.3; }
+  .info-meta { font-size: 11px; color: rgba(235, 238, 255, 0.5); margin-top: 3px; }
+  .info-arrow { color: #FFDE59; font-size: 18px; font-weight: 700; }
+
+  @media (max-width: 900px) {
+    .arkusze-grid { grid-template-columns: repeat(2, 1fr); }
+    .info-grid { grid-template-columns: 1fr; }
+    .ark-h1 { font-size: 32px; }
+  }
+  @media (max-width: 600px) {
+    .arkusze-grid { grid-template-columns: 1fr; }
+  }
+</style>

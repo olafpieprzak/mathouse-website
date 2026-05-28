@@ -79,7 +79,7 @@ export const produkty = {
   // =========================================================================
   // MATEMATYCZNY AUTOPILOT — schemat krok po kroku
   // Cena: 99 zł (było 159 zł)
-  // Widoczny w: NA RAZIE NIGDZIE — dodamy po deployu, gdy potwierdzimy podstronę
+  // Widoczny w: /kursy (4 kafelek matur), /kursy/matematyczny-autopilot
   // =========================================================================
   autopilot: {
     name: 'Matematyczny Autopilot - Schemat Krok po Kroku',
@@ -90,7 +90,7 @@ export const produkty = {
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id ===
     sklepEmbedId: '',
     sklepUrl: '',
-    status: 'soon',  // 'soon' = ukryte z widoku; zmień na 'live' gdy chcesz pokazać
+    status: 'live',
   },
 
   // =========================================================================

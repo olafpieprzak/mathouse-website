@@ -1,0 +1,456 @@
+---
+// =====================================================
+// MATEMATYCZNY AUTOPILOT — schemat krok po kroku
+// =====================================================
+// Cena: 99 zł (było 159 zł, -38%)
+// =====================================================
+import Layout from '../../layouts/Layout.astro';
+import KupTerazWidget from '../../components/KupTerazWidget.astro';
+import { produkty } from '../../data/produkty.js';
+
+const product = produkty.autopilot;
+const PRICE = product.price; // 99
+const PRICE_OLD = product.priceOld; // 159
+const EMBED_ID = product.sklepEmbedId;
+const SHOP_URL = product.sklepUrl;
+const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
+---
+
+<Layout
+  title={`Matematyczny Autopilot — schemat krok po kroku · ${PRICE} zł`}
+  description="Schemat krok po kroku dla każdego typu zadania maturalnego. Dla osób, które chcą ogarnąć całość bez chaosu. Cena 99 zł (było 159 zł)."
+>
+  <!-- Breadcrumb -->
+  <div class="kurs-breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> /
+      <a href="/kursy">Kursy</a> /
+      <span>Matematyczny Autopilot</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="kurs-hero">
+    <div class="container-content kurs-hero-grid">
+      <div class="kurs-hero-left">
+        <div class="section-label">🚀 SCHEMAT · BESTSELLER</div>
+        <h1 class="kurs-title">
+          Matematyczny <span class="text-yellow">Autopilot</span>.<br />
+          Schemat krok po kroku.
+        </h1>
+        <p class="kurs-desc">
+          Dla osób, które chcą ogarnąć całość bez chaosu. Daję Ci gotowy
+          <strong>schemat działania dla każdego typu zadania maturalnego</strong> —
+          krok po kroku, bez improwizacji. Otwierasz zadanie, sprawdzasz typ, idziesz schematem.
+        </p>
+        <div class="kurs-price-row">
+          <span class="kurs-price">{PRICE} zł</span>
+          {PRICE_OLD && <span class="kurs-price-old">{PRICE_OLD} zł</span>}
+          <span class="kurs-price-save">oszczędzasz {PRICE_OLD - PRICE} zł</span>
+        </div>
+        <div class="kurs-cta">
+          {HAS_CHECKOUT ? (
+            <a href="#kup-teraz" class="btn-primary">🛒 Kup teraz · {PRICE} zł</a>
+          ) : (
+            <a href="/kontakt" class="btn-primary">📩 Powiadom mnie</a>
+          )}
+          <a href="/kursy" class="btn-teal">← Wróć do kursów</a>
+        </div>
+      </div>
+      <div class="kurs-hero-right">
+        <div class="hero-card">
+          <div class="hero-card-icon">🎯</div>
+          <div class="hero-card-stat">
+            <div class="hero-card-num">−38%</div>
+            <div class="hero-card-lbl">vs cena pełna</div>
+          </div>
+          <div class="hero-card-stat">
+            <div class="hero-card-num">∞</div>
+            <div class="hero-card-lbl">dostęp na zawsze</div>
+          </div>
+          <div class="hero-card-stat">
+            <div class="hero-card-num">PDF</div>
+            <div class="hero-card-lbl">+ wideo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DLA KOGO -->
+  <section class="kurs-dla-kogo">
+    <div class="container-content">
+      <div class="section-label">👤 DLA KOGO</div>
+      <h2 class="section-title">Komu Autopilot pomoże?</h2>
+      <div class="dla-kogo-grid">
+        <div class="dla-kogo-card">
+          <div class="dla-kogo-ico">🎓</div>
+          <div class="dla-kogo-text">
+            <strong>Maturzysta, który "umie zadania, ale gubi się w kolejności"</strong>
+            <span>Wiesz co masz robić, ale gdy widzisz nieznane zadanie — paraliż. Autopilot daje schemat: krok 1, krok 2, krok 3.</span>
+          </div>
+        </div>
+        <div class="dla-kogo-card">
+          <div class="dla-kogo-ico">⏰</div>
+          <div class="dla-kogo-text">
+            <strong>Osoba, której brakuje czasu na pełny kurs</strong>
+            <span>Nie masz miesięcy na cały materiał. Bierzesz schemat dla typu zadania, którego się boisz — i działasz.</span>
+          </div>
+        </div>
+        <div class="dla-kogo-card">
+          <div class="dla-kogo-ico">🧠</div>
+          <div class="dla-kogo-text">
+            <strong>Wzrokowiec, który lepiej uczy się z diagramów</strong>
+            <span>Schematy są wizualne. Widzisz drzewko decyzyjne, znaki strzałek, kolejność kroków — wszystko na jednej stronie.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {HAS_CHECKOUT && (
+    <a href="#kup-teraz" class="mini-cta mini-cta-yellow">
+      <div class="container-content mini-cta-inner">
+        <span class="mini-cta-emoji">⚡</span>
+        <span class="mini-cta-text">
+          <strong>Chcesz cały schemat?</strong>
+          <em>Dostęp na zawsze. {PRICE} zł zamiast {PRICE_OLD} zł.</em>
+        </span>
+        <span class="mini-cta-btn">🛒 Kup teraz · {PRICE} zł ↓</span>
+      </div>
+    </a>
+  )}
+
+  <!-- CO ZNAJDZIESZ -->
+  <section class="kurs-co">
+    <div class="container-content">
+      <div class="section-label">📋 CO ZNAJDZIESZ W AUTOPILOTE</div>
+      <h2 class="section-title">Schematy do każdego typu zadania.</h2>
+      <p class="kurs-co-sub">
+        Konkretna zawartość zostanie opublikowana wkrótce. Autopilot powstaje z myślą o najczęstszych
+        problemach uczniów — od identyfikacji typu zadania po wybór metody rozwiązywania.
+      </p>
+      <div class="kurs-co-grid">
+        <div class="kurs-co-card">
+          <div class="kurs-co-num">01</div>
+          <div class="kurs-co-name">Identyfikacja typu zadania</div>
+          <div class="kurs-co-desc">Patrzysz na zadanie i w 10 sekund wiesz, jakim "narzędziem" je rozwiązać.</div>
+        </div>
+        <div class="kurs-co-card">
+          <div class="kurs-co-num">02</div>
+          <div class="kurs-co-name">Schemat krok po kroku</div>
+          <div class="kurs-co-desc">Drzewko decyzyjne — co robić, gdy zadanie wygląda inaczej niż w książce.</div>
+        </div>
+        <div class="kurs-co-card">
+          <div class="kurs-co-num">03</div>
+          <div class="kurs-co-name">Ściągi PDF</div>
+          <div class="kurs-co-desc">Do wydruku — schematy do trzymania pod ręką w domu i w szkole.</div>
+        </div>
+        <div class="kurs-co-card">
+          <div class="kurs-co-num">04</div>
+          <div class="kurs-co-name">Wideo omówienia</div>
+          <div class="kurs-co-desc">Krótkie filmy pokazujące jak schemat działa na konkretnych zadaniach.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {HAS_CHECKOUT && (
+    <a href="#kup-teraz" class="mini-cta mini-cta-teal">
+      <div class="container-content mini-cta-inner">
+        <span class="mini-cta-emoji">🚀</span>
+        <span class="mini-cta-text">
+          <strong>Gotowy ogarnąć całość bez chaosu?</strong>
+          <em>Płatność BLIK / kartą / przelew · dostęp natychmiast.</em>
+        </span>
+        <span class="mini-cta-btn">🛒 Zamawiam · {PRICE} zł ↓</span>
+      </div>
+    </a>
+  )}
+
+  <!-- WIDGET PŁATNOŚCI -->
+  {HAS_CHECKOUT && EMBED_ID && (
+    <KupTerazWidget embedId={EMBED_ID} productName="Matematyczny Autopilot" price={PRICE} priceOld={PRICE_OLD} />
+  )}
+
+  {!EMBED_ID && SHOP_URL && (
+    <section id="kup-teraz" class="kup-fallback">
+      <div class="container-content">
+        <h2 class="kup-fallback-title">Gotowy na zakup?</h2>
+        <p class="kup-fallback-sub">Kliknij poniżej, żeby przejść do sklepu i sfinalizować zamówienie.</p>
+        <a href={SHOP_URL} target="_blank" rel="noopener" class="btn-primary kup-fallback-btn">
+          🛒 Przejdź do sklepu · {PRICE} zł →
+        </a>
+      </div>
+    </section>
+  )}
+
+  {!HAS_CHECKOUT && (
+    <section id="kup-teraz" class="kup-fallback">
+      <div class="container-content">
+        <h2 class="kup-fallback-title">Autopilot — wkrótce dostępny</h2>
+        <p class="kup-fallback-sub">Produkt jest w przygotowaniu. Zostaw mi swój email — dam znać gdy ruszy sprzedaż.</p>
+        <a href="/kontakt" class="btn-primary kup-fallback-btn">📩 Powiadom mnie →</a>
+      </div>
+    </section>
+  )}
+</Layout>
+
+<style>
+  .kurs-breadcrumb {
+    padding: 14px 0;
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    border-bottom: 1px solid rgba(235, 238, 255, 0.06);
+  }
+  .kurs-breadcrumb a { color: inherit; text-decoration: none; }
+  .kurs-breadcrumb a:hover { color: #FFDE59; }
+  .kurs-breadcrumb span { color: #FFDE59; }
+  .text-yellow { color: #FFDE59; }
+
+  .kurs-hero { padding: 40px 0 30px; }
+  .kurs-hero-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 30px;
+    align-items: center;
+  }
+  .kurs-title {
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1.2px;
+    margin: 12px 0 16px;
+  }
+  .kurs-desc {
+    font-size: 15px;
+    color: rgba(235, 238, 255, 0.75);
+    line-height: 1.65;
+    max-width: 600px;
+    margin: 0 0 22px;
+  }
+  .kurs-desc strong { color: #EBEEFF; }
+
+  .kurs-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .kurs-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: #FFDE59;
+    letter-spacing: -0.5px;
+  }
+  .kurs-price-old {
+    font-size: 18px;
+    color: rgba(235, 238, 255, 0.45);
+    text-decoration: line-through;
+  }
+  .kurs-price-save {
+    font-size: 11px;
+    color: #2ECC71;
+    background: rgba(46, 204, 113, 0.12);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .kurs-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .kurs-hero-right { display: flex; justify-content: center; }
+  .hero-card {
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.1), rgba(63, 206, 207, 0.05));
+    border: 1px solid rgba(255, 222, 89, 0.25);
+    border-radius: 18px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    min-width: 240px;
+  }
+  .hero-card-icon { font-size: 56px; line-height: 1; }
+  .hero-card-stat {
+    text-align: center;
+    border-top: 1px solid rgba(235, 238, 255, 0.1);
+    padding-top: 12px;
+    width: 100%;
+  }
+  .hero-card-stat:first-of-type { border-top: none; padding-top: 0; }
+  .hero-card-num {
+    font-size: 26px;
+    font-weight: 800;
+    color: #FFDE59;
+    line-height: 1;
+  }
+  .hero-card-lbl {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  /* SEKCJE */
+  .kurs-dla-kogo, .kurs-co { padding: 44px 0; }
+  .section-label {
+    font-size: 11px;
+    color: #3FCECF;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .section-title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 18px;
+  }
+
+  .dla-kogo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .dla-kogo-card {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 12px;
+  }
+  .dla-kogo-ico { font-size: 32px; line-height: 1; flex-shrink: 0; }
+  .dla-kogo-text strong {
+    font-size: 14px;
+    color: #EBEEFF;
+    display: block;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .dla-kogo-text span {
+    font-size: 12.5px;
+    color: rgba(235, 238, 255, 0.65);
+    line-height: 1.55;
+  }
+
+  .kurs-co-sub {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.6);
+    margin-bottom: 22px;
+    max-width: 720px;
+    line-height: 1.6;
+  }
+  .kurs-co-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .kurs-co-card {
+    padding: 20px;
+    background: rgba(255, 222, 89, 0.05);
+    border: 1px solid rgba(255, 222, 89, 0.2);
+    border-radius: 12px;
+  }
+  .kurs-co-num {
+    font-size: 22px;
+    font-weight: 800;
+    color: #FFDE59;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+  .kurs-co-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #EBEEFF;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .kurs-co-desc {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.6);
+    line-height: 1.55;
+  }
+
+  /* MINI-CTA */
+  .mini-cta {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.18s ease, transform 0.18s ease;
+  }
+  .mini-cta:hover { transform: translateY(-1px); }
+  .mini-cta-yellow {
+    background: linear-gradient(90deg, #FFDE59 0%, #FFE680 100%);
+    color: #050A24;
+  }
+  .mini-cta-teal {
+    background: linear-gradient(90deg, #3FCECF 0%, #5CDADB 100%);
+    color: #050A24;
+  }
+  .mini-cta-inner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 0;
+    flex-wrap: wrap;
+  }
+  .mini-cta-emoji { font-size: 32px; line-height: 1; flex-shrink: 0; }
+  .mini-cta-text {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .mini-cta-text strong { font-size: 16px; font-weight: 700; color: #050A24; }
+  .mini-cta-text em {
+    font-size: 12.5px;
+    font-style: normal;
+    color: rgba(5, 10, 36, 0.7);
+  }
+  .mini-cta-btn {
+    background: #050A24;
+    color: #FFDE59;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .mini-cta-teal .mini-cta-btn { color: #3FCECF; }
+
+  .kup-fallback {
+    padding: 60px 0;
+    background: rgba(255, 222, 89, 0.06);
+    border-top: 1px solid rgba(255, 222, 89, 0.2);
+    text-align: center;
+  }
+  .kup-fallback-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .kup-fallback-sub {
+    font-size: 14px;
+    color: rgba(235, 238, 255, 0.7);
+    margin-bottom: 22px;
+  }
+  .kup-fallback-btn { display: inline-block; }
+
+  @media (max-width: 900px) {
+    .kurs-hero-grid { grid-template-columns: 1fr; }
+    .kurs-title { font-size: 32px; }
+    .dla-kogo-grid { grid-template-columns: 1fr; }
+    .kurs-co-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .kurs-co-grid { grid-template-columns: 1fr; }
+    .mini-cta-btn { width: 100%; text-align: center; }
+  }
+</style>

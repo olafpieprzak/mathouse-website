@@ -1,0 +1,243 @@
+---
+// =====================================================
+// ARKUSZE - EGZAMIN ÓSMOKLASISTY
+// URL: /arkusze/osmoklasista
+// =====================================================
+import Layout from '../../layouts/Layout.astro';
+import ArkuszMaterialy from '../../components/ArkuszMaterialy.astro';
+import { arkusze8, informatory } from '../../data/arkusze.js';
+---
+
+<Layout
+  title="Arkusze CKE — egzamin ósmoklasisty"
+  description={`Arkusze CKE z egzaminu ósmoklasisty z matematyki — z odpowiedziami i moimi rozwiązaniami wideo. Za darmo.`}
+>
+  <div class="breadcrumb">
+    <div class="container-content">
+      <a href="/">←&nbsp;Strona główna</a> /
+      <a href="/arkusze">Arkusze CKE</a> /
+      <span>Egzamin 8-klasisty</span>
+    </div>
+  </div>
+
+  <section class="ark-hero">
+    <div class="container-content ark-hero-inner">
+      <span class="tag-lav">🎓 EGZAMIN ÓSMOKLASISTY · {arkusze8.length} arkusz{arkusze8.length === 1 ? '' : 'y'}</span>
+      <h1 class="ark-h1">
+        Arkusze egzaminu <span class="text-lav">ósmoklasisty</span>
+      </h1>
+      <p class="ark-sub">
+        Baza arkuszy CKE z egzaminu ósmoklasisty z matematyki. Z odpowiedziami i moimi rozwiązaniami
+        wideo. Sortowane od najnowszego.
+      </p>
+      <div class="ark-jumps">
+        <a href="/arkusze/podstawa" class="jump-chip jump-yellow">→ Matura podstawowa</a>
+        <a href="/arkusze/rozszerzenie" class="jump-chip jump-teal">→ Matura rozszerzona</a>
+        <a href="/arkusze" class="jump-chip jump-soft">← Pełne archiwum</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-arkusze">
+    <div class="container-content">
+      <div class="section-header">
+        <div>
+          <div class="section-label lav">§ 01 · ARKUSZE</div>
+          <h2 class="ark-title">Egzamin <span class="text-lav">ósmoklasisty</span></h2>
+        </div>
+      </div>
+
+      <div class="arkusze-grid">
+        {arkusze8.map((a) => (
+          <article class={`arkusz-tile arkusz-tile-lav ${a.badge ? 'arkusz-tile-new' : ''}`}>
+            {a.badge && <span class="ark-badge ark-badge-lav">{a.badge}</span>}
+            <div class={`ark-date ${a.badge ? 'lav' : ''}`}>{a.monthLabel}</div>
+            <div class="ark-name">{a.name}</div>
+            <div class="ark-meta">{a.meta}</div>
+            <ArkuszMaterialy arkusz={a} poziom="osmo" />
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Informatory CKE -->
+  <section class="section-info">
+    <div class="container-content">
+      <div class="section-label yellow">§ 02 · MATERIAŁY DODATKOWE</div>
+      <h2 class="ark-title">Informatory CKE — <span class="text-yellow">do pobrania</span></h2>
+      <p class="ark-sub">
+        Oficjalne dokumenty CKE z wymaganiami egzaminacyjnymi i przykładowymi zadaniami. Bezpłatne.
+      </p>
+      <div class="info-grid">
+        {informatory.map((m) => (
+          <a href={m.url || '#'} target="_blank" rel="noopener noreferrer" class="info-tile">
+            <span class="info-icon"><i class="ti ti-file-text"></i></span>
+            <div class="info-text">
+              <div class="info-name">{m.name}</div>
+              {m.meta && <div class="info-meta">{m.meta}</div>}
+            </div>
+            <span class="info-arrow">↓</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .breadcrumb { padding: 14px 0; font-size: 11px; color: rgba(235, 238, 255, 0.5); border-bottom: 1px solid rgba(235, 238, 255, 0.06); }
+  .breadcrumb a { color: inherit; text-decoration: none; }
+  .breadcrumb a:hover { color: #B5A6FF; }
+  .breadcrumb span { color: #B5A6FF; }
+  .text-yellow { color: #FFDE59; }
+  .text-teal { color: #3FCECF; }
+  .text-lav { color: #B5A6FF; }
+
+  .ark-hero { padding: 38px 0 24px; }
+  .ark-hero-inner { max-width: 920px; }
+  .tag-lav {
+    display: inline-block;
+    background: rgba(181, 166, 255, 0.12);
+    color: #B5A6FF;
+    border: 1px solid rgba(181, 166, 255, 0.3);
+    padding: 6px 14px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+  }
+  .ark-h1 {
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1.2px;
+    margin: 14px 0 14px;
+  }
+  .ark-sub {
+    font-size: 14.5px;
+    color: rgba(235, 238, 255, 0.7);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .ark-jumps { display: flex; gap: 8px; flex-wrap: wrap; }
+  .jump-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.7);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .jump-chip:hover { border-color: rgba(181, 166, 255, 0.4); }
+  .jump-yellow { color: #FFDE59 !important; border-color: rgba(255, 222, 89, 0.3); }
+  .jump-teal { color: #3FCECF !important; border-color: rgba(63, 206, 207, 0.3); }
+  .jump-soft { color: rgba(235, 238, 255, 0.6); }
+
+  .section-arkusze, .section-info { padding: 36px 0; }
+  .section-header { margin-bottom: 22px; }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .section-label.lav { color: #B5A6FF; }
+  .section-label.yellow { color: #FFDE59; }
+  .ark-title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .arkusze-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .arkusz-tile {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+  }
+  .arkusz-tile-new {
+    border-color: rgba(181, 166, 255, 0.3);
+    background: rgba(181, 166, 255, 0.04);
+  }
+  .ark-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #050A24;
+  }
+  .ark-badge-lav { background: #B5A6FF; }
+  .ark-date {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .ark-date.lav { color: #B5A6FF; }
+  .ark-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #EBEEFF;
+    margin: 4px 0 4px;
+    line-height: 1.3;
+  }
+  .ark-meta {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin-bottom: 10px;
+  }
+
+  .section-info { background: rgba(255, 222, 89, 0.03); border-top: 1px solid rgba(255, 222, 89, 0.15); }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .info-tile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(235, 238, 255, 0.1);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.18s ease;
+  }
+  .info-tile:hover {
+    border-color: rgba(255, 222, 89, 0.4);
+    background: rgba(255, 222, 89, 0.04);
+    transform: translateY(-2px);
+  }
+  .info-icon { font-size: 22px; color: #FFDE59; }
+  .info-text { flex: 1; }
+  .info-name { font-size: 13.5px; font-weight: 700; color: #EBEEFF; line-height: 1.3; }
+  .info-meta { font-size: 11px; color: rgba(235, 238, 255, 0.5); margin-top: 3px; }
+  .info-arrow { color: #FFDE59; font-size: 18px; font-weight: 700; }
+
+  @media (max-width: 900px) {
+    .arkusze-grid { grid-template-columns: repeat(2, 1fr); }
+    .info-grid { grid-template-columns: 1fr; }
+    .ark-h1 { font-size: 32px; }
+  }
+  @media (max-width: 600px) {
+    .arkusze-grid { grid-template-columns: 1fr; }
+  }
+</style>

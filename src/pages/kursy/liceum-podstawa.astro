@@ -54,7 +54,14 @@ const klasa4 = ['Funkcja wykładnicza', 'Funkcja logarytmiczna', 'Statystyka', '
                 <div class="dzial-podtitle">📚 W tym dziale:</div>
                 <ul class="dzial-podpunkty">
                   {k.podpunkty.slice(0, 3).map((p) => <li>{p}</li>)}
-                  {k.podpunkty.length > 3 && <li class="dzial-podpunkt-more">+ {k.podpunkty.length - 3} kolejnych</li>}
+                  {k.podpunkty.slice(3).map((p) => <li class="dzial-podpunkt-extra">{p}</li>)}
+                  {k.podpunkty.length > 3 && (
+                    <li class="dzial-podpunkt-more">
+                      <button type="button" class="dzial-more-btn" onclick="toggleDzialPodpunkty(event, this)">
+                        + pokaż jeszcze {k.podpunkty.length - 3}
+                      </button>
+                    </li>
+                  )}
                 </ul>
               </div>
               <div class="dzial-card-foot">
@@ -362,4 +369,54 @@ const klasa4 = ['Funkcja wykładnicza', 'Funkcja logarytmiczna', 'Statystyka', '
   @media (max-width: 480px) {
     .dzialy-grid { grid-template-columns: 1fr; }
   }
+
+  /* === COLLAPSIBLE PODPUNKTY === */
+  .dzial-podpunkt-extra {
+    display: none;
+  }
+  .dzial-card-expanded.expanded .dzial-podpunkt-extra {
+    display: list-item;
+  }
+  .dzial-card-expanded .dzial-podpunkt-more {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-top: 4px;
+  }
+  .dzial-card-expanded .dzial-podpunkt-more::before {
+    display: none !important;
+  }
+  .dzial-more-btn {
+    background: rgba(63, 206, 207, 0.12);
+    color: #3FCECF;
+    border: 1px solid rgba(63, 206, 207, 0.3);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+    transition: all 0.15s ease;
+  }
+  .dzial-more-btn:hover {
+    background: rgba(63, 206, 207, 0.2);
+    border-color: rgba(63, 206, 207, 0.5);
+  }
 </style>
+
+<script is:inline>
+  function toggleDzialPodpunkty(event, btn) {
+    event.preventDefault();
+    event.stopPropagation();
+    const card = btn.closest('.dzial-card-expanded');
+    if (!card) return;
+    const expanded = card.classList.toggle('expanded');
+    if (expanded) {
+      const hidden = card.querySelectorAll('.dzial-podpunkt-extra').length;
+      btn.textContent = '− zwiń (' + hidden + ' więcej widocznych)';
+    } else {
+      const hidden = card.querySelectorAll('.dzial-podpunkt-extra').length;
+      btn.textContent = '+ pokaż jeszcze ' + hidden;
+    }
+  }
+</script>
