@@ -19,13 +19,14 @@ if (!config) {
 const isVideo = config.mode === 'video' && config.videoUrl;
 const embedUrl = isVideo ? getYouTubeEmbedUrl(config.videoUrl) : null;
 const caption = captionOverride || config.caption || '';
+const aspectRatio = config.aspectRatio || '16/10';
+const isVertical = aspectRatio === '9/16';
 ---
 
-<div class="hero-media-wrap">
+<div class={`hero-media-wrap ${isVertical ? 'is-vertical' : ''}`}>
   <div class="hero-media-bg" aria-hidden="true"></div>
-  <div class="hero-media-frame">
+  <div class="hero-media-frame" style={`aspect-ratio: ${aspectRatio};`}>
     {isVideo && embedUrl ? (
-      <!-- TRYB WIDEO: embed YouTube w ramce -->
       <iframe
         src={embedUrl}
         title={config.alt}
@@ -37,7 +38,6 @@ const caption = captionOverride || config.caption || '';
         class="hero-media-iframe"
       ></iframe>
     ) : (
-      <!-- TRYB ZDJĘCIE: statyczne zdjęcie -->
       <img
         src={config.image}
         alt={config.alt}
@@ -60,6 +60,11 @@ const caption = captionOverride || config.caption || '';
     position: relative;
     width: 100%;
   }
+  /* WERSJA PIONOWA 9:16 - filmik wąski, wyśrodkowany, z przekręconą szarą ramką */
+  .hero-media-wrap.is-vertical {
+    max-width: 320px;
+    margin: 0 auto;
+  }
   .hero-media-bg {
     position: absolute;
     inset: 0;
@@ -67,6 +72,13 @@ const caption = captionOverride || config.caption || '';
     border-radius: 16px;
     transform: rotate(-3deg);
     z-index: 0;
+  }
+  /* Wersja pionowa: szara ramka lekko przekręcona ~5° (jak w V12) */
+  .is-vertical .hero-media-bg {
+    background: linear-gradient(135deg, #4a5170 0%, #2d3450 100%);
+    transform: rotate(5deg);
+    inset: -8px -12px -8px -12px;
+    border-radius: 22px;
   }
   .hero-media-frame {
     position: relative;
@@ -76,6 +88,10 @@ const caption = captionOverride || config.caption || '';
     aspect-ratio: 16 / 10;
     border: 1px solid rgba(235, 238, 255, 0.1);
     z-index: 1;
+  }
+  .is-vertical .hero-media-frame {
+    border-radius: 22px;
+    border: 3px solid #1a2040;
   }
   .hero-media-img,
   .hero-media-iframe {
@@ -108,5 +124,8 @@ const caption = captionOverride || config.caption || '';
     font-weight: 500;
     text-shadow: 0 1px 4px rgba(0,0,0,0.8);
     z-index: 2;
+  }
+  @media (max-width: 600px) {
+    .hero-media-wrap.is-vertical { max-width: 260px; }
   }
 </style>

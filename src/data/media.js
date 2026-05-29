@@ -24,9 +24,10 @@ export const mediaConfig = {
   // Plik: src/pages/index.astro
   // ==========================
   heroGlowna: {
-    mode: 'image',
-    image: '/images/hero/hero-glowna.svg',  // później: hero-glowna.jpg
-    videoUrl: null,                          // później: 'https://www.youtube.com/watch?v=...'
+    mode: 'video',
+    image: '/images/hero/hero-glowna.svg',
+    videoUrl: 'https://youtube.com/shorts/xB3ydcdv_Pg',
+    aspectRatio: '9/16',  // pionowy format YouTube Shorts
     badge: '📸 POZNAJ MNIE',
     caption: 'cześć, jestem Olaf · założyciel MATHOUSE',
     alt: 'Olaf Pieprzak - założyciel MATHOUSE, korepetytor matematyki',
@@ -74,6 +75,9 @@ export function isVideoReady(slotKey) {
 // =====================================================
 export function extractYouTubeId(url) {
   if (!url) return null;
+  // shorts/ID
+  const shortsMatch = url.match(/shorts\/([a-zA-Z0-9_-]{11})/);
+  if (shortsMatch) return shortsMatch[1];
   // youtu.be/ID
   const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
   if (shortMatch) return shortMatch[1];
