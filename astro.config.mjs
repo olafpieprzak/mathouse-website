@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 // sitemap włączymy gdy będzie kilka podstron (potrzebuje min. 2 strony)
 // import sitemap from '@astrojs/sitemap';
 
@@ -13,6 +15,10 @@ export default defineConfig({
     }),
     // sitemap(),  ← włączymy w etapie 5
   ],
+  markdown: {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [[rehypeKatex, { output: 'html' }]],
+  },
   // Wszystkie strony budowane są jako statyczne HTML
   output: 'static',
   build: {

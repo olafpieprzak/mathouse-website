@@ -165,6 +165,7 @@ const currentPath = Astro.url.pathname;
       </div>
 
       <a href="/kalkulatory" class={currentPath.startsWith('/kalkulatory') ? 'nav-link active' : 'nav-link'}>Kalkulatory</a>
+      <a href="/wiedza" class={currentPath.startsWith('/wiedza') ? 'nav-link active' : 'nav-link'}>Matma w praktyce</a>
       <a href="/o-mnie" class={currentPath === '/o-mnie' ? 'nav-link active' : 'nav-link'}>O mnie</a>
       <a href="/kontakt" class={currentPath === '/kontakt' ? 'nav-link active' : 'nav-link'}>Kontakt</a>
     </nav>
@@ -259,6 +260,12 @@ const currentPath = Astro.url.pathname;
           <a href="/kalkulatory/rownanie-wielomianowe" class="mobile-sublink">x² Równania wielomianowe</a>
         </div>
       </details>
+
+      <a href="/wiedza" class="mobile-item">
+        <span class="mobile-icon">📐</span>
+        <span class="mobile-name">Matma w praktyce</span>
+        <span class="mobile-badge mobile-badge-new">BLOG</span>
+      </a>
     </div>
 
     <!-- INNE -->
