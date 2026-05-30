@@ -114,6 +114,7 @@ import OpinieGoogle from '../components/OpinieGoogle.astro';
             <span class="cena-now">597 zł</span>
             <span class="cena-old">697 zł</span>
           </div>
+          <p class="cena-omnibus">Najniższa cena z 30 dni: 597 zł</p>
           <a href="/kursy/pakiet-klasa-1" class="pakiet-cta">Kup pakiet →</a>
         </article>
 
@@ -575,6 +576,12 @@ import OpinieGoogle from '../components/OpinieGoogle.astro';
     font-size: 14px;
     text-decoration: line-through;
     opacity: 0.5;
+  }
+  .cena-omnibus {
+    font-size: 10px;
+    color: rgba(5, 10, 36, 0.55);
+    margin: 4px 0 10px;
+    font-style: italic;
   }
   .pakiet-cta {
     background: #050A24;

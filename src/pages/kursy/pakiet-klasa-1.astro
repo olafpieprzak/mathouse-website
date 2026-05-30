@@ -12,6 +12,7 @@ import { dzialy } from '../../data/dzialy.js';
 const product = produkty.pakietKlasa1;
 const PRICE = product.price; // 597
 const PRICE_OLD = product.priceOld; // 697
+const PRICE_MIN30 = product.priceMin30Days; // najniższa cena z 30 dni (Omnibus)
 const EMBED_ID = product.sklepEmbedId;
 const SHOP_URL = product.sklepUrl;
 const HAS_CHECKOUT = !!(EMBED_ID || SHOP_URL);
@@ -56,6 +57,9 @@ const oszczednoscVsOsobno = cenaOsobno - PRICE;
           {PRICE_OLD && <span class="kurs-price-old">{PRICE_OLD} zł</span>}
           <span class="kurs-price-save">oszczędzasz {oszczednosc} zł</span>
         </div>
+        {PRICE_OLD && PRICE_MIN30 && (
+          <p class="kurs-price-omnibus">Najniższa cena z 30 dni przed obniżką: {PRICE_MIN30} zł</p>
+        )}
         <p class="kurs-price-note">
           Kupując działy osobno zapłaciłbyś {cenaOsobno} zł — w pakiecie oszczędzasz {oszczednoscVsOsobno} zł.
         </p>
@@ -89,16 +93,20 @@ const oszczednoscVsOsobno = cenaOsobno - PRICE;
   </section>
 
   {HAS_CHECKOUT && (
-    <a href="#kup-teraz" class="mini-cta mini-cta-yellow">
-      <div class="container-content mini-cta-inner">
-        <span class="mini-cta-emoji">📦</span>
-        <span class="mini-cta-text">
-          <strong>Cały rok pierwszy w jednym pakiecie</strong>
-          <em>{PRICE} zł zamiast {PRICE_OLD} zł · dostęp na zawsze.</em>
-        </span>
-        <span class="mini-cta-btn">🛒 Kup pakiet · {PRICE} zł ↓</span>
+    <div class="mini-cta-wrap">
+      <div class="container-content">
+        <a href="#kup-teraz" class="mini-cta mini-cta-yellow">
+          <div class="mini-cta-inner">
+            <span class="mini-cta-emoji">📦</span>
+            <span class="mini-cta-text">
+              <strong>Cały rok pierwszy w jednym pakiecie</strong>
+              <em>{PRICE} zł zamiast {PRICE_OLD} zł · dostęp na zawsze.</em>
+            </span>
+            <span class="mini-cta-btn">🛒 Kup pakiet · {PRICE} zł ↓</span>
+          </div>
+        </a>
       </div>
-    </a>
+    </div>
   )}
 
   <!-- CO WCHODZI W PAKIET -->
@@ -130,16 +138,20 @@ const oszczednoscVsOsobno = cenaOsobno - PRICE;
   </section>
 
   {HAS_CHECKOUT && (
-    <a href="#kup-teraz" class="mini-cta mini-cta-teal">
-      <div class="container-content mini-cta-inner">
-        <span class="mini-cta-emoji">🎓</span>
-        <span class="mini-cta-text">
-          <strong>Gotowy ogarnąć całą klasę 1?</strong>
-          <em>Płatność BLIK / kartą / przelew · dostęp natychmiast.</em>
-        </span>
-        <span class="mini-cta-btn">🛒 Zamawiam pakiet · {PRICE} zł ↓</span>
+    <div class="mini-cta-wrap">
+      <div class="container-content">
+        <a href="#kup-teraz" class="mini-cta mini-cta-teal">
+          <div class="mini-cta-inner">
+            <span class="mini-cta-emoji">🎓</span>
+            <span class="mini-cta-text">
+              <strong>Gotowy ogarnąć całą klasę 1?</strong>
+              <em>Płatność BLIK / kartą / przelew · dostęp natychmiast.</em>
+            </span>
+            <span class="mini-cta-btn">🛒 Zamawiam pakiet · {PRICE} zł ↓</span>
+          </div>
+        </a>
       </div>
-    </a>
+    </div>
   )}
 
   <!-- DLACZEGO PAKIET -->
@@ -175,7 +187,7 @@ const oszczednoscVsOsobno = cenaOsobno - PRICE;
 
   <!-- WIDGET PŁATNOŚCI -->
   {HAS_CHECKOUT && EMBED_ID && (
-    <KupTerazWidget embedId={EMBED_ID} productName="Pakiet podstawowy klasa 1" price={PRICE} priceOld={PRICE_OLD} />
+    <KupTerazWidget embedId={EMBED_ID} productName="Pakiet podstawowy klasa 1" price={PRICE} priceOld={PRICE_OLD} priceMin30Days={PRICE_MIN30} />
   )}
 
   {!EMBED_ID && SHOP_URL && (
@@ -268,6 +280,12 @@ const oszczednoscVsOsobno = cenaOsobno - PRICE;
     font-size: 12px;
     color: rgba(235, 238, 255, 0.55);
     margin-bottom: 18px;
+  }
+  .kurs-price-omnibus {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.5);
+    margin: 4px 0 12px;
+    font-style: italic;
   }
   .kurs-cta { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -404,14 +422,21 @@ const oszczednoscVsOsobno = cenaOsobno - PRICE;
     line-height: 1.55;
   }
 
-  /* MINI-CTA */
+  /* MINI-CTA — karta wewnątrz container (nie pasek na cały ekran) */
+  .mini-cta-wrap {
+    padding: 16px 0;
+  }
   .mini-cta {
     display: block;
+    max-width: 720px;
+    margin: 0 auto;
     text-decoration: none;
     color: inherit;
-    transition: background 0.18s ease, transform 0.18s ease;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
   }
-  .mini-cta:hover { transform: translateY(-1px); }
+  .mini-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
   .mini-cta-yellow {
     background: linear-gradient(90deg, #FFDE59 0%, #FFE680 100%);
     color: #050A24;
@@ -423,34 +448,41 @@ const oszczednoscVsOsobno = cenaOsobno - PRICE;
   .mini-cta-inner {
     display: flex;
     align-items: center;
-    gap: 18px;
-    padding: 18px 0;
+    gap: 14px;
+    padding: 14px 18px;
     flex-wrap: wrap;
   }
-  .mini-cta-emoji { font-size: 32px; line-height: 1; flex-shrink: 0; }
+  .mini-cta-emoji { font-size: 28px; line-height: 1; flex-shrink: 0; }
   .mini-cta-text {
     flex: 1;
-    min-width: 220px;
+    min-width: 180px;
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
-  .mini-cta-text strong { font-size: 16px; font-weight: 700; color: #050A24; }
+  .mini-cta-text strong { font-size: 15px; font-weight: 700; color: #050A24; }
   .mini-cta-text em {
-    font-size: 12.5px;
+    font-size: 12px;
     font-style: normal;
     color: rgba(5, 10, 36, 0.7);
   }
   .mini-cta-btn {
     background: #050A24;
     color: #FFDE59;
-    padding: 11px 22px;
+    padding: 10px 18px;
     border-radius: 8px;
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 700;
     white-space: nowrap;
   }
   .mini-cta-teal .mini-cta-btn { color: #3FCECF; }
+  @media (max-width: 600px) {
+    .mini-cta-inner { padding: 12px 14px; gap: 10px; }
+    .mini-cta-emoji { font-size: 24px; }
+    .mini-cta-text strong { font-size: 14px; }
+    .mini-cta-text em { font-size: 11px; }
+    .mini-cta-btn { width: 100%; text-align: center; padding: 9px 12px; font-size: 12px; }
+  }
 
   .kup-fallback {
     padding: 60px 0;
