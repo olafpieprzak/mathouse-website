@@ -168,7 +168,16 @@ const faq = [
         </div>
       </div>
 
-      <h3 class="cennik-section-h">Szkoła · Liceum · Matura — 45 minut</h3>
+      <!-- TOGGLE 45/90 min -->
+      <div class="cennik-toggle-wrap">
+        <div class="cennik-toggle" role="tablist">
+          <button type="button" class="cennik-toggle-btn active" data-cennik-min="45" aria-pressed="true">45 min</button>
+          <button type="button" class="cennik-toggle-btn" data-cennik-min="90" aria-pressed="false">90 min</button>
+        </div>
+        <div class="cennik-toggle-note">Studia zawsze 90 min — bez zmian.</div>
+      </div>
+
+      <h3 class="cennik-section-h" data-cennik-title>Szkoła · Liceum · Matura — <span data-cennik-min-label>45</span> minut</h3>
       <div class="cennik-table-wrap">
         <div class="cennik-table">
           <div class="cennik-row cennik-header-row">
@@ -185,11 +194,11 @@ const faq = [
                 <strong>{row.name}</strong>
                 {row.sub && <div class="cennik-sub">{row.sub}</div>}
               </div>
-              <div class="cennik-cell-r yellow"><strong>{row.prices['1']} zł</strong></div>
-              <div class="cennik-cell-r">{row.prices['2']} zł</div>
-              <div class="cennik-cell-r">{row.prices['3']} zł</div>
-              <div class="cennik-cell-r">{row.prices['4']} zł</div>
-              <div class="cennik-cell-r teal"><strong>{row.prices['56']} zł</strong></div>
+              <div class="cennik-cell-r yellow"><strong data-cennik-cena={row.prices['1']}>{row.prices['1']} zł</strong></div>
+              <div class="cennik-cell-r"><span data-cennik-cena={row.prices['2']}>{row.prices['2']} zł</span></div>
+              <div class="cennik-cell-r"><span data-cennik-cena={row.prices['3']}>{row.prices['3']} zł</span></div>
+              <div class="cennik-cell-r"><span data-cennik-cena={row.prices['4']}>{row.prices['4']} zł</span></div>
+              <div class="cennik-cell-r teal"><strong data-cennik-cena={row.prices['56']}>{row.prices['56']} zł</strong></div>
             </div>
           ))}
         </div>
@@ -219,15 +228,6 @@ const faq = [
               <div class="cennik-cell-r teal"><strong>{row.prices['56']} zł</strong></div>
             </div>
           ))}
-        </div>
-      </div>
-
-      <!-- INFO BOX: Lekcja 90 min = cena × 2 -->
-      <div class="cennik-info-90">
-        <div class="cennik-info-90-icon">💡</div>
-        <div class="cennik-info-90-content">
-          <strong>Lekcja 90 minut?</strong>
-          <span>Pomnóż cenę z tabeli przez 2. Przykład: szkoła indywidualnie 90 min = <strong style="color:#FFDE59">130 zł × 2 = 260 zł</strong>.</span>
         </div>
       </div>
 
@@ -848,3 +848,75 @@ const faq = [
     }
   }
 </style>
+
+<style>
+  /* === TOGGLE 45/90 min === */
+  .cennik-toggle-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 4px 0 18px;
+    flex-wrap: wrap;
+  }
+  .cennik-toggle {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(235, 238, 255, 0.12);
+    border-radius: 10px;
+    padding: 4px;
+    gap: 2px;
+  }
+  .cennik-toggle-btn {
+    background: transparent;
+    border: none;
+    color: rgba(235, 238, 255, 0.7);
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .cennik-toggle-btn:hover { color: #EBEEFF; }
+  .cennik-toggle-btn.active {
+    background: #FFDE59;
+    color: #050A24;
+  }
+  .cennik-toggle-note {
+    font-size: 12px;
+    color: rgba(235, 238, 255, 0.55);
+    font-style: italic;
+  }
+  @media (max-width: 600px) {
+    .cennik-toggle-wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .cennik-toggle-btn { padding: 8px 14px; font-size: 12px; }
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    const toggleBtns = document.querySelectorAll('[data-cennik-min]');
+    const minLabel = document.querySelector('[data-cennik-min-label]');
+    const ceny = document.querySelectorAll('[data-cennik-cena]');
+
+    function setMin(min) {
+      const multiplier = min === '90' ? 2 : 1;
+      toggleBtns.forEach(btn => {
+        const active = btn.dataset.cennikMin === min;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      if (minLabel) minLabel.textContent = min;
+      ceny.forEach(el => {
+        const baza = parseInt(el.dataset.cennikCena, 10);
+        if (!isNaN(baza)) el.textContent = (baza * multiplier) + ' zł';
+      });
+    }
+
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => setMin(btn.dataset.cennikMin));
+    });
+  })();
+</script>
