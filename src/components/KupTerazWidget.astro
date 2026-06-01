@@ -6,7 +6,7 @@
 // na desktopie. Mobile: pełna szerokość, układ jeden pod drugim.
 // =====================================================
 
-const { embedId, productName = 'kurs', price = 197, priceOld = null } = Astro.props;
+const { embedId, productName = 'kurs', price = 197, priceOld = null, priceMin30Days = null } = Astro.props;
 ---
 
 <section id="kup-teraz" class="kup-teraz-section">
@@ -27,6 +27,9 @@ const { embedId, productName = 'kurs', price = 197, priceOld = null } = Astro.pr
         <span class="kt-price-now">{price} zł</span>
         {priceOld && <span class="kt-price-old">{priceOld} zł</span>}
       </div>
+      {priceOld && (
+        <p class="kt-price-omnibus">Najniższa cena z 30 dni przed obniżką: {priceMin30Days || price} zł</p>
+      )}
     </div>
 
     <!-- PRAWA KOLUMNA — widget Web To Learn -->
@@ -136,6 +139,12 @@ const { embedId, productName = 'kurs', price = 197, priceOld = null } = Astro.pr
     font-size: 16px;
     color: rgba(235, 238, 255, 0.4);
     text-decoration: line-through;
+  }
+  .kt-price-omnibus {
+    font-size: 11px;
+    color: rgba(235, 238, 255, 0.45);
+    margin-top: 6px;
+    font-style: italic;
   }
 
   /* === PRAWA KOLUMNA - widget === */

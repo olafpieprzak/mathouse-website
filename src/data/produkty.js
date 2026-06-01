@@ -34,6 +34,7 @@ export const produkty = {
     desc: 'Wszystkie 12 działów klasy 1 liceum w jednym pakiecie. Od zbiorów liczbowych po trygonometrię. Dostęp na zawsze.',
     price: 597,
     priceOld: 697,
+    priceMin30Days: 597,  // Najniższa cena z 30 dni (RODO/Omnibus) - dostosuj jeśli była niższa
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id ===
     sklepEmbedId: '66f041e16a60928b05a7e228a89c3799',  // np. 'PRZYKLAD_zastap_mnie_32_znakami_hex'
     sklepUrl: '',      // opcjonalnie URL strony produktu
@@ -87,6 +88,7 @@ export const produkty = {
     desc: 'Schemat działania krok po kroku dla każdego typu zadania maturalnego.',
     price: 99,
     priceOld: 159,
+    priceMin30Days: 99,  // Najniższa cena z 30 dni (RODO/Omnibus) - dostosuj jeśli była niższa
     // === EMBED PŁATNOŚCI - wklej tutaj 32-znakowy id ===
     sklepEmbedId: 'd82c8d1619ad8176d665453cfb2e55f0',
     sklepUrl: '',

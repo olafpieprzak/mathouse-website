@@ -68,6 +68,7 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
             <span class="cena-now">597 zł</span>
             <span class="cena-old">697 zł</span>
           </div>
+          <p class="cena-omnibus">Najniższa cena z 30 dni: 597 zł</p>
           <a href="/kursy/pakiet-klasa-1" class="pakiet-big-cta">Kup pakiet →</a>
         </div>
       </div>
@@ -158,6 +159,7 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
             <span class="matura-price">99 zł</span>
             <span class="matura-price-old">159 zł</span>
           </div>
+          <p class="cena-omnibus">Najniższa cena z 30 dni: 99 zł</p>
           <a href="/kursy/matematyczny-autopilot" class="btn-primary matura-cta">Kup kurs →</a>
         </div>
 
@@ -364,6 +366,16 @@ const kursyKlasa1 = dzialy.filter(d => d.klasaNum === 1);
     font-size: 14px;
     text-decoration: line-through;
     opacity: 0.5;
+  }
+  .cena-omnibus {
+    font-size: 10px;
+    color: rgba(235, 238, 255, 0.45);
+    margin: 4px 0 10px;
+    font-style: italic;
+  }
+  /* Wariant dla żółtego tła (pakiet big right) */
+  .pakiet-big-right .cena-omnibus {
+    color: rgba(5, 10, 36, 0.55);
   }
   .pakiet-big-cta {
     background: #050A24;

@@ -7,8 +7,8 @@ import Layout from '../../layouts/Layout.astro';
 import ArkuszMaterialy from '../../components/ArkuszMaterialy.astro';
 import { arkuszePodst, informatory } from '../../data/arkusze.js';
 
-const arkuszeTop = arkuszePodst.slice(0, 8);
-const arkuszeReszta = arkuszePodst.slice(8);
+const arkuszeTop = arkuszePodst.slice(0, 9);
+const arkuszeReszta = arkuszePodst.slice(9);
 ---
 
 <Layout
@@ -240,7 +240,7 @@ const arkuszeReszta = arkuszePodst.slice(8);
 
   .arkusze-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 14px;
   }
   .arkusze-grid-hidden { display: none; }

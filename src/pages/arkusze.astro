@@ -8,10 +8,10 @@ import { arkuszePodst, arkuszeRozsz, arkusze8, informatory, zbioryZadan, getMate
 
 // Lista jest już posortowana w arkusze.js (najnowsze pierwsze)
 // Pierwsze 4 = NAJNOWSZE (preview na stronie), reszta ukryta pod "Pokaż wszystkie"
-const arkuszePodstTop = arkuszePodst.slice(0, 4);
-const arkuszePodstReszta = arkuszePodst.slice(4);
-const arkuszeRozszTop = arkuszeRozsz.slice(0, 4);
-const arkuszeRozszReszta = arkuszeRozsz.slice(4);
+const arkuszePodstTop = arkuszePodst.slice(0, 3);
+const arkuszePodstReszta = arkuszePodst.slice(3);
+const arkuszeRozszTop = arkuszeRozsz.slice(0, 3);
+const arkuszeRozszReszta = arkuszeRozsz.slice(3);
 ---
 
 <Layout
@@ -547,7 +547,7 @@ const arkuszeRozszReszta = arkuszeRozsz.slice(4);
   /* === Arkusze grid === */
   .arkusze-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
   .arkusz-tile {

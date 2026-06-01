@@ -85,7 +85,7 @@ export const TIDYCAL_CONFIG = {
       slug: 'podstawowka-korepetycje-indywidualne-90',
       title: 'Podstawówka · 1 osoba · 90 min',
       duration: 90,
-      price: 240,
+      price: 260,
       maxStudents: 1,
     },
     group2: {
@@ -93,12 +93,12 @@ export const TIDYCAL_CONFIG = {
       slug: 'podstawowka-korepetycje-w-grupie-2-osobowej-90',
       title: 'Podstawówka · 2 osoby · 90 min',
       duration: 90,
-      price: 150,
+      price: 160,
       maxStudents: 2,
     },
-    group3: { contactOnly: true, price: 130, maxStudents: 3 },
-    group4: { contactOnly: true, price: 110, maxStudents: 4 },
-    group56: { contactOnly: true, price: 75, maxStudents: 6 },
+    group3: { contactOnly: true, price: 140, maxStudents: 3 },
+    group4: { contactOnly: true, price: 120, maxStudents: 4 },
+    group56: { contactOnly: true, price: 80, maxStudents: 6 },
   },
 
   // === BOOKING TYPES — LICEUM 45 minut ===
@@ -131,7 +131,7 @@ export const TIDYCAL_CONFIG = {
       slug: 'szkola-srednia-poziom-rozszerzony-korepetycje-indywidualne',
       title: 'Liceum · 1 osoba · 90 min',
       duration: 90,
-      price: 240,
+      price: 260,
       maxStudents: 1,
     },
     group2: {
@@ -139,12 +139,12 @@ export const TIDYCAL_CONFIG = {
       slug: 'szkola-srednia-poziom-rozszerzony-korepetycje-w-grupie-2-osobowej-90',
       title: 'Liceum · 2 osoby · 90 min',
       duration: 90,
-      price: 150,
+      price: 160,
       maxStudents: 2,
     },
-    group3: { contactOnly: true, price: 130, maxStudents: 3 },
-    group4: { contactOnly: true, price: 110, maxStudents: 4 },
-    group56: { contactOnly: true, price: 75, maxStudents: 6 },
+    group3: { contactOnly: true, price: 140, maxStudents: 3 },
+    group4: { contactOnly: true, price: 120, maxStudents: 4 },
+    group56: { contactOnly: true, price: 80, maxStudents: 6 },
   },
 
   // === STUDIA — 45 minut ===
@@ -177,7 +177,7 @@ export const TIDYCAL_CONFIG = {
       slug: 'studia-wyzsze-korepetycje-indywidualne-90',
       title: 'Studia · 1 osoba · 90 min',
       duration: 90,
-      price: 160,
+      price: 320,
       maxStudents: 1,
     },
     group2: {
@@ -185,12 +185,12 @@ export const TIDYCAL_CONFIG = {
       slug: 'studia-wyzsze-korepetycje-w-grupie-2-osobowej-90',
       title: 'Studia · 2 osoby · 90 min',
       duration: 90,
-      price: 110,
+      price: 220,
       maxStudents: 2,
     },
-    group3: { contactOnly: true, price: 100, maxStudents: 3 },
-    group4: { contactOnly: true, price: 80, maxStudents: 4 },
-    group56: { contactOnly: true, price: 50, maxStudents: 6 },
+    group3: { contactOnly: true, price: 200, maxStudents: 3 },
+    group4: { contactOnly: true, price: 160, maxStudents: 4 },
+    group56: { contactOnly: true, price: 100, maxStudents: 6 },
   },
 
   // === PRZEDMIOTY STUDIÓW ===

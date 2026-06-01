@@ -326,7 +326,7 @@ const korzysci = [
 
     <!-- KOSZYK / WIDGET ZAKUPOWY -->
     {prod.sklepEmbedId ? (
-      <KupTerazWidget embedId={prod.sklepEmbedId} productName="3-dniowy Maturalny Sprint" price={prod.price} priceOld={prod.priceOld} />
+      <KupTerazWidget embedId={prod.sklepEmbedId} productName="3-dniowy Maturalny Sprint" price={prod.price} priceOld={prod.priceOld} priceMin30Days={prod.priceMin30Days} />
     ) : (
       <section id="kup-teraz" class="lp-checkout-fallback">
         <div class="container-content">
